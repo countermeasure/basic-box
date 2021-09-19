@@ -1,0 +1,45 @@
+#_preseed_V1
+
+# Don't create a root user account.
+d-i passwd/root-login boolean false
+
+# Create a normal user account.
+d-i passwd/user-fullname string basic
+d-i passwd/username string basic
+d-i passwd/user-password password basic
+d-i passwd/user-password-again password basic
+
+# Set the timezone.
+d-i time/zone string Australia/Melbourne
+
+# Partition the device.
+d-i partman-auto/disk string /dev/sda
+d-i partman-auto/method string crypto
+d-i partman-lvm/confirm boolean true
+d-i partman-auto-crypto/erase_disks boolean false
+d-i partman-auto-lvm/guided_size string max
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+
+# Configure the package mirror.
+d-i mirror/country string manual
+d-i mirror/http/hostname string deb.debian.org
+d-i mirror/http/directory string /debian
+d-i mirror/http/proxy string
+
+# Don't prompt for additional CDs.
+d-i apt-setup/cdrom/set-first boolean false
+
+# Opt out of Popularity Contest.
+popularity-contest popularity-contest/participate boolean false
+
+# Install standard and desktop tasks with tasksel.
+tasksel tasksel/first multiselect standard, desktop
+
+# Configure the bootloader.
+di grub-installer/bootdev string default
+
+# Set hostname and domain. This isn't needed to prevent installer questions,
+# but it stops the hostname and domain being set to "unassigned".
+d-i netcfg/get_domain string
+d-i netcfg/get_hostname string basic
