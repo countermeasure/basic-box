@@ -1,0 +1,8 @@
+[Unit]
+Description=Configure system on first boot.
+
+[Service]
+ExecStart=/usr/local/simple-cdd/first_boot.sh
+
+[Install]
+WantedBy=multi-user.target

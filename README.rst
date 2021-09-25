@@ -18,6 +18,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - an ordinary user called ``basic`` with password ``basic``
 - locale and timezone set to Melbourne, Australia
 - the GNOME desktop environment
+- the UFW firewall installed and enabled
 
 
 Set up

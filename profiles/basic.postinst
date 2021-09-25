@@ -1,0 +1,20 @@
+#!/bin/sh
+
+INSTALLER_DIR="/media/cdrom/simple-cdd"
+LOCAL_DIR="/usr/local/simple-cdd"
+
+# Copy extra files onto the new installation.
+mount /dev/cdrom /media/cdrom
+cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
+cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
+umount /media/cdrom
+
+# Copy first_boot systemd unit file into place.
+cp $LOCAL_DIR/first_boot.service /etc/systemd/system
+
+# Enable the first_boot systemd service. This performs configuration tasks
+# which can't be done in this postinst script, and is then removed.
+systemctl enable first_boot.service
+
+# Install the UFW firewall.
+apt install ufw
