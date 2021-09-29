@@ -4,12 +4,15 @@ INSTALLER_DIR="/media/cdrom/simple-cdd"
 LOCAL_DIR="/usr/local/simple-cdd"
 
 USERNAME=$(ls /home)
-USER_CONFIG_DIR="/home/$USERNAME/.config"
+USER_DIR="/home/$USERNAME"
+USER_CONFIG_DIR="$USER_DIR/.config"
 AUTOSTART_DIR="$USER_CONFIG_DIR/autostart"
 
 # Copy extra files onto the new installation.
 mount /dev/cdrom /media/cdrom
 cp $INSTALLER_DIR/backports.list $LOCAL_DIR
+cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
+cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
@@ -45,3 +48,16 @@ apt update
 
 # Install Tor Browser Launcher.
 apt install --yes torbrowser-launcher
+
+# Install pipx.
+apt install --yes python3-pip python3-venv
+runuser -l "$USERNAME" -c "pip3 install pipx"
+
+# Copy .bashrc extensions into place and enable them.
+cp $LOCAL_DIR/dot_bashrc_aliases "$USER_DIR"/.bashrc_aliases
+cp $LOCAL_DIR/dot_bashrc_modifications "$USER_DIR"/.bashrc_modifications
+chown "$USERNAME":"$USERNAME" "$USER_DIR"/.bashrc_*
+chmod 644 "$USER_DIR"/.bashrc_*
+printf "\n# Enable .bashrc extensions.\n" >> "$USER_DIR"/.bashrc
+# shellcheck disable=SC2016
+echo 'for file in ~/.bashrc_*; do . "$file"; done' >> "$USER_DIR"/.bashrc

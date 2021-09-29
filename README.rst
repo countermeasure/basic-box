@@ -34,6 +34,7 @@ The **Basic Box** installer creates a Debian 10 system with:
   - Enhanced Tracking Protection to Strict
   - Default Search Engine to DuckDuckGo
   - Theme to Dark
+- pipx installed
 
 
 Set up

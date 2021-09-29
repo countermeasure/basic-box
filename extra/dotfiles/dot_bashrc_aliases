@@ -1,0 +1,1 @@
+alias pip3="printf '\nPrefer pipx to pip3.\n\n'"

@@ -1,0 +1,2 @@
+# Enable pipx autocompletion.
+eval "$(register-python-argcomplete pipx)"

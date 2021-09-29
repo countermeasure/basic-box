@@ -4,4 +4,7 @@ extra/first_boot.sh
 extra/first_login.desktop
 extra/first_login.sh
 
+extra/dotfiles/dot_bashrc_aliases
+extra/dotfiles/dot_bashrc_modifications
+
 extra/downloads/MullvadVPN-2021.4_amd64.deb
