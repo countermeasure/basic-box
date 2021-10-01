@@ -1,4 +1,5 @@
 image:
+	@./get_extra_downloads.sh
 	@build-simple-cdd --conf basic.conf --verbose
 
 usb: image

@@ -1,2 +1,6 @@
 extra/first_boot.service
 extra/first_boot.sh
+extra/first_login.desktop
+extra/first_login.sh
+
+extra/downloads/MullvadVPN-2021.4_amd64.deb

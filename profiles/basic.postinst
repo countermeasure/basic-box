@@ -3,10 +3,17 @@
 INSTALLER_DIR="/media/cdrom/simple-cdd"
 LOCAL_DIR="/usr/local/simple-cdd"
 
+USERNAME=$(ls /home)
+USER_CONFIG_DIR="/home/$USERNAME/.config"
+AUTOSTART_DIR="$USER_CONFIG_DIR/autostart"
+
 # Copy extra files onto the new installation.
 mount /dev/cdrom /media/cdrom
 cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
+cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
+cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
+cp $INSTALLER_DIR/MullvadVPN-2021.4_amd64.deb $LOCAL_DIR
 umount /media/cdrom
 
 # Copy first_boot systemd unit file into place.
@@ -18,3 +25,15 @@ systemctl enable first_boot.service
 
 # Install the UFW firewall.
 apt install ufw
+
+# Install the Mullvad VPN app.
+apt install gdebi-core
+gdebi --non-interactive $LOCAL_DIR/MullvadVPN-2021.4_amd64.deb
+
+# Set up a desktop entry to run the first_login script at login. This performs
+# configuration tasks which require user interaction, and is then removed.
+runuser \
+    --login \
+    "$USERNAME" \
+    --command \
+    "desktop-file-install --dir=$AUTOSTART_DIR $LOCAL_DIR/first_login.desktop"

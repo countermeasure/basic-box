@@ -19,6 +19,8 @@ The **Basic Box** installer creates a Debian 10 system with:
 - locale and timezone set to Melbourne, Australia
 - the GNOME desktop environment
 - the UFW firewall installed and enabled
+- the Mullvad VPN app installed and enabled with an interactive script which
+  runs automatically on the first boot
 
 
 Set up
@@ -26,7 +28,7 @@ Set up
 
 Install the dependencies::
 
-  $ sudo apt install make simple-cdd
+  $ sudo apt install make simple-cdd wget
 
 
 Usage

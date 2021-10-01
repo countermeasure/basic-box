@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=First login
+Type=Application
+Exec=gnome-terminal -- /usr/local/simple-cdd/first_login.sh
+Comment=Perform interactive configuration on first login.
