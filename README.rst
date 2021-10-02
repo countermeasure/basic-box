@@ -22,6 +22,14 @@ The **Basic Box** installer creates a Debian 10 system with:
 - the Mullvad VPN app installed and enabled with an interactive script which
   runs automatically on the first boot
 - Tor Browser Launcher installed
+- these Firefox extensions installed interactively on the first login:
+  - Dark Reader
+  - Decentraleyes
+  - Firefox Multi-Account Containers
+  - HTTPS Everywhere
+  - NoScript Security Suite
+  - Privacy Badger
+  - uBlock Origin
 
 
 Set up
