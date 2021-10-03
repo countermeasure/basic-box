@@ -1,3 +1,4 @@
+extra/backports.list
 extra/first_boot.service
 extra/first_boot.sh
 extra/first_login.desktop

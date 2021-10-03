@@ -21,6 +21,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - the UFW firewall installed and enabled
 - the Mullvad VPN app installed and enabled with an interactive script which
   runs automatically on the first boot
+- Tor Browser Launcher installed
 
 
 Set up
