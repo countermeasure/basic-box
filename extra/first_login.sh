@@ -9,13 +9,14 @@ echo "The final setup steps have to be done interactively."
 echo
 echo "Step 1: Enable the Mullvad VPN"
 echo "Step 2: Install the Firefox browser extensions"
+echo "Step 3: Change some Firefox preferences"
 echo
 read -n 1 -p "Press any key to continue..." -r -s
 
 # Enable and configure the Mullvad VPN.
 clear
 echo
-echo "Step 1 of 2: Enable the Mullvad VPN"
+echo "Step 1 of 3: Enable the Mullvad VPN"
 echo "-----------------------------------"
 echo
 EXIT_CODE=""
@@ -44,7 +45,7 @@ read -n 1 -p "Press any key to continue..." -r -s
 # Open Firefox extension installation tabs.
 clear
 echo
-echo "Step 2 of 2: Install the Firefox browser extensions"
+echo "Step 2 of 3: Install the Firefox browser extensions"
 echo "---------------------------------------------------"
 echo
 echo "Installing browser extensions requires user interactions in Firefox."
@@ -60,8 +61,6 @@ echo "- uBlock Origin"
 echo
 echo "In each tab, you need to click to install the extension."
 echo
-echo "This is the last configuration step you need to carry out."
-echo
 echo "When you've finished, close Firefox."
 echo
 read -n 1 -p "Press any key to continue..." -r -s
@@ -73,6 +72,66 @@ firefox \
     https://addons.mozilla.org/en-US/firefox/addon/noscript/ \
     https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/ \
     https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
+
+# Change Firefox preferences.
+clear
+echo
+echo "Step 3 of 3: Change some Firefox preferences"
+echo "--------------------------------------------"
+echo
+echo "Although many of Firefox's preferences can be changed without user"
+echo "interaction, the configuration machinery is unpredictable and not well"
+echo "documented, so it's more reliable to do it manually."
+echo
+echo "This step involves 3 small operations."
+echo
+echo "Operation 1: Set Enhanced Tracking Protection to Strict"
+echo "Operation 2: Set Default Search Engine to DuckDuckGo"
+echo "Operation 3: Set Theme to Dark"
+echo
+echo "This is the last configuration step you need to carry out."
+echo
+read -n 1 -p "Press any key to continue..." -r -s
+clear
+echo
+echo "Step 3 of 3: Change some Firefox preferences"
+echo "--------------------------------------------"
+echo
+echo "Operation 1 of 3: Set Enhanced Tracking Protection to Strict"
+echo
+echo "This will open the Privacy and Security Preferences page in Firefox."
+echo
+echo "Select Strict under Enhanced Tracking Protection, then close Firefox."
+echo
+read -n 1 -p "Press any key to continue..." -r -s
+firefox about:preferences#privacy
+clear
+echo
+echo "Step 3 of 3: Change some Firefox preferences"
+echo "--------------------------------------------"
+echo
+echo "Operation 2 of 3: Set Default Search Engine to DuckDuckGo"
+echo
+echo "This will open the Search Preferences page in Firefox."
+echo
+echo "Select DuckDuckGo under Default Search Engine, then close Firefox."
+echo
+read -n 1 -p "Press any key to continue..." -r -s
+firefox about:preferences#search
+clear
+echo
+echo "Step 3 of 3: Change some Firefox preferences"
+echo "--------------------------------------------"
+echo
+echo "Operation 3 of 3: Set Theme to Dark"
+echo
+echo "This will open the Addons page in Firefox."
+echo
+echo "Click Themes, click the Enable button for the Dark theme, then close "
+echo "Firefox."
+echo
+read -n 1 -p "Press any key to continue..." -r -s
+firefox about:addons
 
 # Print a farewell.
 clear

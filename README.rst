@@ -30,6 +30,10 @@ The **Basic Box** installer creates a Debian 10 system with:
   - NoScript Security Suite
   - Privacy Badger
   - uBlock Origin
+- these Firefox preferences set interactively on the first login:
+  - Enhanced Tracking Protection to Strict
+  - Default Search Engine to DuckDuckGo
+  - Theme to Dark
 
 
 Set up
