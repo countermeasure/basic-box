@@ -36,6 +36,7 @@ The **Basic Box** installer creates a Debian 10 system with:
   - Theme to Dark
 - pipx installed
 - youtube-dl installed
+- ranger installed
 
 
 Set up

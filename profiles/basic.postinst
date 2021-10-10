@@ -65,3 +65,6 @@ echo 'for file in ~/.bashrc_*; do . "$file"; done' >> "$USER_DIR"/.bashrc
 # Install youtube-dl.
 runuser -l "$USERNAME" -c "pipx install youtube-dl"
 apt install --yes ffmpeg
+
+# Install ranger.
+apt install --yes ranger
