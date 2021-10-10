@@ -35,6 +35,7 @@ The **Basic Box** installer creates a Debian 10 system with:
   - Default Search Engine to DuckDuckGo
   - Theme to Dark
 - pipx installed
+- youtube-dl installed
 
 
 Set up
