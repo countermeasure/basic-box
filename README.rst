@@ -37,6 +37,13 @@ The **Basic Box** installer creates a Debian 10 system with:
 - pipx installed
 - youtube-dl installed
 - ranger installed
+- these GNOME changes:
+  - Enable dark theme
+  - Display date and battery percentage in top bar
+  - Never blank screen, dim screen or suspend when inactive
+  - Enable night light (makes display colour warmer at night)
+  - Enable natural scrolling for mouse
+  - Speed up trackpad and enable trackpad tap-to-click
 
 
 Set up

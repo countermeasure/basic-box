@@ -8,6 +8,14 @@ USER_DIR="/home/$USERNAME"
 USER_CONFIG_DIR="$USER_DIR/.config"
 AUTOSTART_DIR="$USER_CONFIG_DIR/autostart"
 
+gsettings_set () {
+    # Change a dconf setting. It's necessary to use dbus-launch ahead of
+    # gsettings when invoking this as the root user.
+    runuser \
+        --login "$USERNAME" \
+        --command "dbus-launch gsettings set org.gnome.$1"
+}
+
 # Copy extra files onto the new installation.
 mount /dev/cdrom /media/cdrom
 cp $INSTALLER_DIR/backports.list $LOCAL_DIR
@@ -68,3 +76,25 @@ apt install --yes ffmpeg
 
 # Install ranger.
 apt install --yes ranger
+
+# Set dark theme globally.
+gsettings_set "desktop.interface gtk-theme 'Adwaita-dark'"
+
+# Display date and battery percentage in top bar.
+gsettings_set "desktop.interface clock-show-date true"
+gsettings_set "desktop.interface show-battery-percentage true"
+
+# Never blank screen, dim screen or suspend when inactive.
+gsettings_set "desktop.session idle-delay 0"
+gsettings_set "settings-daemon.plugins.power idle-dim false"
+gsettings_set "settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'"
+
+# Make display colour warmer at night.
+gsettings_set "settings-daemon.plugins.color night-light-enabled true"
+
+# Enable natural scrolling for mouse.
+gsettings_set "desktop.peripherals.mouse natural-scroll true"
+
+# Speed up trackpad and enable trackpad tap-to-click.
+gsettings_set "desktop.peripherals.touchpad speed 0.25"
+gsettings_set "desktop.peripherals.touchpad tap-to-click true"
