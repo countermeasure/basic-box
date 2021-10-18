@@ -44,6 +44,7 @@ The **Basic Box** installer creates a Debian 10 system with:
   - Enable night light (makes display colour warmer at night)
   - Enable natural scrolling for mouse
   - Speed up trackpad and enable trackpad tap-to-click
+- automatic login enabled
 
 
 Set up

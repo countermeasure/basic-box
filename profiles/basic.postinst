@@ -98,3 +98,11 @@ gsettings_set "desktop.peripherals.mouse natural-scroll true"
 # Speed up trackpad and enable trackpad tap-to-click.
 gsettings_set "desktop.peripherals.touchpad speed 0.25"
 gsettings_set "desktop.peripherals.touchpad tap-to-click true"
+
+# Enable automatic login.
+sed -i \
+    "s/.*AutomaticLoginEnable =.*/AutomaticLoginEnable = true/" \
+    /etc/gdm3/daemon.conf
+sed -i \
+    "s/.*AutomaticLogin =.*/AutomaticLogin = $USERNAME/" \
+    /etc/gdm3/daemon.conf
