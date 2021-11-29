@@ -48,6 +48,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - fd installed
 - ripgrep installed
 - exa installed
+- bat installed
 
 
 Set up

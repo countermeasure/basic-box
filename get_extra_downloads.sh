@@ -18,3 +18,7 @@ wget --timestamping "https://github.com/BurntSushi/ripgrep/releases/download/\
 # Ensure the exa package is present.
 wget --timestamping "https://github.com/ogham/exa/releases/download/v0.10.1/\
 exa-linux-x86_64-v0.10.1.zip"
+
+# Ensure the bat package is present.
+wget --timestamping "https://github.com/sharkdp/bat/releases/download/v0.18.3/\
+bat_0.18.3_amd64.deb"
