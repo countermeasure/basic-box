@@ -47,6 +47,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - automatic login enabled
 - fd installed
 - ripgrep installed
+- exa installed
 
 
 Set up

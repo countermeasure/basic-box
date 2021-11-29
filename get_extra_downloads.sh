@@ -14,3 +14,7 @@ fd_8.2.1_amd64.deb"
 # Ensure the ripgrep package is present.
 wget --timestamping "https://github.com/BurntSushi/ripgrep/releases/download/\
 13.0.0/ripgrep_13.0.0_amd64.deb"
+
+# Ensure the exa package is present.
+wget --timestamping "https://github.com/ogham/exa/releases/download/v0.10.1/\
+exa-linux-x86_64-v0.10.1.zip"

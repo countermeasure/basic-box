@@ -21,6 +21,7 @@ mount /dev/cdrom /media/cdrom
 cp $INSTALLER_DIR/backports.list $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
+cp $INSTALLER_DIR/exa-linux-x86_64-v0.10.1.zip $LOCAL_DIR
 cp $INSTALLER_DIR/fd_8.2.1_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
@@ -114,3 +115,15 @@ dpkg -i $LOCAL_DIR/fd_8.2.1_amd64.deb
 
 # Install ripgrep.
 dpkg -i $LOCAL_DIR/ripgrep_13.0.0_amd64.deb
+
+# Install exa.
+unzip -d /tmp/exa_0.10.1 $LOCAL_DIR/exa-linux-x86_64-v0.10.1.zip
+cp /tmp/exa_0.10.1/bin/exa /usr/local/bin
+cp \
+    /tmp/exa_0.10.1/completions/exa.bash \
+    /usr/share/bash-completion/completions
+mkdir /usr/local/share/man/man1
+cp /tmp/exa_0.10.1/man/exa.1 /usr/local/share/man/man1
+mkdir /usr/local/share/man/man5
+cp /tmp/exa_0.10.1/man/exa_colors.5 /usr/local/share/man/man5
+mandb
