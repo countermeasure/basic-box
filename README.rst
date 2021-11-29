@@ -50,6 +50,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - exa installed
 - bat installed
 - fzf installed
+- zoxide installed
 
 
 Set up

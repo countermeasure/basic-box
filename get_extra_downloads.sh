@@ -32,3 +32,7 @@ wget --timestamping "https://github.com/junegunn/fzf/archive/refs/tags/\
 # its name. Simply saving with this different filename will stop wget's
 # --timestamping option working.
 cp 0.28.0.tar.gz fzf-0.28.0-source.tar.gz
+
+# Ensure the zoxide package is present.
+wget --timestamping "https://github.com/ajeetdsouza/zoxide/releases/download/\
+v0.7.9/zoxide-v0.7.9-x86_64-unknown-linux-musl.tar.gz"

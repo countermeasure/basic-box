@@ -20,3 +20,6 @@ _fzf_compgen_path() {
 }
 export FZF_DEFAULT_COMMAND="fd --exclude .git --follow --hidden --type file"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Enable zoxide.
+eval "$(zoxide init bash)"
