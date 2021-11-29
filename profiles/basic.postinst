@@ -28,6 +28,8 @@ cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
+cp $INSTALLER_DIR/fzf-0.28.0-linux_amd64.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/fzf-0.28.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.4_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 umount /media/cdrom
@@ -131,3 +133,13 @@ mandb
 
 # Install bat.
 dpkg -i $LOCAL_DIR/bat_0.18.3_amd64.deb
+
+# Install fzf.
+tar --extract -f $LOCAL_DIR/fzf-0.28.0-linux_amd64.tar.gz --directory /tmp
+tar --extract -f $LOCAL_DIR/fzf-0.28.0-source.tar.gz --directory /tmp
+cp /tmp/fzf /usr/local/bin
+cp /tmp/fzf-0.28.0/man/man1/fzf.1 /usr/local/share/man/man1
+mkdir /usr/local/share/fzf
+cp /tmp/fzf-0.28.0/shell/completion.bash /usr/local/share/fzf
+cp /tmp/fzf-0.28.0/shell/key-bindings.bash /usr/local/share/fzf
+mandb

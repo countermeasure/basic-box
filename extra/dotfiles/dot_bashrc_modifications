@@ -3,3 +3,20 @@ eval "$(register-python-argcomplete pipx)"
 
 # Colourise man pages by setting bat as the man pager.
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+# Enable fzf auto-completion and keybindings.
+source /usr/local/share/fzf/completion.bash
+source /usr/local/share/fzf/key-bindings.bash
+
+# Sort fzf lists from the top down.
+export FZF_DEFAULT_OPTS="--reverse"
+
+# Use fd instead of find for fzf.
+_fzf_compgen_dir() {
+  fd --exclude .git --follow --hidden --type directory . "$1"
+}
+_fzf_compgen_path() {
+  fd --exclude .git --follow --hidden . "$1"
+}
+export FZF_DEFAULT_COMMAND="fd --exclude .git --follow --hidden --type file"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

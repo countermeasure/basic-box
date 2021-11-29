@@ -22,3 +22,13 @@ exa-linux-x86_64-v0.10.1.zip"
 # Ensure the bat package is present.
 wget --timestamping "https://github.com/sharkdp/bat/releases/download/v0.18.3/\
 bat_0.18.3_amd64.deb"
+
+# Ensure the fzf package is present.
+wget --timestamping "https://github.com/junegunn/fzf/releases/download/0.28.0/\
+fzf-0.28.0-linux_amd64.tar.gz"
+wget --timestamping "https://github.com/junegunn/fzf/archive/refs/tags/\
+0.28.0.tar.gz"
+# As the fzf archive doesn't include fzf in its name, make a copy with fzf in
+# its name. Simply saving with this different filename will stop wget's
+# --timestamping option working.
+cp 0.28.0.tar.gz fzf-0.28.0-source.tar.gz

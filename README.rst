@@ -49,6 +49,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - ripgrep installed
 - exa installed
 - bat installed
+- fzf installed
 
 
 Set up
