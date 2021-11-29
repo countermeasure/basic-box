@@ -27,6 +27,7 @@ cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.4_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 umount /media/cdrom
 
 # Copy first_boot systemd unit file into place.
@@ -110,3 +111,6 @@ sed -i \
 
 # Install fd.
 dpkg -i $LOCAL_DIR/fd_8.2.1_amd64.deb
+
+# Install ripgrep.
+dpkg -i $LOCAL_DIR/ripgrep_13.0.0_amd64.deb

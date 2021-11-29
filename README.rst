@@ -46,6 +46,7 @@ The **Basic Box** installer creates a Debian 10 system with:
   - Speed up trackpad and enable trackpad tap-to-click
 - automatic login enabled
 - fd installed
+- ripgrep installed
 
 
 Set up
