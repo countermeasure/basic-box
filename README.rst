@@ -45,6 +45,7 @@ The **Basic Box** installer creates a Debian 10 system with:
   - Enable natural scrolling for mouse
   - Speed up trackpad and enable trackpad tap-to-click
 - automatic login enabled
+- fd installed
 
 
 Set up

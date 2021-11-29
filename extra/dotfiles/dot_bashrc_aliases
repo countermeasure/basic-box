@@ -1,3 +1,5 @@
 alias f="ranger"  # "f" for "file manager".
+alias fd="fd --exclude .git --follow --hidden"
+alias find="printf '\nPrefer fd to find.\n\n'"
 
 alias pip3="printf '\nPrefer pipx to pip3.\n\n'"

@@ -21,6 +21,7 @@ mount /dev/cdrom /media/cdrom
 cp $INSTALLER_DIR/backports.list $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
+cp $INSTALLER_DIR/fd_8.2.1_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
@@ -106,3 +107,6 @@ sed -i \
 sed -i \
     "s/.*AutomaticLogin =.*/AutomaticLogin = $USERNAME/" \
     /etc/gdm3/daemon.conf
+
+# Install fd.
+dpkg -i $LOCAL_DIR/fd_8.2.1_amd64.deb
