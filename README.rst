@@ -51,6 +51,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - bat installed
 - fzf installed
 - zoxide installed
+- htop installed
 
 
 Set up

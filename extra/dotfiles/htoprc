@@ -1,0 +1,6 @@
+# This file will be overwritten the first time htop is run, but these settings
+# should survive the overwriting process to be included in the new contents of
+# the file.
+hide_userland_threads=1
+highlight_base_name=1
+show_program_path=0

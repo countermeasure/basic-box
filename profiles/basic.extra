@@ -6,6 +6,7 @@ extra/first_login.sh
 
 extra/dotfiles/dot_bashrc_aliases
 extra/dotfiles/dot_bashrc_modifications
+extra/dotfiles/htoprc
 
 extra/downloads/bat_0.18.3_amd64.deb
 extra/downloads/exa-linux-x86_64-v0.10.1.zip
