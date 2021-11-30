@@ -7,6 +7,8 @@ alias l="exa --colour-scale --group-directories-first --long"
 # "la" for "list all".
 alias la="exa --all --colour-scale --group-directories-first --long"
 
+alias ncdu="ncdu --color dark -r --si"
+
 alias pip3="printf '\nPrefer pipx to pip3.\n\n'"
 
 alias rg="rg --glob '!.git' --hidden --smart-case"

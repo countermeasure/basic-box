@@ -170,3 +170,6 @@ chmod 644 "$HTOP_DIR"/htoprc
 # the GNOME Terminal menu's File item. Without doing this, changes made
 # interactively to htop's settings can't be applied.
 gsettings_set "Terminal.Legacy.Settings menu-accelerator-enabled false"
+
+# Install ncdu.
+apt install --yes ncdu
