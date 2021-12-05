@@ -8,6 +8,12 @@ USER_DIR="/home/$USERNAME"
 USER_CONFIG_DIR="$USER_DIR/.config"
 AUTOSTART_DIR="$USER_CONFIG_DIR/autostart"
 
+git_global_config_set () {
+    # Add a setting to the Git global configuration. It's necessary to wrap the
+    # second argument in double quotes to set the configuration values
+    # correctly.
+    runuser --login "$USERNAME" --command "git config --global $1 \"$2\""
+}
 gsettings_set () {
     # Change a dconf setting. It's necessary to use dbus-launch ahead of
     # gsettings when invoking this as the root user.
@@ -23,6 +29,7 @@ cp $INSTALLER_DIR/bat_0.18.3_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.11.3-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.11.3-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
+cp $INSTALLER_DIR/dot_bashrc_functions $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/exa-linux-x86_64-v0.10.1.zip $LOCAL_DIR
 cp $INSTALLER_DIR/fd_8.2.1_amd64.deb $LOCAL_DIR
@@ -73,6 +80,7 @@ runuser -l "$USERNAME" -c 'pip3 install pipx'
 
 # Copy .bashrc extensions into place and enable them.
 cp $LOCAL_DIR/dot_bashrc_aliases "$USER_DIR"/.bashrc_aliases
+cp $LOCAL_DIR/dot_bashrc_functions "$USER_DIR"/.bashrc_functions
 cp $LOCAL_DIR/dot_bashrc_modifications "$USER_DIR"/.bashrc_modifications
 chown "$USERNAME":"$USERNAME" "$USER_DIR"/.bashrc_*
 chmod 644 "$USER_DIR"/.bashrc_*
@@ -185,3 +193,27 @@ cp /tmp/delta-0.11.3-x86_64-unknown-linux-musl/delta /usr/local/bin
 cp \
     /tmp/delta-0.11.3/etc/completion/completion.bash \
     /usr/share/bash-completion/completions/delta.bash
+
+# Install Git
+apt install --yes git
+# Add Git global config settings for user identity. These are placeholders
+# which the user should change.
+git_global_config_set 'user.name' 'Basic'
+git_global_config_set 'user.email' 'basic@basic.box'
+# Add Git global config setting for "git branch" sorting.
+git_global_config_set 'branch.sort' '-committerdate'
+# Add Git global config settings for "git log" formatting.
+git_global_config_set 'log.date' 'format:%b %d %Y'
+git_global_config_set \
+    'format.pretty' \
+    '%C(auto)%h %C(dim white)%ad%C(auto)%d%Creset %s %C(dim white)by %an %ar'
+# Add Git global config setting for "git pull" behaviour.
+git_global_config_set 'pull.rebase' 'true'
+# Add Git global config settings recommended by delta.
+git_global_config_set 'core.pager' 'delta'
+git_global_config_set 'delta.navigate' 'true'
+git_global_config_set 'diff.colorMoved' 'default'
+git_global_config_set 'interactive.diffFilter' 'delta --color-only'
+git_global_config_set 'merge.conflictstyle' 'diff3'
+# Add Git global config settings for line numbers for delta.
+git_global_config_set 'delta.line-numbers' 'true'

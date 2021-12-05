@@ -61,6 +61,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - ncdu installed
 - aliases which add certain defaults to commonly-used utilities
 - delta installed
+- Git installed
 
 
 Set up

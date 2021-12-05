@@ -1,0 +1,94 @@
+###############################################################################
+#
+#  Do a Git add and then do then a Git diff of staged changes.
+#
+#  Arguments:
+#    Strings. The arguments to pass to the Git add function.
+#
+###############################################################################
+git_add_then_git_diff() {
+    git add --all "$@"
+    git diff --staged
+}
+
+
+###############################################################################
+#
+#  Do a Git add and then do a Git status.
+#
+#  Arguments:
+#    Strings. The arguments to pass to the Git add function.
+#
+###############################################################################
+git_add_then_git_status() {
+    git add --all "$@"
+    echo
+    git status
+}
+
+
+###############################################################################
+#
+#  Do a Git checkout and then do a Git status.
+#
+#  Arguments:
+#    Strings. The arguments to pass to the Git checkout function.
+#
+###############################################################################
+git_checkout_then_git_status() {
+    git checkout "$@"
+    echo
+    git status
+}
+
+
+###############################################################################
+#
+#  Do a Git commit of everything which is not yet committed.
+#
+###############################################################################
+git_commit_checkpoint() {
+    git add --all
+    git commit -m 'Checkpoint'
+}
+
+
+###############################################################################
+#
+#  Do a Git interactive rebase.
+#
+#  Arguments:
+#    Int. The number of commits to include in the interactive rebase.
+#
+###############################################################################
+git_rebase_interactive() {
+    git rebase --interactive HEAD~"$1"
+}
+
+
+###############################################################################
+#
+#  Do a Git interactive rebase with autosquash.
+#
+#  Arguments:
+#    Int. The number of commits to include in the interactive rebase.
+#
+###############################################################################
+git_rebase_interactive_with_autosquash() {
+    git rebase --interactive --autosquash HEAD~"$1"
+}
+
+
+###############################################################################
+#
+#  Do a Git rebase and then do a Git status.
+#
+#  Arguments:
+#    Strings. The arguments to pass to the Git rebase function.
+#
+###############################################################################
+git_rebase_then_git_status() {
+    git rebase "$@"
+    echo
+    git status
+}

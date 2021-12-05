@@ -5,6 +5,7 @@ extra/first_login.desktop
 extra/first_login.sh
 
 extra/dotfiles/dot_bashrc_aliases
+extra/dotfiles/dot_bashrc_functions
 extra/dotfiles/dot_bashrc_modifications
 extra/dotfiles/htoprc
 
