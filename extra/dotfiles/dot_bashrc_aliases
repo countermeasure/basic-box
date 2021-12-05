@@ -1,14 +1,14 @@
-alias f="ranger"  # "f" for "file manager".
-alias fd="fd --exclude .git --follow --hidden"
-alias find="printf '\nPrefer fd to find.\n\n'"
+alias f='ranger'  # "f" for "file manager".
+alias fd='fd --exclude .git --follow --hidden'
+alias find='printf "\nPrefer fd to find.\n\n"'
 
 # "l" for "list".
-alias l="exa --colour-scale --group-directories-first --long"
+alias l='exa --colour-scale --group-directories-first --long'
 # "la" for "list all".
-alias la="exa --all --colour-scale --group-directories-first --long"
+alias la='exa --all --colour-scale --group-directories-first --long'
 
-alias ncdu="ncdu --color dark -r --si"
+alias ncdu='ncdu --color dark -r --si'
 
-alias pip3="printf '\nPrefer pipx to pip3.\n\n'"
+alias pip3='printf "\nPrefer pipx to pip3.\n\n"'
 
 alias rg="rg --glob '!.git' --hidden --smart-case"

@@ -1,7 +1,7 @@
 #!/bin/sh
 
-INSTALLER_DIR="/media/cdrom/simple-cdd"
-LOCAL_DIR="/usr/local/simple-cdd"
+INSTALLER_DIR='/media/cdrom/simple-cdd'
+LOCAL_DIR='/usr/local/simple-cdd'
 
 USERNAME=$(ls /home)
 USER_DIR="/home/$USERNAME"
@@ -67,49 +67,49 @@ apt install --yes torbrowser-launcher
 
 # Install pipx.
 apt install --yes python3-pip python3-venv
-runuser -l "$USERNAME" -c "pip3 install pipx"
+runuser -l "$USERNAME" -c 'pip3 install pipx'
 
 # Copy .bashrc extensions into place and enable them.
 cp $LOCAL_DIR/dot_bashrc_aliases "$USER_DIR"/.bashrc_aliases
 cp $LOCAL_DIR/dot_bashrc_modifications "$USER_DIR"/.bashrc_modifications
 chown "$USERNAME":"$USERNAME" "$USER_DIR"/.bashrc_*
 chmod 644 "$USER_DIR"/.bashrc_*
-printf "\n# Enable .bashrc extensions.\n" >> "$USER_DIR"/.bashrc
+printf '\n# Enable .bashrc extensions.\n' >> "$USER_DIR"/.bashrc
 # shellcheck disable=SC2016
 echo 'for file in ~/.bashrc_*; do . "$file"; done' >> "$USER_DIR"/.bashrc
 
 # Install youtube-dl.
-runuser -l "$USERNAME" -c "pipx install youtube-dl"
+runuser -l "$USERNAME" -c 'pipx install youtube-dl'
 apt install --yes ffmpeg
 
 # Install ranger.
 apt install --yes ranger
 
 # Set dark theme globally.
-gsettings_set "desktop.interface gtk-theme 'Adwaita-dark'"
+gsettings_set 'desktop.interface gtk-theme "Adwaita-dark"'
 
 # Display date and battery percentage in top bar.
-gsettings_set "desktop.interface clock-show-date true"
-gsettings_set "desktop.interface show-battery-percentage true"
+gsettings_set 'desktop.interface clock-show-date true'
+gsettings_set 'desktop.interface show-battery-percentage true'
 
 # Never blank screen, dim screen or suspend when inactive.
-gsettings_set "desktop.session idle-delay 0"
-gsettings_set "settings-daemon.plugins.power idle-dim false"
-gsettings_set "settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'"
+gsettings_set 'desktop.session idle-delay 0'
+gsettings_set 'settings-daemon.plugins.power idle-dim false'
+gsettings_set 'settings-daemon.plugins.power sleep-inactive-ac-type "nothing"'
 
 # Make display colour warmer at night.
-gsettings_set "settings-daemon.plugins.color night-light-enabled true"
+gsettings_set 'settings-daemon.plugins.color night-light-enabled true'
 
 # Enable natural scrolling for mouse.
-gsettings_set "desktop.peripherals.mouse natural-scroll true"
+gsettings_set 'desktop.peripherals.mouse natural-scroll true'
 
 # Speed up trackpad and enable trackpad tap-to-click.
-gsettings_set "desktop.peripherals.touchpad speed 0.25"
-gsettings_set "desktop.peripherals.touchpad tap-to-click true"
+gsettings_set 'desktop.peripherals.touchpad speed 0.25'
+gsettings_set 'desktop.peripherals.touchpad tap-to-click true'
 
 # Enable automatic login.
 sed -i \
-    "s/.*AutomaticLoginEnable =.*/AutomaticLoginEnable = true/" \
+    's/.*AutomaticLoginEnable =.*/AutomaticLoginEnable = true/' \
     /etc/gdm3/daemon.conf
 sed -i \
     "s/.*AutomaticLogin =.*/AutomaticLogin = $USERNAME/" \
@@ -169,7 +169,7 @@ chmod 644 "$HTOP_DIR"/htoprc
 # Make the F10 key available in the GNOME Terminal by stopping it from opening
 # the GNOME Terminal menu's File item. Without doing this, changes made
 # interactively to htop's settings can't be applied.
-gsettings_set "Terminal.Legacy.Settings menu-accelerator-enabled false"
+gsettings_set 'Terminal.Legacy.Settings menu-accelerator-enabled false'
 
 # Install ncdu.
 apt install --yes ncdu
