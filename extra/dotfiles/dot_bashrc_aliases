@@ -10,6 +10,7 @@ alias find='printf "\nPrefer fd to find.\n\n"'
 alias l='exa --colour-scale --group-directories-first --long'
 # "la" for "list all".
 alias la='exa --all --colour-scale --group-directories-first --long'
+alias less='less --HILITE-UNREAD --ignore-case --LONG-PROMPT --QUIET'
 alias ln='ln --interactive --verbose'
 alias ls='printf "\nPrefer l to ls.\n\n"'
 
