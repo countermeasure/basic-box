@@ -53,6 +53,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - zoxide installed
 - htop installed
 - ncdu installed
+- aliases which add certain defaults to commonly-used utilities
 
 
 Set up
