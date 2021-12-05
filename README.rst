@@ -23,6 +23,7 @@ The **Basic Box** installer creates a Debian 10 system with:
   runs automatically on the first boot
 - Tor Browser Launcher installed
 - these Firefox extensions installed interactively on the first login:
+
   - Dark Reader
   - Decentraleyes
   - Firefox Multi-Account Containers
@@ -30,20 +31,25 @@ The **Basic Box** installer creates a Debian 10 system with:
   - NoScript Security Suite
   - Privacy Badger
   - uBlock Origin
+
 - these Firefox preferences set interactively on the first login:
+
   - Enhanced Tracking Protection to Strict
   - Default Search Engine to DuckDuckGo
   - Theme to Dark
+
 - pipx installed
 - youtube-dl installed
 - ranger installed
 - these GNOME changes:
+
   - Enable dark theme
   - Display date and battery percentage in top bar
   - Never blank screen, dim screen or suspend when inactive
   - Enable night light (makes display colour warmer at night)
   - Enable natural scrolling for mouse
   - Speed up trackpad and enable trackpad tap-to-click
+
 - automatic login enabled
 - fd installed
 - ripgrep installed
