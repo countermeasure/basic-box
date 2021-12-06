@@ -20,6 +20,8 @@ gsettings_set () {
 mount /dev/cdrom /media/cdrom
 cp $INSTALLER_DIR/backports.list $LOCAL_DIR
 cp $INSTALLER_DIR/bat_0.18.3_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/delta-0.11.3-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/delta-0.11.3-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/exa-linux-x86_64-v0.10.1.zip $LOCAL_DIR
@@ -173,3 +175,13 @@ gsettings_set 'Terminal.Legacy.Settings menu-accelerator-enabled false'
 
 # Install ncdu.
 apt install --yes ncdu
+
+# Install delta.
+tar \
+    --extract -f $LOCAL_DIR/delta-0.11.3-x86_64-unknown-linux-musl.tar.gz \
+    --directory /tmp
+tar --extract -f $LOCAL_DIR/delta-0.11.3-source.tar.gz --directory /tmp
+cp /tmp/delta-0.11.3-x86_64-unknown-linux-musl/delta /usr/local/bin
+cp \
+    /tmp/delta-0.11.3/etc/completion/completion.bash \
+    /usr/share/bash-completion/completions/delta.bash

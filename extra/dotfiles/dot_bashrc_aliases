@@ -1,6 +1,8 @@
 alias cp='cp --archive --interactive --verbose'
 
+alias delta='delta --line-numbers --navigate'
 alias df='df --si --total'
+alias diff='printf "\nPrefer delta to diff.\n\n"'
 
 alias f='ranger'  # "f" for "file manager".
 alias fd='fd --exclude .git --follow --hidden'

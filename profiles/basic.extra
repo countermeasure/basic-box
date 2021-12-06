@@ -9,6 +9,8 @@ extra/dotfiles/dot_bashrc_modifications
 extra/dotfiles/htoprc
 
 extra/downloads/bat_0.18.3_amd64.deb
+extra/downloads/delta-0.11.3-source.tar.gz
+extra/downloads/delta-0.11.3-x86_64-unknown-linux-musl.tar.gz
 extra/downloads/exa-linux-x86_64-v0.10.1.zip
 extra/downloads/fd_8.2.1_amd64.deb
 extra/downloads/fzf-0.28.0-linux_amd64.tar.gz

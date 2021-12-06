@@ -60,6 +60,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - htop installed
 - ncdu installed
 - aliases which add certain defaults to commonly-used utilities
+- delta installed
 
 
 Set up
