@@ -39,6 +39,7 @@ cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
 cp $INSTALLER_DIR/fzf-0.28.0-linux_amd64.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/fzf-0.28.0-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.4_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
@@ -217,3 +218,11 @@ git_global_config_set 'interactive.diffFilter' 'delta --color-only'
 git_global_config_set 'merge.conflictstyle' 'diff3'
 # Add Git global config settings for line numbers for delta.
 git_global_config_set 'delta.line-numbers' 'true'
+
+# Install gitk
+apt install --yes gitk
+GIT_DIR="$USER_CONFIG_DIR/git"
+mkdir "$GIT_DIR"
+cp $LOCAL_DIR/gitk "$GIT_DIR"
+chown --recursive "$USERNAME":"$USERNAME" "$GIT_DIR"
+chmod 644 "$GIT_DIR"/gitk

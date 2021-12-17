@@ -62,6 +62,7 @@ alias gfa='git fetch --all'
 __git_complete gfa _git_fetch
 alias gfap='git fetch --all --prune'
 __git_complete gfap _git_fetch
+alias gk='gitk &'
 alias gl='git log'
 __git_complete gl _git_log
 alias glg='git log --all --graph'

@@ -1,0 +1,38 @@
+# This file will be overwritten the first time gitk is run, but these settings
+# should survive the overwriting process to be included in the new contents of
+# the file.
+set mainfont {sans 10}
+set textfont {monospace 10}
+set uifont {sans 10}
+set datetimeformat {%b %d %Y @ %H:%M}
+set uicolor #282828
+set want_ttk 0
+set bgcolor #2e3436
+set fgcolor #d3d7cf
+set uifgcolor #d3d7cf
+set uifgdisabledcolor #555753
+set colors {"#8ae234" "#ef2929" "#3465a4" "#75507b"}
+set diffcolors {"#ef2929" "#8ae234" "#729fcf"}
+set selectbgcolor #3465a4
+set foundbgcolor #c4a000
+set currentsearchhitbgcolor #c4a000
+set headbgcolor #8ae234
+set headfgcolor #2e3436
+set headoutlinecolor #4e9a06
+set remotebgcolor #4e9a06
+set tagbgcolor #c4a000
+set tagfgcolor #2e3436
+set tagoutlinecolor #c4a000
+set reflinecolor #555753
+set filesepbgcolor #282828
+set filesepfgcolor #d3d7cf
+set mainheadcirclecolor #8ae234
+set workingfilescirclecolor #ef2929
+set indexcirclecolor #00ff00
+set circlecolors {"#d3d7cf" "#729fcf" "#555753" "#729fcf" "#729fcf"}
+set linkfgcolor #729fcf
+set circleoutlinecolor #2e3436
+set permviews {{{All branches} {} {--all --branches --tags --remotes} {}}
+{{Local branches} {} --branches {}}
+{{Remote branches} {} --remotes {}}
+}
