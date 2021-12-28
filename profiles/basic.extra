@@ -1,4 +1,5 @@
 extra/backports.list
+extra/box.sh
 extra/first_boot.service
 extra/first_boot.sh
 extra/first_login.desktop
@@ -9,6 +10,7 @@ extra/dotfiles/dot_bashrc_functions
 extra/dotfiles/dot_bashrc_modifications
 extra/dotfiles/gitk
 extra/dotfiles/htoprc
+extra/dotfiles/keyd_default.cfg
 
 extra/downloads/bat_0.18.3_amd64.deb
 extra/downloads/delta-0.11.3-source.tar.gz

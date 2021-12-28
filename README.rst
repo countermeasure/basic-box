@@ -64,6 +64,11 @@ The **Basic Box** installer creates a Debian 10 system with:
 - Git installed
 - gitk installed
 - keyd installed
+- optional key remapping which:
+
+  - modifies the CapsLock key to produce Control when held and Escape when
+    tapped
+  - modifies the Escape key to produce CapsLock
 
 
 Set up
