@@ -49,3 +49,11 @@ wget --timestamping "https://github.com/dandavison/delta/archive/refs/tags/\
 # delta in its name. Simply saving with this different filename will stop
 # wget's --timestamping option working.
 cp 0.11.3.tar.gz delta-0.11.3-source.tar.gz
+
+# Ensure the keyd package is present.
+wget --timestamping "https://github.com/rvaiya/keyd/archive/refs/tags/\
+v1.3.0.tar.gz"
+# As the keyd archive doesn't include keyd in its name, make a copy with keyd
+# in its name. Simply saving with this different filename will stop wget's
+# --timestamping option working.
+cp v1.3.0.tar.gz keyd-v1.3.0-source.tar.gz

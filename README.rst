@@ -63,6 +63,7 @@ The **Basic Box** installer creates a Debian 10 system with:
 - delta installed
 - Git installed
 - gitk installed
+- keyd installed
 
 
 Set up

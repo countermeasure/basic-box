@@ -41,6 +41,7 @@ cp $INSTALLER_DIR/fzf-0.28.0-linux_amd64.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/fzf-0.28.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
+cp $INSTALLER_DIR/keyd-v1.3.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.4_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/zoxide-v0.7.9-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
@@ -226,3 +227,9 @@ mkdir "$GIT_DIR"
 cp $LOCAL_DIR/gitk "$GIT_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$GIT_DIR"
 chmod 644 "$GIT_DIR"/gitk
+
+# Install and configure keyd.
+apt install --yes libudev-dev
+tar --extract -f $LOCAL_DIR/keyd-v1.3.0-source.tar.gz --directory /tmp
+make --directory=/tmp/keyd-1.3.0
+make --directory=/tmp/keyd-1.3.0 install
