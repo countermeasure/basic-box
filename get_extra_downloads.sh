@@ -96,3 +96,7 @@ tags/0.21.10.24.tar.gz"
 # with trash-cli in its name. Simply saving with this different filename will
 # stop wget's --timestamping option working.
 cp 0.21.10.24.tar.gz trash-cli-0.21.10.24-source.tar.gz
+
+# Ensure the Neovim package is present.
+wget --timestamping "https://github.com/neovim/neovim/releases/download/\
+v0.7.0/nvim-linux64.deb"

@@ -54,6 +54,7 @@ cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
 cp $INSTALLER_DIR/keyd-v1.3.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.6_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/nvim-linux64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/setup.rst $LOCAL_DIR
@@ -376,3 +377,26 @@ mkdir "$RANGER_DIR"
 cp $LOCAL_DIR/ranger_rc.conf "$RANGER_DIR/rc.conf"
 chown --recursive "$USERNAME":"$USERNAME" "$RANGER_DIR"
 chmod 644 "$RANGER_DIR"/rc.conf
+
+# Install Neovim.
+# The default Vim package is no longer required, so remove it first.
+apt purge --yes vim-tiny
+apt install --yes $LOCAL_DIR/nvim-linux64.deb
+# Set Neovim as the alternative for the editor, ex, rview, rvim, vi, view, vim
+# and vimdiff commands.
+NVIM_PATH=/usr/bin/nvim
+update-alternatives --install /usr/bin/editor editor $NVIM_PATH 50
+update-alternatives --install /usr/bin/ex ex $NVIM_PATH 50
+update-alternatives --install /usr/bin/rview rview $NVIM_PATH 50
+update-alternatives --install /usr/bin/rvim rvim $NVIM_PATH 50
+update-alternatives --install /usr/bin/vi vi $NVIM_PATH 50
+update-alternatives --install /usr/bin/view view $NVIM_PATH 50
+update-alternatives --install /usr/bin/vim vim $NVIM_PATH 50
+update-alternatives --install /usr/bin/vimdiff vimdiff $NVIM_PATH 50
+# Set Neovim as the sensible-editor for the root user so that ranger doesn't
+# ask which editor to use the first time it goes to open a file for the root
+# user.
+# Invoking select-editor for the root user must be done using runuser or the
+# .selected_editor file is created in the / directory rather than the /root
+# directory.
+runuser -l root -c 'echo 1 | select-editor'
