@@ -28,6 +28,7 @@ gsettings_set () {
 
 # Copy extra files onto the new installation.
 cp $INSTALLER_DIR/bat_0.19.0_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/black $LOCAL_DIR
 cp $INSTALLER_DIR/box.sh $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.11.3-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.11.3-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
@@ -55,11 +56,14 @@ cp $INSTALLER_DIR/keyd-v1.3.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.6_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim-linux64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_init.lua $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/setup.rst $LOCAL_DIR
 cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
+cp $INSTALLER_DIR/stylua-linux.zip $LOCAL_DIR
+cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
 cp $INSTALLER_DIR/trash-cli-0.21.10.24-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 
@@ -400,3 +404,48 @@ update-alternatives --install /usr/bin/vimdiff vimdiff $NVIM_PATH 50
 # .selected_editor file is created in the / directory rather than the /root
 # directory.
 runuser -l root -c 'echo 1 | select-editor'
+
+# Configure Neovim.
+# Put the init file in place.
+NVIM_CONFIG_DIR="$USER_CONFIG_DIR/nvim"
+mkdir "$NVIM_CONFIG_DIR"
+cp $LOCAL_DIR/nvim_init.lua "$NVIM_CONFIG_DIR"/init.lua
+chown --recursive "$USERNAME":"$USERNAME" "$NVIM_CONFIG_DIR"
+chmod 644 "$NVIM_CONFIG_DIR"/init.lua
+# Install the Neovim Python client.
+PYNVIM_DIR="$USER_DIR"/.local/pip/venvs/pynvim
+runuser -l "$USERNAME" -c "python3 -m venv $PYNVIM_DIR"
+runuser -l "$USERNAME" -c "$PYNVIM_DIR/bin/pip install pynvim==0.4.3"
+# Install plugins.
+git clone \
+    --depth 1 \
+    https://github.com/wbthomason/packer.nvim \
+    "$USER_SHARE_DIR/nvim/site/pack/packer/start/packer.nvim"
+chown --recursive "$USERNAME":"$USERNAME" "$USER_SHARE_DIR/nvim"
+runuser \
+    -l "$USERNAME" \
+    -c \
+    'nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerSync"'
+# Install ShellCheck.
+apt install --yes shellcheck
+# Install StyLua.
+unzip -d /usr/local/bin $LOCAL_DIR/stylua-linux.zip stylua
+chmod 755 /usr/local/bin/stylua
+# Copy StyLua configuration file into place.
+STYLUA_CONFIG_DIR="$USER_CONFIG_DIR/stylua"
+mkdir "$STYLUA_CONFIG_DIR"
+cp $LOCAL_DIR/stylua.toml "$STYLUA_CONFIG_DIR"/stylua.toml
+chown --recursive "$USERNAME":"$USERNAME" "$STYLUA_CONFIG_DIR"
+chmod 644 "$STYLUA_CONFIG_DIR"/stylua.toml
+# Install universal-ctags.
+apt install --yes universal-ctags
+# Install Python LSP Server and its third-party plugins.
+runuser -l "$USERNAME" -c 'pipx install python-lsp-server[flake8]==1.4.1'
+runuser -l "$USERNAME" -c 'pipx inject python-lsp-server pyls-isort==0.2.2'
+runuser \
+  -l "$USERNAME" \
+  -c 'pipx inject python-lsp-server python-lsp-black==1.2.1'
+# Copy Black configuration file into place.
+cp $LOCAL_DIR/black "$USER_CONFIG_DIR"
+chown "$USERNAME":"$USERNAME" "$USER_CONFIG_DIR"/black
+chmod 644 "$USER_CONFIG_DIR"/black

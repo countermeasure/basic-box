@@ -1,3 +1,6 @@
+# Paths related to ctags.
+.ctags
+
 # Paths related to direnv.
 .direnv/
 .envrc

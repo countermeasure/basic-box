@@ -100,3 +100,7 @@ cp 0.21.10.24.tar.gz trash-cli-0.21.10.24-source.tar.gz
 # Ensure the Neovim package is present.
 wget --timestamping "https://github.com/neovim/neovim/releases/download/\
 v0.7.0/nvim-linux64.deb"
+
+# Ensure the StyLua package is present.
+wget --timestamping "https://github.com/JohnnyMorganz/StyLua/releases/\
+download/v0.13.1/stylua-linux.zip"

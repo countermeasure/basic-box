@@ -5,6 +5,7 @@ extra/first_login.desktop
 extra/first_login.sh
 extra/setup.rst
 
+extra/dotfiles/black
 extra/dotfiles/dot_bashrc_aliases
 extra/dotfiles/dot_bashrc_functions
 extra/dotfiles/dot_bashrc_modifications
@@ -14,8 +15,10 @@ extra/dotfiles/git_global_ignore
 extra/dotfiles/htoprc
 extra/dotfiles/keepassxc.ini
 extra/dotfiles/keyd_default.cfg
+extra/dotfiles/nvim_init.lua
 extra/dotfiles/ranger_rc.conf
 extra/dotfiles/starship.toml
+extra/dotfiles/stylua.toml
 
 extra/downloads/bat_0.19.0_amd64.deb
 extra/downloads/delta-0.11.3-source.tar.gz
@@ -33,5 +36,6 @@ extra/downloads/MullvadVPN-2021.6_amd64.deb
 extra/downloads/nvim-linux64.deb
 extra/downloads/ripgrep_13.0.0_amd64.deb
 extra/downloads/starship-x86_64-unknown-linux-gnu.tar.gz
+extra/downloads/stylua-linux.zip
 extra/downloads/trash-cli-0.21.10.24-source.tar.gz
 extra/downloads/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz
