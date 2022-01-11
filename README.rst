@@ -70,6 +70,8 @@ The **Basic Box** installer creates a Debian 10 system with:
     tapped
   - modifies the Escape key to produce CapsLock
 
+- direnv installed
+
 
 Set up
 ------

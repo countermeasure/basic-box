@@ -57,3 +57,13 @@ v1.3.0.tar.gz"
 # in its name. Simply saving with this different filename will stop wget's
 # --timestamping option working.
 cp v1.3.0.tar.gz keyd-v1.3.0-source.tar.gz
+
+# Ensure the direnv package is present.
+wget --timestamping "https://github.com/direnv/direnv/releases/download/\
+v2.30.3/direnv.linux-amd64"
+wget --timestamping "https://github.com/direnv/direnv/archive/refs/tags/\
+v2.30.3.tar.gz"
+# As the direnv archive doesn't include direnv in its name, make a copy with
+# direnv in its name. Simply saving with this different filename will stop
+# wget's --timestamping option working.
+cp v2.30.3.tar.gz direnv-v2.30.3-source.tar.gz

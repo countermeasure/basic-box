@@ -1,0 +1,2 @@
+# If $EDITOR is not exported, direnv edit will default to using nano.
+export EDITOR='vim'

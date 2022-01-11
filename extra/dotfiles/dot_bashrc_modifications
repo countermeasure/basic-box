@@ -23,3 +23,6 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Enable zoxide.
 eval "$(zoxide init bash)"
+
+# Enable direnv.
+eval "$(direnv hook bash)"

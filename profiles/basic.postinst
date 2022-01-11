@@ -30,9 +30,12 @@ cp $INSTALLER_DIR/bat_0.18.3_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/box.sh $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.11.3-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.11.3-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/direnv-v2.30.3-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/direnv.linux-amd64 $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_functions $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
+cp $INSTALLER_DIR/dot_profile_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/exa-linux-x86_64-v0.10.1.zip $LOCAL_DIR
 cp $INSTALLER_DIR/fd_8.2.1_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
@@ -92,6 +95,14 @@ chmod 644 "$USER_DIR"/.bashrc_*
 printf '\n# Enable .bashrc extensions.\n' >> "$USER_DIR"/.bashrc
 # shellcheck disable=SC2016
 echo 'for file in ~/.bashrc_*; do . "$file"; done' >> "$USER_DIR"/.bashrc
+
+# Copy .profile extension into place and enable it.
+cp $LOCAL_DIR/dot_profile_modifications "$USER_DIR"/.profile_modifications
+chown "$USERNAME":"$USERNAME" "$USER_DIR"/.profile_modifications
+chmod 644 "$USER_DIR"/.profile_modifications
+printf '\n# Enable .profile modifications.\n' >> "$USER_DIR"/.profile
+# shellcheck disable=SC2016
+echo '. "$HOME/.profile_modifications"' >> "$USER_DIR"/.profile
 
 # Install youtube-dl.
 runuser -l "$USERNAME" -c 'pipx install youtube-dl'
@@ -251,3 +262,14 @@ BOX_SCRIPT_PATH="$USER_BIN_DIR/box"
 cp $LOCAL_DIR/box.sh "$BOX_SCRIPT_PATH"
 chown "$USERNAME":"$USERNAME" "$BOX_SCRIPT_PATH"
 chmod 755 "$BOX_SCRIPT_PATH"
+
+# Install direnv.
+DIRENV_EXECUTABLE_PATH='/usr/local/bin/direnv'
+cp $LOCAL_DIR/direnv.linux-amd64 $DIRENV_EXECUTABLE_PATH
+chmod 755 $DIRENV_EXECUTABLE_PATH
+tar --extract -f $LOCAL_DIR/direnv-v2.30.3-source.tar.gz --directory /tmp
+cp /tmp/direnv-2.30.3/man/direnv-fetchurl.1 /usr/local/share/man/man1
+cp /tmp/direnv-2.30.3/man/direnv-stdlib.1 /usr/local/share/man/man1
+cp /tmp/direnv-2.30.3/man/direnv.1 /usr/local/share/man/man1
+cp /tmp/direnv-2.30.3/man/direnv.toml.1 /usr/local/share/man/man1
+mandb
