@@ -4,6 +4,20 @@
 set -o errexit -o nounset -o pipefail
 
 
+destroy () {
+    echo 'This will PERMANENTLY DESTROY ALL DATA on this machine.'
+    echo
+    sudo cryptsetup --verbose erase /dev/sda5
+    echo
+    echo 'Done.'
+    sleep 1
+    echo
+    echo 'Powering off...'
+    sleep 1
+    systemctl poweroff
+}
+
+
 keyboard () {
     case "$1" in
         -h|--help)
@@ -85,6 +99,7 @@ main_help () {
     echo 'Commands:'
     echo
     echo '  -h|--help  Show this help.'
+    echo '  destroy    Destroy all data on this machine.'
     echo '  keyboard   Control key mapping.'
 }
 
@@ -93,6 +108,9 @@ echo
 case "${1-}" in
     -h|--help)
         main_help
+        ;;
+    destroy)
+        destroy
         ;;
     keyboard)
         keyboard "${2-}"
