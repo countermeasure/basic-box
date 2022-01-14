@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Enable the UFW firewall.
 ufw enable

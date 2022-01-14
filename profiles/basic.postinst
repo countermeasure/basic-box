@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 INSTALLER_DIR='/media/cdrom/simple-cdd'
 LOCAL_DIR='/usr/local/simple-cdd'

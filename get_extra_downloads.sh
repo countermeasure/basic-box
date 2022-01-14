@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Ensure the extra downloads directory exists and switch into it.
 mkdir -p extra/downloads
