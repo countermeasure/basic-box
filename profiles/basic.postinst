@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set intuitive error behaviour.
+set -o errexit -o nounset -o pipefail
+
 INSTALLER_DIR='/media/cdrom/simple-cdd'
 LOCAL_DIR='/usr/local/simple-cdd'
 
@@ -24,7 +27,6 @@ gsettings_set () {
 }
 
 # Copy extra files onto the new installation.
-mount /dev/cdrom /media/cdrom
 cp $INSTALLER_DIR/backports.list $LOCAL_DIR
 cp $INSTALLER_DIR/bat_0.18.3_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/box.sh $LOCAL_DIR
@@ -51,7 +53,6 @@ cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.4_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/zoxide-v0.7.9-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
-umount /media/cdrom
 
 # Copy first_boot systemd unit file into place.
 cp $LOCAL_DIR/first_boot.service /etc/systemd/system

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set intuitive error behaviour.
+set -o errexit -o nounset -o pipefail
+
 
 keyboard () {
     case "$1" in
@@ -87,14 +90,14 @@ main_help () {
 
 
 echo
-case "$1" in
+case "${1-}" in
     -h|--help)
         main_help
         ;;
     keyboard)
-        keyboard "$2"
+        keyboard "${2-}"
         ;;
     *)
-        main_catchall "$1"
+        main_catchall "${1-}"
         ;;
 esac

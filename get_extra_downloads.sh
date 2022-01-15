@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set intuitive error behaviour.
+set -o errexit -o nounset -o pipefail
+
 # Ensure the extra downloads directory exists and switch into it.
 mkdir -p extra/downloads
 cd extra/downloads || exit 1

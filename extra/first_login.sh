@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set intuitive error behaviour.
+set -o errexit -o nounset -o pipefail
+
 # Print a welcome.
 echo
 echo 'Welcome to your new Basic Box'
@@ -26,8 +29,7 @@ while [[ $EXIT_CODE != 0 ]] ; do
     echo
     echo "$ACCOUNT_NUMBER" | mullvad account set
     echo
-    mullvad account get
-    EXIT_CODE=$?
+    mullvad account get && EXIT_CODE=$? || EXIT_CODE=$?
     echo
     if [[ $EXIT_CODE != 0 ]] ; then
         echo "That account number didn't work."

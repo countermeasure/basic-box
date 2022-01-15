@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set intuitive error behaviour.
+set -o errexit -o nounset -o pipefail
+
 # Enable the UFW firewall.
 ufw enable
 
