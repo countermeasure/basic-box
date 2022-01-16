@@ -39,6 +39,7 @@ cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/dot_profile_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/exa-linux-x86_64-v0.10.1.zip $LOCAL_DIR
 cp $INSTALLER_DIR/fd_8.3.2_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/Fira_Code_Regular_Nerd_Font_Complete.otf $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
@@ -269,3 +270,10 @@ cp /tmp/direnv-2.30.3/man/direnv-stdlib.1 /usr/local/share/man/man1
 cp /tmp/direnv-2.30.3/man/direnv.1 /usr/local/share/man/man1
 cp /tmp/direnv-2.30.3/man/direnv.toml.1 /usr/local/share/man/man1
 mandb
+
+# Install Fira Code Nerd Font.
+FONTS_DIR='/usr/local/share/fonts'
+cp $LOCAL_DIR/Fira_Code_Regular_Nerd_Font_Complete.otf $FONTS_DIR
+chmod 664 $FONTS_DIR/Fira_Code_Regular_Nerd_Font_Complete.otf
+# Make Fira Code the system-wide monospace font.
+gsettings_set 'desktop.interface monospace-font-name "FiraCode Nerd Font 11"'

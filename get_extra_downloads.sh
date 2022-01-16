@@ -69,3 +69,14 @@ v2.30.3.tar.gz"
 # direnv in its name. Simply saving with this different filename will stop
 # wget's --timestamping option working.
 cp v2.30.3.tar.gz direnv-v2.30.3-source.tar.gz
+
+# Ensure the Fira Code font is present.
+wget --timestamping "https://github.com/ryanoasis/nerd-fonts/raw/v2.1.0/\
+patched-fonts/FiraCode/Regular/complete/\
+Fira%20Code%20Regular%20Nerd%20Font%20Complete.otf"
+# As the file name includes spaces, make a copy replacing them with
+# underscores. Simply saving with this different filename will stop wget's
+# --timestamping option working.
+cp \
+    'Fira Code Regular Nerd Font Complete.otf' \
+    Fira_Code_Regular_Nerd_Font_Complete.otf

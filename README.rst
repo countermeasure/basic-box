@@ -71,6 +71,7 @@ The **Basic Box** installer creates a Debian 11 system with:
   - modifies the Escape key to produce CapsLock
 
 - direnv installed
+- Fira Code Nerd Font installed and set as the system-wide monospace font
 
 
 Set up
