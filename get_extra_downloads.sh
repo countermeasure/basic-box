@@ -80,3 +80,7 @@ Fira%20Code%20Regular%20Nerd%20Font%20Complete.otf"
 cp \
     'Fira Code Regular Nerd Font Complete.otf' \
     Fira_Code_Regular_Nerd_Font_Complete.otf
+
+# Ensure the Starship binary is present.
+wget --timestamping "https://github.com/starship/starship/releases/download/\
+v1.3.0/starship-x86_64-unknown-linux-gnu.tar.gz"

@@ -24,5 +24,9 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Enable zoxide.
 eval "$(zoxide init bash)"
 
+# Enable Starship.
+eval "$(starship init bash)"
+
 # Enable direnv.
+# This should appear after shell extensions that manipulate the prompt.
 eval "$(direnv hook bash)"

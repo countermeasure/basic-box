@@ -52,6 +52,7 @@ cp $INSTALLER_DIR/keyd-v1.3.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.6_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 
 # Copy first_boot systemd unit file into place.
@@ -277,3 +278,12 @@ cp $LOCAL_DIR/Fira_Code_Regular_Nerd_Font_Complete.otf $FONTS_DIR
 chmod 664 $FONTS_DIR/Fira_Code_Regular_Nerd_Font_Complete.otf
 # Make Fira Code the system-wide monospace font.
 gsettings_set 'desktop.interface monospace-font-name "FiraCode Nerd Font 11"'
+
+# Install Starship.
+tar \
+    --extract -f $LOCAL_DIR/starship-x86_64-unknown-linux-gnu.tar.gz \
+    --directory /usr/local/bin
+# The Starship binary is called with its full path here as calling it just with
+# starship doesn't work.
+/usr/local/bin/starship completions bash > \
+    /usr/share/bash-completion/completions/starship.bash
