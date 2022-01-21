@@ -1,0 +1,37 @@
+format = "[(${cmd_duration}${status}\n)${all}](bold bright-black)"
+
+[character]
+success_symbol = "❯"
+
+[cmd_duration]
+format = "[⚡ That took ${duration}](${style})\n"
+show_notifications = true
+
+[directory]
+format = "In 📂 [${path}](${style})[${read_only}](${read_only_style}) "
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = "🌱 "
+
+[git_metrics]
+disabled = false
+format = "[(+${added} )(-${deleted} )](bold purple)"
+
+[git_status]
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+
+[python]
+format = "via [${symbol}(${version})](${style}) "
+version_format = "v${major}.${minor}"
+
+[status]
+disabled = false
+format = "[${symbol} Exit code ${status}](${style})\n"
+symbol = "💥"
+
+[sudo]
+disabled = false
+style = "bold bright-black"

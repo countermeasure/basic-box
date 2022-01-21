@@ -53,6 +53,7 @@ cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.6_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
 cp $INSTALLER_DIR/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 
 # Copy first_boot systemd unit file into place.
@@ -287,3 +288,6 @@ tar \
 # starship doesn't work.
 /usr/local/bin/starship completions bash > \
     /usr/share/bash-completion/completions/starship.bash
+cp $LOCAL_DIR/starship.toml "$USER_CONFIG_DIR"
+chown "$USERNAME":"$USERNAME" "$USER_CONFIG_DIR"/starship.toml
+chmod 664 "$USER_CONFIG_DIR"/starship.toml
