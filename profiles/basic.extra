@@ -1,4 +1,3 @@
-extra/backports.list
 extra/box.sh
 extra/first_boot.service
 extra/first_boot.sh
@@ -15,7 +14,7 @@ extra/dotfiles/keyd_default.cfg
 
 extra/downloads/bat_0.18.3_amd64.deb
 extra/downloads/delta-0.11.3-source.tar.gz
-extra/downloads/delta-0.11.3-x86_64-unknown-linux-musl.tar.gz
+extra/downloads/delta-0.11.3-x86_64-unknown-linux-gnu.tar.gz
 extra/downloads/direnv-v2.30.3-source.tar.gz
 extra/downloads/direnv.linux-amd64
 extra/downloads/exa-linux-x86_64-v0.10.1.zip

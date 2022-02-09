@@ -13,7 +13,7 @@ alias find='printf "\nPrefer fd to find.\n\n"'
 source /usr/share/bash-completion/completions/git
 
 alias g='git'
-__git_complete g _git
+__git_complete g __git_main
 alias ga='git_add_then_git_status'
 __git_complete ga _git_add
 alias gad='git_add_then_git_diff'

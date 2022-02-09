@@ -1,2 +1,7 @@
+# On Debian 11, simple-cdd 0.6.8 fails to include cryptsetup-initramfs, without
+# which the machine will fail to boot. A patch for this is on the simple-cdd
+# master branch, so it will presumably be fixed in the next version of
+# simple-cdd.
+cryptsetup-initramfs
 firmware-iwlwifi
 firmware-misc-nonfree

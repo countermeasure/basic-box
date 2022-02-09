@@ -27,11 +27,10 @@ gsettings_set () {
 }
 
 # Copy extra files onto the new installation.
-cp $INSTALLER_DIR/backports.list $LOCAL_DIR
 cp $INSTALLER_DIR/bat_0.18.3_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/box.sh $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.11.3-source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/delta-0.11.3-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/delta-0.11.3-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/direnv-v2.30.3-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/direnv.linux-amd64 $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
@@ -76,10 +75,6 @@ runuser \
     --command \
     "desktop-file-install --dir=$AUTOSTART_DIR $LOCAL_DIR/first_login.desktop"
 
-# Enable Backports to be able to install Tor Browser Launcher.
-cp $LOCAL_DIR/backports.list /etc/apt/sources.list.d
-apt update
-
 # Install Tor Browser Launcher.
 apt install --yes torbrowser-launcher
 
@@ -116,7 +111,7 @@ apt install --yes ranger
 gsettings_set 'desktop.interface gtk-theme "Adwaita-dark"'
 
 # Display date and battery percentage in top bar.
-gsettings_set 'desktop.interface clock-show-date true'
+gsettings_set 'desktop.interface clock-show-weekday true'
 gsettings_set 'desktop.interface show-battery-percentage true'
 
 # Never blank screen, dim screen or suspend when inactive.
@@ -203,10 +198,10 @@ apt install --yes ncdu
 
 # Install delta.
 tar \
-    --extract -f $LOCAL_DIR/delta-0.11.3-x86_64-unknown-linux-musl.tar.gz \
+    --extract -f $LOCAL_DIR/delta-0.11.3-x86_64-unknown-linux-gnu.tar.gz \
     --directory /tmp
 tar --extract -f $LOCAL_DIR/delta-0.11.3-source.tar.gz --directory /tmp
-cp /tmp/delta-0.11.3-x86_64-unknown-linux-musl/delta /usr/local/bin
+cp /tmp/delta-0.11.3-x86_64-unknown-linux-gnu/delta /usr/local/bin
 cp \
     /tmp/delta-0.11.3/etc/completion/completion.bash \
     /usr/share/bash-completion/completions/delta.bash

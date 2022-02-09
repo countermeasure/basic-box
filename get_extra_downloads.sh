@@ -41,11 +41,10 @@ wget --timestamping "https://github.com/ajeetdsouza/zoxide/releases/download/\
 v0.7.9/zoxide-v0.7.9-x86_64-unknown-linux-musl.tar.gz"
 
 # Ensure the delta package is present.
-# The musl version is needed for Debian 10.
 # The delta .deb package doesn't contain completions as of version 0.11.3, so
 # manual installation is necessary.
 wget --timestamping "https://github.com/dandavison/delta/releases/download/\
-0.11.3/delta-0.11.3-x86_64-unknown-linux-musl.tar.gz"
+0.11.3/delta-0.11.3-x86_64-unknown-linux-gnu.tar.gz"
 wget --timestamping "https://github.com/dandavison/delta/archive/refs/tags/\
 0.11.3.tar.gz"
 # As the delta archive doesn't include delta in its name, make a copy with

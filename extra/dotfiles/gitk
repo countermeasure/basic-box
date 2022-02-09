@@ -32,6 +32,7 @@ set indexcirclecolor #00ff00
 set circlecolors {"#d3d7cf" "#729fcf" "#555753" "#729fcf" "#729fcf"}
 set linkfgcolor #729fcf
 set circleoutlinecolor #2e3436
+set diffbgcolors {"#2e3436" "#2e3436"}
 set permviews {{{All branches} {} {--all --branches --tags --remotes} {}}
 {{Local branches} {} --branches {}}
 {{Remote branches} {} --remotes {}}
