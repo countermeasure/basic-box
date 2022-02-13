@@ -5,9 +5,21 @@ set -o errexit -o nounset -o pipefail
 
 
 destroy () {
+    boot_device_name=$(
+        lsblk --list | grep /boot$ | awk '{print $1}' | head --lines 1
+    )
+    if [ "$boot_device_name" = 'nvme0n1p2' ]; then
+        target_device='/dev/nvme0n1p3'
+    elif [ "$boot_device_name" = 'sda1' ]; then
+        target_device='/dev/sda5'
+    else
+        echo 'Boot device could not be determined.'
+        echo 'Operation cancelled.'
+        exit 1
+    fi
     echo 'This will PERMANENTLY DESTROY ALL DATA on this machine.'
     echo
-    sudo cryptsetup --verbose erase /dev/sda5
+    sudo cryptsetup --verbose erase $target_device
     echo
     echo 'Done.'
     sleep 1
