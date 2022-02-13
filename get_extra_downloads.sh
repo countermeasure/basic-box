@@ -8,11 +8,11 @@ mkdir -p extra/downloads
 cd extra/downloads || exit 1
 
 # Ensure the Mullvad VPN app package is present.
-wget --timestamping https://mullvad.net/media/app/MullvadVPN-2021.4_amd64.deb
+wget --timestamping https://mullvad.net/media/app/MullvadVPN-2021.6_amd64.deb
 
 # Ensure the fd package is present.
-wget --timestamping "https://github.com/sharkdp/fd/releases/download/v8.2.1/\
-fd_8.2.1_amd64.deb"
+wget --timestamping "https://github.com/sharkdp/fd/releases/download/v8.3.2/\
+fd_8.3.2_amd64.deb"
 
 # Ensure the ripgrep package is present.
 wget --timestamping "https://github.com/BurntSushi/ripgrep/releases/download/\
@@ -23,22 +23,22 @@ wget --timestamping "https://github.com/ogham/exa/releases/download/v0.10.1/\
 exa-linux-x86_64-v0.10.1.zip"
 
 # Ensure the bat package is present.
-wget --timestamping "https://github.com/sharkdp/bat/releases/download/v0.18.3/\
-bat_0.18.3_amd64.deb"
+wget --timestamping "https://github.com/sharkdp/bat/releases/download/v0.19.0/\
+bat_0.19.0_amd64.deb"
 
 # Ensure the fzf package is present.
-wget --timestamping "https://github.com/junegunn/fzf/releases/download/0.28.0/\
-fzf-0.28.0-linux_amd64.tar.gz"
+wget --timestamping "https://github.com/junegunn/fzf/releases/download/0.29.0/\
+fzf-0.29.0-linux_amd64.tar.gz"
 wget --timestamping "https://github.com/junegunn/fzf/archive/refs/tags/\
-0.28.0.tar.gz"
+0.29.0.tar.gz"
 # As the fzf archive doesn't include fzf in its name, make a copy with fzf in
 # its name. Simply saving with this different filename will stop wget's
 # --timestamping option working.
-cp 0.28.0.tar.gz fzf-0.28.0-source.tar.gz
+cp 0.29.0.tar.gz fzf-0.29.0-source.tar.gz
 
 # Ensure the zoxide package is present.
 wget --timestamping "https://github.com/ajeetdsouza/zoxide/releases/download/\
-v0.7.9/zoxide-v0.7.9-x86_64-unknown-linux-musl.tar.gz"
+v0.8.0/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz"
 
 # Ensure the delta package is present.
 # The delta .deb package doesn't contain completions as of version 0.11.3, so

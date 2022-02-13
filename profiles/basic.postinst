@@ -27,7 +27,7 @@ gsettings_set () {
 }
 
 # Copy extra files onto the new installation.
-cp $INSTALLER_DIR/bat_0.18.3_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/bat_0.19.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/box.sh $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.11.3-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.11.3-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
@@ -38,20 +38,20 @@ cp $INSTALLER_DIR/dot_bashrc_functions $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/dot_profile_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/exa-linux-x86_64-v0.10.1.zip $LOCAL_DIR
-cp $INSTALLER_DIR/fd_8.2.1_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/fd_8.3.2_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
-cp $INSTALLER_DIR/fzf-0.28.0-linux_amd64.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/fzf-0.28.0-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/fzf-0.29.0-linux_amd64.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/fzf-0.29.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
 cp $INSTALLER_DIR/keyd-v1.3.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
-cp $INSTALLER_DIR/MullvadVPN-2021.4_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/MullvadVPN-2021.6_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
-cp $INSTALLER_DIR/zoxide-v0.7.9-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 
 # Copy first_boot systemd unit file into place.
 cp $LOCAL_DIR/first_boot.service /etc/systemd/system
@@ -65,7 +65,7 @@ apt install ufw
 
 # Install the Mullvad VPN app.
 apt install gdebi-core
-gdebi --non-interactive $LOCAL_DIR/MullvadVPN-2021.4_amd64.deb
+gdebi --non-interactive $LOCAL_DIR/MullvadVPN-2021.6_amd64.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
@@ -138,7 +138,7 @@ sed -i \
     /etc/gdm3/daemon.conf
 
 # Install fd.
-dpkg -i $LOCAL_DIR/fd_8.2.1_amd64.deb
+dpkg -i $LOCAL_DIR/fd_8.3.2_amd64.deb
 
 # Install ripgrep.
 dpkg -i $LOCAL_DIR/ripgrep_13.0.0_amd64.deb
@@ -156,27 +156,27 @@ cp /tmp/exa_0.10.1/man/exa_colors.5 /usr/local/share/man/man5
 mandb
 
 # Install bat.
-dpkg -i $LOCAL_DIR/bat_0.18.3_amd64.deb
+dpkg -i $LOCAL_DIR/bat_0.19.0_amd64.deb
 
 # Install fzf.
-tar --extract -f $LOCAL_DIR/fzf-0.28.0-linux_amd64.tar.gz --directory /tmp
-tar --extract -f $LOCAL_DIR/fzf-0.28.0-source.tar.gz --directory /tmp
+tar --extract -f $LOCAL_DIR/fzf-0.29.0-linux_amd64.tar.gz --directory /tmp
+tar --extract -f $LOCAL_DIR/fzf-0.29.0-source.tar.gz --directory /tmp
 cp /tmp/fzf /usr/local/bin
-cp /tmp/fzf-0.28.0/man/man1/fzf.1 /usr/local/share/man/man1
+cp /tmp/fzf-0.29.0/man/man1/fzf.1 /usr/local/share/man/man1
 mkdir /usr/local/share/fzf
-cp /tmp/fzf-0.28.0/shell/completion.bash /usr/local/share/fzf
-cp /tmp/fzf-0.28.0/shell/key-bindings.bash /usr/local/share/fzf
+cp /tmp/fzf-0.29.0/shell/completion.bash /usr/local/share/fzf
+cp /tmp/fzf-0.29.0/shell/key-bindings.bash /usr/local/share/fzf
 mandb
 
 # Install zoxide.
-mkdir /tmp/zoxide-v0.7.9
+mkdir /tmp/zoxide-v0.8.0
 tar \
-    --extract -f $LOCAL_DIR/zoxide-v0.7.9-x86_64-unknown-linux-musl.tar.gz \
-    --directory /tmp/zoxide-v0.7.9
-cp /tmp/zoxide-v0.7.9/zoxide /usr/local/bin
-cp /tmp/zoxide-v0.7.9/man/zoxide.1 /usr/local/share/man/man1
+    --extract -f $LOCAL_DIR/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz \
+    --directory /tmp/zoxide-v0.8.0
+cp /tmp/zoxide-v0.8.0/zoxide /usr/local/bin
+cp /tmp/zoxide-v0.8.0/man/zoxide.1 /usr/local/share/man/man1
 cp \
-    /tmp/zoxide-v0.7.9/completions/zoxide.bash \
+    /tmp/zoxide-v0.8.0/completions/zoxide.bash \
     /usr/share/bash-completion/completions
 mandb
 
