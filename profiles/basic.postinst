@@ -104,7 +104,7 @@ printf '\n# Enable .profile modifications.\n' >> "$USER_DIR"/.profile
 echo '. "$HOME/.profile_modifications"' >> "$USER_DIR"/.profile
 
 # Install youtube-dl.
-runuser -l "$USERNAME" -c 'pipx install youtube-dl'
+runuser -l "$USERNAME" -c 'pipx install youtube-dl==2021.12.17'
 apt install --yes ffmpeg
 
 # Install ranger.
