@@ -48,6 +48,7 @@ cp $INSTALLER_DIR/fzf-0.29.0-linux_amd64.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/fzf-0.29.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
+cp $INSTALLER_DIR/httpie-completion.bash $LOCAL_DIR
 cp $INSTALLER_DIR/keyd-v1.3.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.6_amd64.deb $LOCAL_DIR
@@ -291,3 +292,17 @@ tar \
 cp $LOCAL_DIR/starship.toml "$USER_CONFIG_DIR"
 chown "$USERNAME":"$USERNAME" "$USER_CONFIG_DIR"/starship.toml
 chmod 664 "$USER_CONFIG_DIR"/starship.toml
+
+# Install HTTPie.
+runuser -l "$USERNAME" -c 'pipx install httpie==3.1.0'
+USER_SHARE_DIR="$USER_DIR/.local/share"
+USER_COMPLETION_DIR="$USER_SHARE_DIR/bash-completion/completions"
+mkdir -p "$USER_COMPLETION_DIR"
+# The completion file needs to be named with of the commands which it relates
+# to to work, so rather than naming it httpie.bash, it is named https.bash.
+cp $LOCAL_DIR/httpie-completion.bash "$USER_COMPLETION_DIR"/http.bash
+ln --symbolic \
+    "$USER_COMPLETION_DIR"/http.bash \
+    "$USER_COMPLETION_DIR"/https.bash
+chown --recursive "$USERNAME":"$USERNAME" "$USER_SHARE_DIR"
+chmod 644 "$USER_COMPLETION_DIR"/http.bash

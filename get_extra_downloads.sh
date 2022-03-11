@@ -84,3 +84,7 @@ cp \
 # Ensure the Starship binary is present.
 wget --timestamping "https://github.com/starship/starship/releases/download/\
 v1.3.0/starship-x86_64-unknown-linux-gnu.tar.gz"
+
+# Ensure the HTTPie completion file is present.
+wget --timestamping "https://github.com/httpie/httpie/raw/3.1.0/extras/\
+httpie-completion.bash"

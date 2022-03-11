@@ -73,6 +73,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - direnv installed
 - Fira Code Nerd Font installed and set as the system-wide monospace font
 - Starship installed
+- HTTPie installed
 
 
 Set up
