@@ -113,8 +113,15 @@ main_help () {
     echo '  -h|--help  Show this help.'
     echo '  destroy    Destroy all data on this machine.'
     echo '  keyboard   Control key mapping.'
+    echo '  off        Power off.'
 }
 
+
+off () {
+    echo 'Powering off...'
+    sleep 1
+    systemctl poweroff
+}
 
 echo
 case "${1-}" in
@@ -126,6 +133,9 @@ case "${1-}" in
         ;;
     keyboard)
         keyboard "${2-}"
+        ;;
+    off)
+        off
         ;;
     *)
         main_catchall "${1-}"
