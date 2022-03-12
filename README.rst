@@ -74,6 +74,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Fira Code Nerd Font installed and set as the system-wide monospace font
 - Starship installed
 - HTTPie installed
+- Nmap installed
 
 
 Set up

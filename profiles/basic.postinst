@@ -306,3 +306,6 @@ ln --symbolic \
     "$USER_COMPLETION_DIR"/https.bash
 chown --recursive "$USERNAME":"$USERNAME" "$USER_SHARE_DIR"
 chmod 644 "$USER_COMPLETION_DIR"/http.bash
+
+# Install Nmap.
+apt install --yes nmap
