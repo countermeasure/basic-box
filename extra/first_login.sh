@@ -13,13 +13,14 @@ echo
 echo 'Step 1: Enable the Mullvad VPN'
 echo 'Step 2: Install the Firefox browser extensions'
 echo 'Step 3: Change some Firefox preferences'
+echo 'Step 4: Change some KeePassXC settings'
 echo
 read -n 1 -p 'Press any key to continue...' -r -s
 
 # Enable and configure the Mullvad VPN.
 clear
 echo
-echo 'Step 1 of 3: Enable the Mullvad VPN'
+echo 'Step 1 of 4: Enable the Mullvad VPN'
 echo '-----------------------------------'
 echo
 EXIT_CODE=''
@@ -47,7 +48,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 # Open Firefox extension installation tabs.
 clear
 echo
-echo 'Step 2 of 3: Install the Firefox browser extensions'
+echo 'Step 2 of 4: Install the Firefox browser extensions'
 echo '---------------------------------------------------'
 echo
 echo 'Installing browser extensions requires user interactions in Firefox.'
@@ -57,6 +58,7 @@ echo '- Dark Reader'
 echo '- Decentraleyes'
 echo '- Firefox Multi-Account Containers'
 echo '- HTTPS Everywhere'
+echo '- KeePassXC-Browser'
 echo '- NoScript Security Suite'
 echo '- Privacy Badger'
 echo '- uBlock Origin'
@@ -71,6 +73,7 @@ firefox \
     https://addons.mozilla.org/en-US/firefox/addon/decentraleyes/ \
     https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/ \
     https://addons.mozilla.org/en-US/firefox/addon/https-everywhere/ \
+    https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/ \
     https://addons.mozilla.org/en-US/firefox/addon/noscript/ \
     https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/ \
     https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
@@ -78,7 +81,7 @@ firefox \
 # Change Firefox preferences.
 clear
 echo
-echo 'Step 3 of 3: Change some Firefox preferences'
+echo 'Step 3 of 4: Change some Firefox preferences'
 echo '--------------------------------------------'
 echo
 echo "Although many of Firefox's preferences can be changed without user"
@@ -91,12 +94,10 @@ echo 'Operation 1: Set Enhanced Tracking Protection to Strict'
 echo 'Operation 2: Set Default Search Engine to DuckDuckGo'
 echo 'Operation 3: Set Theme to Dark'
 echo
-echo 'This is the last configuration step you need to carry out.'
-echo
 read -n 1 -p 'Press any key to continue...' -r -s
 clear
 echo
-echo 'Step 3 of 3: Change some Firefox preferences'
+echo 'Step 3 of 4: Change some Firefox preferences'
 echo '--------------------------------------------'
 echo
 echo 'Operation 1 of 3: Set Enhanced Tracking Protection to Strict'
@@ -109,7 +110,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 firefox about:preferences#privacy
 clear
 echo
-echo 'Step 3 of 3: Change some Firefox preferences'
+echo 'Step 3 of 4: Change some Firefox preferences'
 echo '--------------------------------------------'
 echo
 echo 'Operation 2 of 3: Set Default Search Engine to DuckDuckGo'
@@ -122,7 +123,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 firefox about:preferences#search
 clear
 echo
-echo 'Step 3 of 3: Change some Firefox preferences'
+echo 'Step 3 of 4: Change some Firefox preferences'
 echo '--------------------------------------------'
 echo
 echo 'Operation 3 of 3: Set Theme to Dark'
@@ -134,6 +135,54 @@ echo 'Firefox.'
 echo
 read -n 1 -p 'Press any key to continue...' -r -s
 firefox about:addons
+
+# Change KeePassXC settings.
+clear
+echo
+echo 'Step 4 of 4: Change some KeePassXC settings'
+echo '-------------------------------------------'
+echo
+echo "Some of KeePassXC's settings can't be set with its configuration file,"
+echo 'so they must be set manually.'
+echo
+echo 'This step involves 2 small operations.'
+echo
+echo 'Operation 1: Enable Firefox integration'
+echo 'Operation 2: Set clipboard clearing timeout'
+echo
+echo 'This is the last configuration step you need to carry out.'
+echo
+read -n 1 -p 'Press any key to continue...' -r -s
+clear
+echo
+echo 'Step 4 of 4: Change some KeePassXC settings'
+echo '-------------------------------------------'
+echo
+echo 'Operation 1 of 2: Enable Firefox integration'
+echo
+echo 'This will open KeePassXC.'
+echo
+echo 'Click Tools, click Settings, click the Browser Integration button, check'
+echo 'the Firefox checkbox in the "Enable integration for these browsers" box,'
+echo 'click the OK button, then close KeePassXC.'
+echo
+read -n 1 -p 'Press any key to continue...' -r -s
+keepassxc 2> /dev/null
+clear
+echo
+echo 'Step 4 of 4: Change some KeePassXC settings'
+echo '-------------------------------------------'
+echo
+echo 'Operation 2 of 2: Set clipboard clearing timeout'
+echo
+echo 'This will open KeePassXC.'
+echo
+echo 'Click Tools, click Settings, click the Security button, set "Clear'
+echo 'clipboard after" to 30 seconds, click the OK button, then close'
+echo 'KeePassXC.'
+echo
+read -n 1 -p 'Press any key to continue...' -r -s
+keepassxc 2> /dev/null
 
 # Print a farewell.
 clear

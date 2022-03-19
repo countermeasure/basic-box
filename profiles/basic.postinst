@@ -49,6 +49,7 @@ cp $INSTALLER_DIR/fzf-0.29.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
 cp $INSTALLER_DIR/httpie-completion.bash $LOCAL_DIR
+cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
 cp $INSTALLER_DIR/keyd-v1.3.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.6_amd64.deb $LOCAL_DIR
@@ -309,3 +310,11 @@ chmod 644 "$USER_COMPLETION_DIR"/http.bash
 
 # Install Nmap.
 apt install --yes nmap
+
+# Install KeePassXC.
+apt install --yes keepassxc
+KEEPASSXC_DIR="$USER_CONFIG_DIR/keepassxc"
+mkdir "$KEEPASSXC_DIR"
+cp $LOCAL_DIR/keepassxc.ini "$KEEPASSXC_DIR"
+chown --recursive "$USERNAME":"$USERNAME" "$KEEPASSXC_DIR"
+chmod 644 "$KEEPASSXC_DIR"/keepassxc.ini

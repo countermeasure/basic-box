@@ -28,6 +28,7 @@ The **Basic Box** installer creates a Debian 11 system with:
   - Decentraleyes
   - Firefox Multi-Account Containers
   - HTTPS Everywhere
+  - KeePassXC-Browser
   - NoScript Security Suite
   - Privacy Badger
   - uBlock Origin
@@ -75,6 +76,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Starship installed
 - HTTPie installed
 - Nmap installed
+- KeePassXC installed
 
 
 Set up

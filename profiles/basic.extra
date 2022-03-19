@@ -10,6 +10,7 @@ extra/dotfiles/dot_bashrc_modifications
 extra/dotfiles/dot_profile_modifications
 extra/dotfiles/gitk
 extra/dotfiles/htoprc
+extra/dotfiles/keepassxc.ini
 extra/dotfiles/keyd_default.cfg
 extra/dotfiles/starship.toml
 
