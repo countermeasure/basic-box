@@ -77,6 +77,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - HTTPie installed
 - Nmap installed
 - KeePassXC installed
+- IPython installed
 
 
 Set up

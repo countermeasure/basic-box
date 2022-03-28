@@ -318,3 +318,6 @@ mkdir "$KEEPASSXC_DIR"
 cp $LOCAL_DIR/keepassxc.ini "$KEEPASSXC_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$KEEPASSXC_DIR"
 chmod 644 "$KEEPASSXC_DIR"/keepassxc.ini
+
+# Install IPython.
+runuser -l "$USERNAME" -c 'pipx install ipython==8.2.0'

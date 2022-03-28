@@ -104,6 +104,7 @@ alias mv='mv --interactive --verbose'
 
 alias ncdu='ncdu --color dark -r --si'
 
+alias p='ipython --no-confirm-exit'
 alias ping='ping -c 5 -i 0.2'
 alias pip3='printf "\nPrefer pipx to pip3.\n\n"'
 
