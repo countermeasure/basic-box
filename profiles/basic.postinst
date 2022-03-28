@@ -321,3 +321,6 @@ chmod 644 "$KEEPASSXC_DIR"/keepassxc.ini
 
 # Install IPython.
 runuser -l "$USERNAME" -c 'pipx install ipython==8.2.0'
+
+# Install Entomb.
+runuser -l "$USERNAME" -c 'pipx install entomb==0.4.0'

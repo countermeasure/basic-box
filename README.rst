@@ -78,6 +78,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Nmap installed
 - KeePassXC installed
 - IPython installed
+- Entomb installed
 
 
 Set up
