@@ -1,3 +1,4 @@
+alias c='clear -x'
 alias cp='cp --archive --interactive --verbose'
 
 alias delta='delta --line-numbers --navigate'
@@ -106,8 +107,10 @@ alias ncdu='ncdu --color dark -r --si'
 
 alias p='ipython --no-confirm-exit'
 alias ping='ping -c 5 -i 0.2'
+alias pip='printf "\nPrefer pipx to pip.\n\n"'
 alias pip3='printf "\nPrefer pipx to pip3.\n\n"'
 
+alias r='reset'
 alias rg="rg --glob '!.git' --hidden --smart-case"
 alias rm='rm --interactive --verbose'
 alias rmdir='rmdir --verbose'
