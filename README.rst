@@ -79,6 +79,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - KeePassXC installed
 - IPython installed
 - Entomb installed
+- MTR installed
 
 
 Set up
