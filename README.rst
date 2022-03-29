@@ -81,6 +81,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Entomb installed
 - MTR installed
 - tree installed
+- tldr-pages installed
 
 
 Set up

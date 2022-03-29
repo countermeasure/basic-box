@@ -330,3 +330,11 @@ apt install --yes mtr-tiny
 
 # Install tree.
 apt install --yes tree
+
+# Install tldr-pages.
+runuser -l "$USERNAME" -c 'pipx install tldr==3.1.0'
+# tldr is called with its full path here as calling it just with tldr doesn't
+# work.
+"$USER_BIN_DIR"/tldr --print-completion bash > "$USER_COMPLETION_DIR"/tldr.bash
+chown "$USERNAME":"$USERNAME" "$USER_COMPLETION_DIR"/tldr.bash
+chmod 644 "$USER_COMPLETION_DIR"/tldr.bash
