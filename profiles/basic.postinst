@@ -338,3 +338,6 @@ runuser -l "$USERNAME" -c 'pipx install tldr==3.1.0'
 "$USER_BIN_DIR"/tldr --print-completion bash > "$USER_COMPLETION_DIR"/tldr.bash
 chown "$USERNAME":"$USERNAME" "$USER_COMPLETION_DIR"/tldr.bash
 chmod 644 "$USER_COMPLETION_DIR"/tldr.bash
+
+# Install OfflineIMAP.
+apt install --yes offlineimap

@@ -82,6 +82,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - MTR installed
 - tree installed
 - tldr-pages installed
+- OfflineIMAP installed
 
 
 Set up
