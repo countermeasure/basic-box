@@ -80,6 +80,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - IPython installed
 - Entomb installed
 - MTR installed
+- tree installed
 
 
 Set up

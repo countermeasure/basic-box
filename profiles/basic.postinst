@@ -327,3 +327,6 @@ runuser -l "$USERNAME" -c 'pipx install entomb==0.4.0'
 
 # Install MTR.
 apt install --yes mtr-tiny
+
+# Install tree.
+apt install --yes tree
