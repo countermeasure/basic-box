@@ -47,6 +47,7 @@ cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
 cp $INSTALLER_DIR/fzf-0.29.0-linux_amd64.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/fzf-0.29.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/gitk $LOCAL_DIR
+cp $INSTALLER_DIR/git_global_ignore $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
 cp $INSTALLER_DIR/httpie-completion.bash $LOCAL_DIR
 cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
@@ -341,3 +342,8 @@ chmod 644 "$USER_COMPLETION_DIR"/tldr.bash
 
 # Install OfflineIMAP.
 apt install --yes offlineimap
+
+# Add a global Git ignore file.
+cp $LOCAL_DIR/git_global_ignore "$GIT_DIR"/ignore
+chown "$USERNAME":"$USERNAME" "$GIT_DIR"/ignore
+chmod 644 "$GIT_DIR"/ignore

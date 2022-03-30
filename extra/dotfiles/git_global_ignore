@@ -1,0 +1,3 @@
+# Paths related to direnv.
+.direnv/
+.envrc

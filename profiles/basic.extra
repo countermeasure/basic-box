@@ -9,6 +9,7 @@ extra/dotfiles/dot_bashrc_functions
 extra/dotfiles/dot_bashrc_modifications
 extra/dotfiles/dot_profile_modifications
 extra/dotfiles/gitk
+extra/dotfiles/git_global_ignore
 extra/dotfiles/htoprc
 extra/dotfiles/keepassxc.ini
 extra/dotfiles/keyd_default.cfg

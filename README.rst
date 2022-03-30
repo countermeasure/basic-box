@@ -83,6 +83,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - tree installed
 - tldr-pages installed
 - OfflineIMAP installed
+- a global Git ignore file
 
 
 Set up
