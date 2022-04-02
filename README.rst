@@ -84,6 +84,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - tldr-pages installed
 - OfflineIMAP installed
 - a global Git ignore file
+- trash-cli installed and integrated with ranger
 
 
 Set up

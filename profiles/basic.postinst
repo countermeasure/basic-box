@@ -54,9 +54,11 @@ cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
 cp $INSTALLER_DIR/keyd-v1.3.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.6_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
+cp $INSTALLER_DIR/trash-cli-0.21.10.24-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 
 # Copy first_boot systemd unit file into place.
@@ -347,3 +349,21 @@ apt install --yes offlineimap
 cp $LOCAL_DIR/git_global_ignore "$GIT_DIR"/ignore
 chown "$USERNAME":"$USERNAME" "$GIT_DIR"/ignore
 chmod 644 "$GIT_DIR"/ignore
+
+# Install trash-cli.
+runuser -l "$USERNAME" -c 'pipx install trash-cli==0.21.10.24'
+tar --extract -f $LOCAL_DIR/trash-cli-0.21.10.24-source.tar.gz --directory /tmp
+cp /tmp/trash-cli-0.21.10.24/man/man1/trash.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.21.10.24/man/man1/trash-empty.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.21.10.24/man/man1/trash-list.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.21.10.24/man/man1/trash-put.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.21.10.24/man/man1/trash-restore.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.21.10.24/man/man1/trash-rm.1 /usr/local/share/man/man1
+mandb
+
+# Add a Ranger rc.conf file.
+RANGER_DIR="$USER_CONFIG_DIR/ranger"
+mkdir "$RANGER_DIR"
+cp $LOCAL_DIR/ranger_rc.conf "$RANGER_DIR/rc.conf"
+chown --recursive "$USERNAME":"$USERNAME" "$RANGER_DIR"
+chmod 644 "$RANGER_DIR"/rc.conf

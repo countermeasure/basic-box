@@ -112,5 +112,7 @@ alias pip3='printf "\nPrefer pipx to pip3.\n\n"'
 
 alias r='reset'
 alias rg="rg --glob '!.git' --hidden --smart-case"
-alias rm='rm --interactive --verbose'
+alias rm='printf "\nPrefer t to rm.\n\n"'
 alias rmdir='rmdir --verbose'
+
+alias t='trash'

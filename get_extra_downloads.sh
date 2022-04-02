@@ -88,3 +88,11 @@ v1.3.0/starship-x86_64-unknown-linux-gnu.tar.gz"
 # Ensure the HTTPie completion file is present.
 wget --timestamping "https://github.com/httpie/httpie/raw/3.1.0/extras/\
 httpie-completion.bash"
+
+# Ensure the trash-cli package is present.
+wget --timestamping "https://github.com/andreafrancia/trash-cli/archive/refs/\
+tags/0.21.10.24.tar.gz"
+# As the trash-cli archive doesn't include trash-cli in its name, make a copy
+# with trash-cli in its name. Simply saving with this different filename will
+# stop wget's --timestamping option working.
+cp 0.21.10.24.tar.gz trash-cli-0.21.10.24-source.tar.gz
