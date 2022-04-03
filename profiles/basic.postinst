@@ -229,6 +229,9 @@ git_global_config_set \
     '%C(auto)%h %C(dim white)%ad%C(auto)%d%Creset %s %C(dim white)by %an %ar'
 # Add Git global config setting for "git pull" behaviour.
 git_global_config_set 'pull.rebase' 'true'
+# Add Git global config settings to enable "git rerere" functionality.
+git_global_config_set 'rerere.autoupdate' 'true'
+git_global_config_set 'rerere.enabled' 'true'
 # Add Git global config settings recommended by delta.
 git_global_config_set 'core.pager' 'delta'
 git_global_config_set 'delta.navigate' 'true'
