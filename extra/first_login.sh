@@ -8,7 +8,7 @@ echo
 echo 'Welcome to your new Basic Box'
 echo '-----------------------------'
 echo
-echo 'The final setup steps have to be done interactively.'
+echo 'The final configuration steps have to be done interactively.'
 echo
 echo 'Step 1: Enable the Mullvad VPN'
 echo 'Step 2: Install the Firefox browser extensions'
@@ -187,11 +187,15 @@ keepassxc 2> /dev/null
 # Print a farewell.
 clear
 echo
-echo 'Setup complete'
-echo '--------------'
+echo 'Configuration complete'
+echo '----------------------'
 echo
-echo 'Basic Box setup is all done.'
+echo "Basic Box configuration is all done, and now it's ready for use."
 echo
+echo "If you'd like to set it up with your personal data, the steps you need"
+echo 'to take are in the ~/setup.rst file.'
+echo
+
 read -n 1 -p 'Press any key to close this terminal...' -r -s
 
 # This script should only run at the first login, so remove the desktop entry

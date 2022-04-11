@@ -56,6 +56,7 @@ cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2021.6_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/setup.rst $LOCAL_DIR
 cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
 cp $INSTALLER_DIR/trash-cli-0.21.10.24-source.tar.gz $LOCAL_DIR
@@ -324,6 +325,11 @@ mkdir "$KEEPASSXC_DIR"
 cp $LOCAL_DIR/keepassxc.ini "$KEEPASSXC_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$KEEPASSXC_DIR"
 chmod 644 "$KEEPASSXC_DIR"/keepassxc.ini
+
+# Add post-installation setup instructions.
+cp $LOCAL_DIR/setup.rst "$USER_DIR"
+chown "$USERNAME":"$USERNAME" "$USER_DIR"/setup.rst
+chmod 644 "$USER_DIR"/setup.rst
 
 # Install IPython.
 runuser -l "$USERNAME" -c 'pipx install ipython==8.2.0'
