@@ -3,7 +3,7 @@ Basic Box
 
 Builds a basic Debian 11 (Bullseye) installer which asks very few questions.
 
-Includes non-free wifi firmware for Thinkpad P1 and T-series laptops.
+Includes firmware for Thinkpad P1 and T-series laptops.
 
 Runs on Debian 11.
 
