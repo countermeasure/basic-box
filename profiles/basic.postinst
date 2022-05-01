@@ -449,3 +449,6 @@ runuser \
 cp $LOCAL_DIR/black "$USER_CONFIG_DIR"
 chown "$USERNAME":"$USERNAME" "$USER_CONFIG_DIR"/black
 chmod 644 "$USER_CONFIG_DIR"/black
+
+# Install curl.
+apt install --yes curl
