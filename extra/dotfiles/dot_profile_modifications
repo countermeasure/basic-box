@@ -1,2 +1,6 @@
 # If $EDITOR is not exported, the direnv edit command will fail.
 export EDITOR='vim'
+
+# Ensure that Bluetooth is turned off when the system boots. The full path to
+# the rfkill command is required for a non-root user.
+/usr/sbin/rfkill block bluetooth

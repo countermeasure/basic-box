@@ -452,3 +452,6 @@ chmod 644 "$USER_CONFIG_DIR"/black
 
 # Install curl.
 apt install --yes curl
+
+# Install rfkill. This is used to turn Bluetooth off when the system boots.
+apt install --yes rfkill
