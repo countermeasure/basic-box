@@ -40,7 +40,7 @@ The **Basic Box** installer creates a Debian 11 system with:
   - Theme to Dark
 
 - pipx installed
-- youtube-dl installed
+- yt-dlp installed
 - ranger installed
 - these GNOME changes:
 

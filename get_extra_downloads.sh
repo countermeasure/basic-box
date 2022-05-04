@@ -104,3 +104,7 @@ v0.7.0/nvim-linux64.deb"
 # Ensure the StyLua package is present.
 wget --timestamping "https://github.com/JohnnyMorganz/StyLua/releases/\
 download/v0.13.1/stylua-linux.zip"
+
+# Ensure the yt-dlp package is present.
+wget --timestamping "https://github.com/yt-dlp/yt-dlp/releases/download/\
+2022.04.08/yt-dlp.tar.gz"
