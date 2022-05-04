@@ -92,3 +92,39 @@ git_rebase_then_git_status() {
     echo
     git status
 }
+
+
+###############################################################################
+#
+#  Allow pip to run if inside a virtualenv. If not inside a virtualenv, show a
+#  message to prefer pipx.
+#
+#  Arguments:
+#    Strings. The arguments to pass to the pip executable.
+#
+###############################################################################
+only_allow_pip_in_virtualenvs() {
+    if [ -n "$VIRTUAL_ENV" ]; then
+        \pip "$@";
+    else
+        echo "Prefer pipx to pip when not in a virtualenv.";
+    fi
+}
+
+
+###############################################################################
+#
+#  Allow pip3 to run if inside a virtualenv. If not inside a virtualenv, show a
+#  message to prefer pipx.
+#
+#  Arguments:
+#    Strings. The arguments to pass to the pip3 executable.
+#
+###############################################################################
+only_allow_pip3_in_virtualenvs() {
+    if [ -n "$VIRTUAL_ENV" ]; then
+        \pip3 "$@";
+    else
+        echo "Prefer pipx to pip3 when not in a virtualenv.";
+    fi
+}
