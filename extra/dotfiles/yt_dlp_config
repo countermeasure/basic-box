@@ -1,0 +1,3 @@
+# Save files into the ~/Downloads/yt-dlp directory.
+--output "~/Downloads/yt-dlp/%(title)s.%(ext)s"
+

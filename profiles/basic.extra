@@ -19,6 +19,7 @@ extra/dotfiles/nvim_init.lua
 extra/dotfiles/ranger_rc.conf
 extra/dotfiles/starship.toml
 extra/dotfiles/stylua.toml
+extra/dotfiles/yt_dlp_config
 
 extra/downloads/bat_0.19.0_amd64.deb
 extra/downloads/delta-0.11.3-source.tar.gz

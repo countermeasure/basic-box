@@ -66,6 +66,7 @@ cp $INSTALLER_DIR/stylua-linux.zip $LOCAL_DIR
 cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
 cp $INSTALLER_DIR/trash-cli-0.21.10.24-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt-dlp.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/yt_dlp_config $LOCAL_DIR
 cp $INSTALLER_DIR/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 
 # Copy first_boot systemd unit file into place.
@@ -460,3 +461,10 @@ apt install --yes curl
 
 # Install rfkill. This is used to turn Bluetooth off when the system boots.
 apt install --yes rfkill
+
+# Add a yt-dlp configuration file.
+YT_DLP_DIR="$USER_CONFIG_DIR/yt-dlp"
+mkdir "$YT_DLP_DIR"
+cp $LOCAL_DIR/yt_dlp_config "$YT_DLP_DIR"/config
+chown --recursive "$USERNAME":"$USERNAME" "$YT_DLP_DIR"
+chmod 644 "$YT_DLP_DIR"/config
