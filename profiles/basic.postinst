@@ -79,8 +79,7 @@ systemctl enable first_boot.service
 apt install ufw
 
 # Install the Mullvad VPN app.
-apt install gdebi-core
-gdebi --non-interactive $LOCAL_DIR/MullvadVPN-2021.6_amd64.deb
+apt install --yes $LOCAL_DIR/MullvadVPN-2021.6_amd64.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
