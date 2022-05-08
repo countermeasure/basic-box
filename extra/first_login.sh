@@ -43,6 +43,8 @@ mullvad auto-connect set on
 echo
 mullvad always-require-vpn set on
 echo
+mullvad dns set default --block-ads --block-malware --block-trackers
+echo
 read -n 1 -p 'Press any key to continue...' -r -s
 
 # Open Firefox extension installation tabs.
