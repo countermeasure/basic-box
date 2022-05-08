@@ -114,6 +114,7 @@ main_help () {
     echo '  destroy    Destroy all data on this machine.'
     echo '  keyboard   Control key mapping.'
     echo '  off        Power off.'
+    echo '  reboot     Reboot.'
 }
 
 
@@ -122,6 +123,14 @@ off () {
     sleep 1
     systemctl poweroff
 }
+
+
+reboot () {
+    echo 'Rebooting...'
+    sleep 1
+    systemctl reboot
+}
+
 
 echo
 case "${1-}" in
@@ -136,6 +145,9 @@ case "${1-}" in
         ;;
     off)
         off
+        ;;
+    reboot)
+        reboot
         ;;
     *)
         main_catchall "${1-}"
