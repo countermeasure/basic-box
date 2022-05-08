@@ -27,12 +27,12 @@ gsettings_set () {
 }
 
 # Copy extra files onto the new installation.
-cp $INSTALLER_DIR/bat_0.19.0_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/bat_0.20.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/black $LOCAL_DIR
 cp $INSTALLER_DIR/box.sh $LOCAL_DIR
-cp $INSTALLER_DIR/delta-0.11.3-source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/delta-0.11.3-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/direnv-v2.30.3-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/delta-0.12.1-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/delta-0.12.1-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/direnv-v2.31.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/direnv.linux-amd64 $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_functions $LOCAL_DIR
@@ -45,16 +45,16 @@ cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
-cp $INSTALLER_DIR/fzf-0.29.0-linux_amd64.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/fzf-0.29.0-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/fzf-0.30.0-linux_amd64.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/fzf-0.30.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/git_global_ignore $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
 cp $INSTALLER_DIR/httpie-completion.bash $LOCAL_DIR
 cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
-cp $INSTALLER_DIR/keyd-v1.3.0-source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/keyd_default.cfg $LOCAL_DIR
-cp $INSTALLER_DIR/MullvadVPN-2021.6_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/keyd-v2.4.0-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/keyd_default.conf $LOCAL_DIR
+cp $INSTALLER_DIR/MullvadVPN-2022.1_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim-linux64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_init.lua $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
@@ -64,10 +64,10 @@ cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
 cp $INSTALLER_DIR/stylua-linux.zip $LOCAL_DIR
 cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
-cp $INSTALLER_DIR/trash-cli-0.21.10.24-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/trash-cli-0.22.4.16-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt-dlp.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt_dlp_config $LOCAL_DIR
-cp $INSTALLER_DIR/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/zoxide-v0.8.1-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 
 # Copy first_boot systemd unit file into place.
 cp $LOCAL_DIR/first_boot.service /etc/systemd/system
@@ -80,7 +80,7 @@ systemctl enable first_boot.service
 apt install ufw
 
 # Install the Mullvad VPN app.
-apt install --yes $LOCAL_DIR/MullvadVPN-2021.6_amd64.deb
+apt install --yes $LOCAL_DIR/MullvadVPN-2022.1_amd64.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
@@ -176,27 +176,32 @@ cp /tmp/exa_0.10.1/man/exa_colors.5 /usr/local/share/man/man5
 mandb
 
 # Install bat.
-dpkg -i $LOCAL_DIR/bat_0.19.0_amd64.deb
+dpkg -i $LOCAL_DIR/bat_0.20.0_amd64.deb
 
 # Install fzf.
-tar --extract -f $LOCAL_DIR/fzf-0.29.0-linux_amd64.tar.gz --directory /tmp
-tar --extract -f $LOCAL_DIR/fzf-0.29.0-source.tar.gz --directory /tmp
+tar --extract -f $LOCAL_DIR/fzf-0.30.0-linux_amd64.tar.gz --directory /tmp
+tar --extract -f $LOCAL_DIR/fzf-0.30.0-source.tar.gz --directory /tmp
 cp /tmp/fzf /usr/local/bin
-cp /tmp/fzf-0.29.0/man/man1/fzf.1 /usr/local/share/man/man1
+cp /tmp/fzf-0.30.0/man/man1/fzf.1 /usr/local/share/man/man1
 mkdir /usr/local/share/fzf
-cp /tmp/fzf-0.29.0/shell/completion.bash /usr/local/share/fzf
-cp /tmp/fzf-0.29.0/shell/key-bindings.bash /usr/local/share/fzf
+cp /tmp/fzf-0.30.0/shell/completion.bash /usr/local/share/fzf
+cp /tmp/fzf-0.30.0/shell/key-bindings.bash /usr/local/share/fzf
 mandb
 
 # Install zoxide.
-mkdir /tmp/zoxide-v0.8.0
+mkdir /tmp/zoxide-v0.8.1
 tar \
-    --extract -f $LOCAL_DIR/zoxide-v0.8.0-x86_64-unknown-linux-musl.tar.gz \
-    --directory /tmp/zoxide-v0.8.0
-cp /tmp/zoxide-v0.8.0/zoxide /usr/local/bin
-cp /tmp/zoxide-v0.8.0/man/zoxide.1 /usr/local/share/man/man1
+    --extract -f $LOCAL_DIR/zoxide-v0.8.1-x86_64-unknown-linux-musl.tar.gz \
+    --directory /tmp/zoxide-v0.8.1
+cp /tmp/zoxide-v0.8.1/zoxide /usr/local/bin
+cp /tmp/zoxide-v0.8.1/man/man1/zoxide-add.1 /usr/local/share/man/man1
+cp /tmp/zoxide-v0.8.1/man/man1/zoxide-import.1 /usr/local/share/man/man1
+cp /tmp/zoxide-v0.8.1/man/man1/zoxide-init.1 /usr/local/share/man/man1
+cp /tmp/zoxide-v0.8.1/man/man1/zoxide-query.1 /usr/local/share/man/man1
+cp /tmp/zoxide-v0.8.1/man/man1/zoxide-remove.1 /usr/local/share/man/man1
+cp /tmp/zoxide-v0.8.1/man/man1/zoxide.1 /usr/local/share/man/man1
 cp \
-    /tmp/zoxide-v0.8.0/completions/zoxide.bash \
+    /tmp/zoxide-v0.8.1/completions/zoxide.bash \
     /usr/share/bash-completion/completions
 mandb
 
@@ -218,12 +223,12 @@ apt install --yes ncdu
 
 # Install delta.
 tar \
-    --extract -f $LOCAL_DIR/delta-0.11.3-x86_64-unknown-linux-gnu.tar.gz \
+    --extract -f $LOCAL_DIR/delta-0.12.1-x86_64-unknown-linux-gnu.tar.gz \
     --directory /tmp
-tar --extract -f $LOCAL_DIR/delta-0.11.3-source.tar.gz --directory /tmp
-cp /tmp/delta-0.11.3-x86_64-unknown-linux-gnu/delta /usr/local/bin
+tar --extract -f $LOCAL_DIR/delta-0.12.1-source.tar.gz --directory /tmp
+cp /tmp/delta-0.12.1-x86_64-unknown-linux-gnu/delta /usr/local/bin
 cp \
-    /tmp/delta-0.11.3/etc/completion/completion.bash \
+    /tmp/delta-0.12.1/etc/completion/completion.bash \
     /usr/share/bash-completion/completions/delta.bash
 
 # Install Git
@@ -263,18 +268,17 @@ chmod 644 "$GIT_DIR"/gitk
 
 # Install and configure keyd.
 apt install --yes libudev-dev
-tar --extract -f $LOCAL_DIR/keyd-v1.3.0-source.tar.gz --directory /tmp
-make --directory=/tmp/keyd-1.3.0
-make --directory=/tmp/keyd-1.3.0 install
-# keyd requires configuration files to be available in /etc/keyd, but prefer to
-# keep them within the user's home directory.
+tar --extract -f $LOCAL_DIR/keyd-v2.4.0-source.tar.gz --directory /tmp
+make --directory=/tmp/keyd-2.4.0
+make --directory=/tmp/keyd-2.4.0 install
+# keyd requires the configuration file to be available in /etc/keyd, but prefer
+# to keep it within the user's home directory.
 KEYD_DIR="$USER_CONFIG_DIR/keyd"
 mkdir "$KEYD_DIR"
-rmdir /etc/keyd
-ln --symbolic "$KEYD_DIR" /etc/keyd
-cp $LOCAL_DIR/keyd_default.cfg "$KEYD_DIR/default.cfg"
+cp $LOCAL_DIR/keyd_default.conf "$KEYD_DIR/default.conf"
 chown --recursive "$USERNAME":"$USERNAME" "$KEYD_DIR"
-chmod 644 "$KEYD_DIR"/default.cfg
+chmod 644 "$KEYD_DIR"/default.conf
+ln --symbolic "$KEYD_DIR"/default.conf /etc/keyd/default.conf
 
 # Make the "box" command available everywhere.
 BOX_SCRIPT_PATH="$USER_BIN_DIR/box"
@@ -286,11 +290,11 @@ chmod 755 "$BOX_SCRIPT_PATH"
 DIRENV_EXECUTABLE_PATH='/usr/local/bin/direnv'
 cp $LOCAL_DIR/direnv.linux-amd64 $DIRENV_EXECUTABLE_PATH
 chmod 755 $DIRENV_EXECUTABLE_PATH
-tar --extract -f $LOCAL_DIR/direnv-v2.30.3-source.tar.gz --directory /tmp
-cp /tmp/direnv-2.30.3/man/direnv-fetchurl.1 /usr/local/share/man/man1
-cp /tmp/direnv-2.30.3/man/direnv-stdlib.1 /usr/local/share/man/man1
-cp /tmp/direnv-2.30.3/man/direnv.1 /usr/local/share/man/man1
-cp /tmp/direnv-2.30.3/man/direnv.toml.1 /usr/local/share/man/man1
+tar --extract -f $LOCAL_DIR/direnv-v2.31.0-source.tar.gz --directory /tmp
+cp /tmp/direnv-2.31.0/man/direnv-fetchurl.1 /usr/local/share/man/man1
+cp /tmp/direnv-2.31.0/man/direnv-stdlib.1 /usr/local/share/man/man1
+cp /tmp/direnv-2.31.0/man/direnv.1 /usr/local/share/man/man1
+cp /tmp/direnv-2.31.0/man/direnv.toml.1 /usr/local/share/man/man1
 mandb
 
 # Install Fira Code Nerd Font.
@@ -313,7 +317,7 @@ chown "$USERNAME":"$USERNAME" "$USER_CONFIG_DIR"/starship.toml
 chmod 664 "$USER_CONFIG_DIR"/starship.toml
 
 # Install HTTPie.
-runuser -l "$USERNAME" -c 'pipx install httpie==3.1.0'
+runuser -l "$USERNAME" -c 'pipx install httpie==3.2.1'
 USER_SHARE_DIR="$USER_DIR/.local/share"
 USER_COMPLETION_DIR="$USER_SHARE_DIR/bash-completion/completions"
 mkdir -p "$USER_COMPLETION_DIR"
@@ -343,7 +347,7 @@ chown "$USERNAME":"$USERNAME" "$USER_DIR"/setup.rst
 chmod 644 "$USER_DIR"/setup.rst
 
 # Install IPython.
-runuser -l "$USERNAME" -c 'pipx install ipython==8.2.0'
+runuser -l "$USERNAME" -c 'pipx install ipython==8.3.0'
 
 # Install Entomb.
 runuser -l "$USERNAME" -c 'pipx install entomb==0.4.0'
@@ -371,14 +375,14 @@ chown "$USERNAME":"$USERNAME" "$GIT_DIR"/ignore
 chmod 644 "$GIT_DIR"/ignore
 
 # Install trash-cli.
-runuser -l "$USERNAME" -c 'pipx install trash-cli==0.21.10.24'
-tar --extract -f $LOCAL_DIR/trash-cli-0.21.10.24-source.tar.gz --directory /tmp
-cp /tmp/trash-cli-0.21.10.24/man/man1/trash.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.21.10.24/man/man1/trash-empty.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.21.10.24/man/man1/trash-list.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.21.10.24/man/man1/trash-put.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.21.10.24/man/man1/trash-restore.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.21.10.24/man/man1/trash-rm.1 /usr/local/share/man/man1
+runuser -l "$USERNAME" -c 'pipx install trash-cli==0.22.4.16'
+tar --extract -f $LOCAL_DIR/trash-cli-0.22.4.16-source.tar.gz --directory /tmp
+cp /tmp/trash-cli-0.22.4.16/man/man1/trash.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.22.4.16/man/man1/trash-empty.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.22.4.16/man/man1/trash-list.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.22.4.16/man/man1/trash-put.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.22.4.16/man/man1/trash-restore.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.22.4.16/man/man1/trash-rm.1 /usr/local/share/man/man1
 mandb
 
 # Add a Ranger rc.conf file.
