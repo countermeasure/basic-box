@@ -116,3 +116,6 @@ alias rm='printf "\nPrefer t to rm.\n\n"'
 alias rmdir='rmdir --verbose'
 
 alias t='trash'
+
+# ".." for "parent directory".
+alias ..='go_to_parent_directory'

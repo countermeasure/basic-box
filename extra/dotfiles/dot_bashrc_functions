@@ -96,6 +96,33 @@ git_rebase_then_git_status() {
 
 ###############################################################################
 #
+#  Change to a parent directory.
+#
+#  Arguments:
+#    Int (optional). The number of parent directories to climb by. Values can
+#    be 1 to 99 inclusive.
+#
+###############################################################################
+go_to_parent_directory() {
+    if [ -z "$1" ]; then
+        cd ..
+        return 0
+    elif [[ $1 != [1-9]?([0-9]) ]]; then
+        echo "Argument must be an integer between 1 and 99."
+        return 1
+    else
+        path=''
+        for _ in $(seq "$1"); do
+            path+='../'
+        done
+        cd $path || return 1
+        return 0
+    fi
+}
+
+
+###############################################################################
+#
 #  Allow pip to run if inside a virtualenv. If not inside a virtualenv, show a
 #  message to prefer pipx.
 #
