@@ -117,5 +117,8 @@ alias rmdir='rmdir --verbose'
 
 alias t='trash'
 
+# "x" for "extract".
+alias x='aunpack --each --quiet --subdir'
+
 # ".." for "parent directory".
 alias ..='go_to_parent_directory'

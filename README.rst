@@ -88,6 +88,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Neovim installed and configured as a development environment
 - curl installed
 - Bluetooth turned off when the system boots
+- atool installed
 
 
 Set up

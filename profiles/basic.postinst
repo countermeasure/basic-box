@@ -472,3 +472,6 @@ mkdir "$YT_DLP_DIR"
 cp $LOCAL_DIR/yt_dlp_config "$YT_DLP_DIR"/config
 chown --recursive "$USERNAME":"$USERNAME" "$YT_DLP_DIR"
 chmod 644 "$YT_DLP_DIR"/config
+
+# Install atool.
+apt install --yes atool
