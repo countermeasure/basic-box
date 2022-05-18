@@ -89,6 +89,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - curl installed
 - Bluetooth turned off when the system boots
 - atool installed
+- bandwhich installed
 
 
 Set up

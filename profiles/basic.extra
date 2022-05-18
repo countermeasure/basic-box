@@ -21,6 +21,8 @@ extra/dotfiles/starship.toml
 extra/dotfiles/stylua.toml
 extra/dotfiles/yt_dlp_config
 
+extra/downloads/bandwhich-0.20.0-source.tar.gz
+extra/downloads/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz
 extra/downloads/bat_0.20.0_amd64.deb
 extra/downloads/delta-0.12.1-source.tar.gz
 extra/downloads/delta-0.12.1-x86_64-unknown-linux-gnu.tar.gz

@@ -27,6 +27,8 @@ gsettings_set () {
 }
 
 # Copy extra files onto the new installation.
+cp $INSTALLER_DIR/bandwhich-0.20.0-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/bat_0.20.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/black $LOCAL_DIR
 cp $INSTALLER_DIR/box.sh $LOCAL_DIR
@@ -475,3 +477,17 @@ chmod 644 "$YT_DLP_DIR"/config
 
 # Install atool.
 apt install --yes atool
+
+# Install bandwhich.
+tar \
+    --extract \
+    -f $LOCAL_DIR/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz \
+    --directory /tmp
+cp /tmp/bandwhich /usr/local/bin
+tar --extract -f $LOCAL_DIR/bandwhich-0.20.0-source.tar.gz --directory /tmp
+cp /tmp/bandwhich-0.20.0/docs/bandwhich.1 /usr/local/share/man/man1
+mandb
+# Allow bandwhich to run without being called with sudo.
+setcap \
+    cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep \
+    /usr/local/bin/bandwhich

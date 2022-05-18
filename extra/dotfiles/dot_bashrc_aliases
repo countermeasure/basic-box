@@ -1,3 +1,5 @@
+alias b='bandwhich'
+
 alias c='clear -x'
 alias cp='cp --archive --interactive --verbose'
 

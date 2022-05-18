@@ -108,3 +108,13 @@ download/v0.13.1/stylua-linux.zip"
 # Ensure the yt-dlp package is present.
 wget --timestamping "https://github.com/yt-dlp/yt-dlp/releases/download/\
 2022.04.08/yt-dlp.tar.gz"
+
+# Ensure the bandwhich package is present.
+wget --timestamping "https://github.com/imsnif/bandwhich/releases/download/\
+0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz"
+wget --timestamping "https://github.com/imsnif/bandwhich/archive/refs/tags/\
+0.20.0.tar.gz"
+# As the bandwhich archive doesn't include bandwhich in its name, make a copy
+# with bandwhich in its name. Simply saving with this different filename will
+# stop wget's --timestamping option working.
+cp 0.20.0.tar.gz bandwhich-0.20.0-source.tar.gz
