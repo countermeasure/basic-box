@@ -119,6 +119,8 @@ alias rmdir='rmdir --verbose'
 
 alias t='trash'
 
+alias whois='whois -H'
+
 # "x" for "extract".
 alias x='aunpack --each --quiet --subdir'
 
