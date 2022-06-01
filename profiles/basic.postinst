@@ -59,6 +59,7 @@ cp $INSTALLER_DIR/keyd_default.conf $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2022.1_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim-linux64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_init.lua $LOCAL_DIR
+cp $INSTALLER_DIR/ranger_colourscheme.py $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/setup.rst $LOCAL_DIR
@@ -494,3 +495,10 @@ setcap \
 
 # Install whois.
 apt install --yes whois
+
+# Add ranger colourscheme.
+RANGER_COLOURSCHEME_DIR="$RANGER_DIR/colorschemes"
+mkdir "$RANGER_COLOURSCHEME_DIR"
+cp $LOCAL_DIR/ranger_colourscheme.py "$RANGER_COLOURSCHEME_DIR"/box.py
+chown --recursive "$USERNAME":"$USERNAME" "$RANGER_COLOURSCHEME_DIR"
+chmod 644 "$RANGER_COLOURSCHEME_DIR"/box.py

@@ -16,6 +16,7 @@ extra/dotfiles/htoprc
 extra/dotfiles/keepassxc.ini
 extra/dotfiles/keyd_default.conf
 extra/dotfiles/nvim_init.lua
+extra/dotfiles/ranger_colourscheme.py
 extra/dotfiles/ranger_rc.conf
 extra/dotfiles/starship.toml
 extra/dotfiles/stylua.toml
