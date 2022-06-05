@@ -502,3 +502,6 @@ mkdir "$RANGER_COLOURSCHEME_DIR"
 cp $LOCAL_DIR/ranger_colourscheme.py "$RANGER_COLOURSCHEME_DIR"/box.py
 chown --recursive "$USERNAME":"$USERNAME" "$RANGER_COLOURSCHEME_DIR"
 chmod 644 "$RANGER_COLOURSCHEME_DIR"/box.py
+
+# Install smartmontools.
+apt install --yes smartmontools

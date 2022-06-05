@@ -91,6 +91,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - atool installed
 - bandwhich installed
 - whois installed
+- smartmontools installed
 
 
 Set up
