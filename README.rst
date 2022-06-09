@@ -92,6 +92,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - bandwhich installed
 - whois installed
 - smartmontools installed
+- python-is-python3 installed
 
 
 Set up

@@ -505,3 +505,6 @@ chmod 644 "$RANGER_COLOURSCHEME_DIR"/box.py
 
 # Install smartmontools.
 apt install --yes smartmontools
+
+# Install python-is-python3.
+apt install --yes python-is-python3
