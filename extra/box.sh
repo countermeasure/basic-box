@@ -5,28 +5,35 @@ set -o errexit -o nounset -o pipefail
 
 
 destroy () {
-    boot_device_name=$(
-        lsblk --list | grep /boot$ | awk '{print $1}' | head --lines 1
+    # get list of block devices by type and name, then `awk` that to extract the name of the first type=crypt device by exiting after a match
+    crypt_device_name=$(
+        lsblk --noheadings --raw --output type,name |
+        awk '/^crypt/ {print $2; exit}'
     )
-    if [ "$boot_device_name" = 'nvme0n1p2' ]; then
-        target_device='/dev/nvme0n1p3'
-    elif [ "$boot_device_name" = 'sda1' ]; then
-        target_device='/dev/sda5'
+    # now determine the path of the crypt device's parent (which is the partition we want to destroy)
+    # -v for `awk` to use the dynamic contents of $pattern to match against `lsblk` list of devices
+    # prepend 'part' to the pattern to match type=partition, then use parameter expansion to strip the tailing text '_crypt' from $crypt_device_name
+    target_device=$(
+        lsblk --noheadings --raw --output type,name,path |
+        awk -v pattern="^part ${crypt_device_name%%_crypt*}" '$0 ~ pattern {print $3; exit}'
+    )
+    # if resulting $target_device is not empty, we have something sensible to destroy
+    if [ -n "${target_device}" ]; then
+        echo 'This will PERMANENTLY DESTROY ALL DATA on this machine.'
+        echo
+        sudo cryptsetup --verbose erase "${target_device}"
+        echo
+        echo 'Done.'
+        sleep 1
+        echo
+        echo 'Powering off...'
+        sleep 1
+        systemctl poweroff
     else
-        echo 'Boot device could not be determined.'
+        echo 'Device to destroy could not be determined.'
         echo 'Operation cancelled.'
         exit 1
     fi
-    echo 'This will PERMANENTLY DESTROY ALL DATA on this machine.'
-    echo
-    sudo cryptsetup --verbose erase $target_device
-    echo
-    echo 'Done.'
-    sleep 1
-    echo
-    echo 'Powering off...'
-    sleep 1
-    systemctl poweroff
 }
 
 
