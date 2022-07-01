@@ -30,6 +30,18 @@ destroy () {
 }
 
 
+ip () {
+    curl \
+        --silent \
+        'https://api.duckduckgo.com/?q=my%20ip&format=json&pretty=true' \
+        | grep '"Answer" :' \
+        | sed -e 's/<[^>]*>//g' \
+        | sed -e 's/^\s*"Answer" : "Your IP address is //' \
+        | sed -e 's/\sin\s/\n/' \
+        | sed -e 's/\",$//'
+}
+
+
 keyboard () {
     case "$1" in
         -h|--help)
@@ -112,6 +124,7 @@ main_help () {
     echo
     echo '  -h|--help  Show this help.'
     echo '  destroy    Destroy all data on this machine.'
+    echo '  ip         Show public IP address.'
     echo '  keyboard   Control key mapping.'
     echo '  off        Power off.'
     echo '  reboot     Reboot.'
@@ -139,6 +152,9 @@ case "${1-}" in
         ;;
     destroy)
         destroy
+        ;;
+    ip)
+        ip
         ;;
     keyboard)
         keyboard "${2-}"
