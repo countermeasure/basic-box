@@ -128,6 +128,7 @@ main_help () {
     echo '  keyboard   Control key mapping.'
     echo '  off        Power off.'
     echo '  reboot     Reboot.'
+    echo '  upgrade    Upgrade firmware and software packages.'
 }
 
 
@@ -142,6 +143,26 @@ reboot () {
     echo 'Rebooting...'
     sleep 1
     systemctl reboot
+}
+
+
+upgrade () {
+    echo "Upgrading Debian packages..."
+    echo
+    sudo apt --quiet --quiet update
+    echo
+    sudo apt --upgradable list
+    echo
+    sudo apt --quiet --quiet --yes upgrade
+    echo
+    echo 'Upgrading Python packages...'
+    echo
+    pipx upgrade-all
+    echo
+    echo 'Upgrading firmware...'
+    echo
+    fwupdmgr --force refresh
+    fwupdmgr upgrade
 }
 
 
@@ -164,6 +185,9 @@ case "${1-}" in
         ;;
     reboot)
         reboot
+        ;;
+    upgrade)
+        upgrade
         ;;
     *)
         main_catchall "${1-}"
