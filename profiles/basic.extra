@@ -21,6 +21,7 @@ extra/dotfiles/ranger_rc.conf
 extra/dotfiles/starship.toml
 extra/dotfiles/stylua.toml
 extra/dotfiles/yt_dlp_config
+extra/dotfiles/zathurarc
 
 extra/downloads/bandwhich-0.20.0-source.tar.gz
 extra/downloads/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz

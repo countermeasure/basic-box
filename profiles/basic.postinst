@@ -70,6 +70,7 @@ cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
 cp $INSTALLER_DIR/trash-cli-0.22.4.16-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt-dlp.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt_dlp_config $LOCAL_DIR
+cp $INSTALLER_DIR/zathurarc $LOCAL_DIR
 cp $INSTALLER_DIR/zoxide-v0.8.1-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 
 # Copy first_boot systemd unit file into place.
@@ -508,3 +509,11 @@ apt install --yes smartmontools
 
 # Install python-is-python3.
 apt install --yes python-is-python3
+
+# Install zathura.
+apt install --yes zathura
+ZATHURA_DIR="$USER_CONFIG_DIR/zathura"
+mkdir "$ZATHURA_DIR"
+cp $LOCAL_DIR/zathurarc "$ZATHURA_DIR"
+chown --recursive "$USERNAME":"$USERNAME" "$ZATHURA_DIR"
+chmod 644 "$ZATHURA_DIR"/zathurarc
