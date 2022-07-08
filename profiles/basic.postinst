@@ -61,6 +61,8 @@ cp $INSTALLER_DIR/nvim-linux64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_init.lua $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_colourscheme.py $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
+cp $INSTALLER_DIR/ranger_rifle.conf $LOCAL_DIR
+cp $INSTALLER_DIR/ranger_scope.sh $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/setup.rst $LOCAL_DIR
 cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
@@ -520,3 +522,9 @@ mkdir "$ZATHURA_DIR"
 cp $LOCAL_DIR/zathurarc "$ZATHURA_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$ZATHURA_DIR"
 chmod 644 "$ZATHURA_DIR"/zathurarc
+
+# Add ranger rifle.conf and scope.sh files.
+cp $LOCAL_DIR/ranger_rifle.conf "$RANGER_DIR/rifle.conf"
+cp $LOCAL_DIR/ranger_scope.sh "$RANGER_DIR/scope.sh"
+chmod 644 "$RANGER_DIR"/rifle.conf
+chmod 755 "$RANGER_DIR"/scope.sh
