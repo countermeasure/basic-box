@@ -4,6 +4,11 @@
 set -o errexit -o nounset -o pipefail
 
 
+battery () {
+    acpi
+}
+
+
 destroy () {
     boot_device_name=$(
         lsblk --list | grep /boot$ | awk '{print $1}' | head --lines 1
@@ -123,6 +128,7 @@ main_help () {
     echo 'Commands:'
     echo
     echo '  -h|--help  Show this help.'
+    echo '  battery    Show battery information.'
     echo '  destroy    Destroy all data on this machine.'
     echo '  ip         Show public IP address.'
     echo '  keyboard   Control key mapping.'
@@ -170,6 +176,9 @@ echo
 case "${1-}" in
     -h|--help)
         main_help
+        ;;
+    battery)
+        battery
         ;;
     destroy)
         destroy
