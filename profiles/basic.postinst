@@ -528,3 +528,6 @@ cp $LOCAL_DIR/ranger_rifle.conf "$RANGER_DIR/rifle.conf"
 cp $LOCAL_DIR/ranger_scope.sh "$RANGER_DIR/scope.sh"
 chmod 644 "$RANGER_DIR"/rifle.conf
 chmod 755 "$RANGER_DIR"/scope.sh
+
+# Install acpi.
+apt install --yes acpi

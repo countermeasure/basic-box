@@ -94,6 +94,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - smartmontools installed
 - python-is-python3 installed
 - zathura installed
+- acpi installed
 
 
 Set up
