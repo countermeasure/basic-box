@@ -70,6 +70,7 @@ cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
 cp $INSTALLER_DIR/stylua-linux.zip $LOCAL_DIR
 cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
+cp $INSTALLER_DIR/sudoers_ufw $LOCAL_DIR
 cp $INSTALLER_DIR/trash-cli-0.22.4.16-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt-dlp.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt_dlp_config $LOCAL_DIR
@@ -542,3 +543,9 @@ cp $LOCAL_DIR/sources_syncthing.list $SOURCES_DIR/syncthing.list
 chmod 644 $SOURCES_DIR/syncthing.list
 apt update
 apt install --yes syncthing
+# Allow passwordless sudo for the ufw command which deletes the Syncthing
+# firewall rule. This is required for the "box sync" command to work properly
+# when the terminal it is executed in is closed before Syncthing is closed.
+SUDOERS_DIR='/etc/sudoers.d'
+cp $LOCAL_DIR/sudoers_ufw $SUDOERS_DIR/ufw
+chmod 440 $SUDOERS_DIR/ufw

@@ -134,6 +134,7 @@ main_help () {
     echo '  keyboard   Control key mapping.'
     echo '  off        Power off.'
     echo '  reboot     Reboot.'
+    echo '  sync       Start Syncthing.'
     echo '  upgrade    Upgrade firmware and software packages.'
 }
 
@@ -149,6 +150,22 @@ reboot () {
     echo 'Rebooting...'
     sleep 1
     systemctl reboot
+}
+
+
+sync () {
+    manage_syncthing () {
+        sudo ufw allow syncthing
+        mullvad-exclude syncthing
+        # Execution will block here while Syncthing is running, then the
+        # following command will run after Syncthing is shut down.
+        sudo ufw delete allow syncthing
+    }
+    # Ensure the user is authenticated for sudo before the manage_syncthing
+    # function is backgrounded.
+    sudo -v
+    echo 'Starting Syncthing...'
+    manage_syncthing &> /dev/null &
 }
 
 
@@ -194,6 +211,9 @@ case "${1-}" in
         ;;
     reboot)
         reboot
+        ;;
+    sync)
+        sync
         ;;
     upgrade)
         upgrade

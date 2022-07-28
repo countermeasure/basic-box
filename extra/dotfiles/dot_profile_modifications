@@ -4,3 +4,9 @@ export EDITOR='vim'
 # Ensure that Bluetooth is turned off when the system boots. The full path to
 # the rfkill command is required for a non-root user.
 /usr/sbin/rfkill block bluetooth
+
+# Ensure that Syncthing ports are closed in UFW when the system boots. These
+# ports should always be opened and closed automatically by the `box sync`
+# command, so this is just an added layer of protection in case that mechanism
+# fails for any reason.
+sudo ufw delete allow syncthing

@@ -1,0 +1,6 @@
+# The Syncthing UFW rule needs to be able to be removed without a password so
+# that the "box sync" command can remove it if the terminal which it is run in
+# is closed before Syncthing is closed. There doesn't seem to be a significant
+# security risk associated with this because closing ports in the firewall
+# should reduce rather than increase the attack surface.
+%sudo ALL=(root) NOPASSWD: /usr/sbin/ufw delete allow syncthing
