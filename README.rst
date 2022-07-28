@@ -95,6 +95,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - python-is-python3 installed
 - zathura installed
 - acpi installed
+- Syncthing installed
 
 
 Set up

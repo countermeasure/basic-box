@@ -20,6 +20,7 @@ extra/dotfiles/ranger_colourscheme.py
 extra/dotfiles/ranger_rc.conf
 extra/dotfiles/ranger_rifle.conf
 extra/dotfiles/ranger_scope.sh
+extra/dotfiles/sources_syncthing.list
 extra/dotfiles/starship.toml
 extra/dotfiles/stylua.toml
 extra/dotfiles/yt_dlp_config

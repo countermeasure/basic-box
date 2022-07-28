@@ -65,6 +65,7 @@ cp $INSTALLER_DIR/ranger_rifle.conf $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_scope.sh $LOCAL_DIR
 cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/setup.rst $LOCAL_DIR
+cp $INSTALLER_DIR/sources_syncthing.list $LOCAL_DIR
 cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
 cp $INSTALLER_DIR/stylua-linux.zip $LOCAL_DIR
@@ -531,3 +532,13 @@ chmod 755 "$RANGER_DIR"/scope.sh
 
 # Install acpi.
 apt install --yes acpi
+
+# Install Syncthing.
+SOURCES_DIR='/etc/apt/sources.list.d'
+wget \
+    --output-document /usr/share/keyrings/syncthing-archive-keyring.gpg \
+    https://syncthing.net/release-key.gpg
+cp $LOCAL_DIR/sources_syncthing.list $SOURCES_DIR/syncthing.list
+chmod 644 $SOURCES_DIR/syncthing.list
+apt update
+apt install --yes syncthing
