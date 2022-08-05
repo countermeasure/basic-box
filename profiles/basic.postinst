@@ -53,6 +53,7 @@ cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/git_global_ignore $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
 cp $INSTALLER_DIR/httpie-completion.bash $LOCAL_DIR
+cp $INSTALLER_DIR/ipython_config.py $LOCAL_DIR
 cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
 cp $INSTALLER_DIR/keyd-v2.4.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.conf $LOCAL_DIR
@@ -549,3 +550,11 @@ apt install --yes syncthing
 SUDOERS_DIR='/etc/sudoers.d'
 cp $LOCAL_DIR/sudoers_ufw $SUDOERS_DIR/ufw
 chmod 440 $SUDOERS_DIR/ufw
+
+# Add ipython_config.py file.
+IPYTHON_DIR="$USER_DIR/.ipython"
+IPYTHON_PROFILE_DIR="$IPYTHON_DIR/profile_default"
+mkdir -p "$IPYTHON_PROFILE_DIR"
+cp $LOCAL_DIR/ipython_config.py "$IPYTHON_PROFILE_DIR"
+chown --recursive "$USERNAME":"$USERNAME" "$IPYTHON_DIR"
+chmod 644 "$IPYTHON_PROFILE_DIR"/ipython_config.py

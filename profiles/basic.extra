@@ -13,6 +13,7 @@ extra/dotfiles/dot_profile_modifications
 extra/dotfiles/gitk
 extra/dotfiles/git_global_ignore
 extra/dotfiles/htoprc
+extra/dotfiles/ipython_config.py
 extra/dotfiles/keepassxc.ini
 extra/dotfiles/keyd_default.conf
 extra/dotfiles/nvim_init.lua

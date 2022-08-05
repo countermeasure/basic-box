@@ -107,7 +107,7 @@ alias mv='mv --interactive --verbose'
 
 alias ncdu='ncdu --color dark -r --si'
 
-alias p='ipython --no-confirm-exit'
+alias p='ipython'
 alias ping='ping -c 5 -i 0.2'
 alias pip='only_allow_pip_in_virtualenvs'
 alias pip3='only_allow_pip3_in_virtualenvs'
