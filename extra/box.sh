@@ -174,7 +174,7 @@ upgrade () {
     echo
     sudo apt --quiet --quiet update
     echo
-    sudo apt --upgradable list
+    apt --upgradable list
     echo
     sudo apt --quiet --quiet --yes upgrade
     echo
