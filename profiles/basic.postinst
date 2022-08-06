@@ -52,6 +52,7 @@ cp $INSTALLER_DIR/fzf-0.33.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/geckodriver-v0.32.0-linux64.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/git_global_ignore $LOCAL_DIR
+cp $INSTALLER_DIR/git_wrapper.sh $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
 cp $INSTALLER_DIR/httpie-completion.bash $LOCAL_DIR
 cp $INSTALLER_DIR/ipython_config.py $LOCAL_DIR
@@ -248,9 +249,9 @@ git_global_config_set 'user.email' 'basic@basic.box'
 git_global_config_set 'branch.sort' '-committerdate'
 # Add Git global config settings for "git log" formatting.
 git_global_config_set 'log.date' 'format:%b %d %Y'
-git_global_config_set \
-    'format.pretty' \
-    '%C(auto)%h %C(dim white)%ad%C(auto)%d%Creset %s %C(dim white)by %an %ar'
+GIT_COMMIT_FORMAT="%C(yellow)%h %C(white)%<(31)%s %C(dim white)Commit by \
+%Creset%C(magenta)%an %C(cyan)%ar %C(dim white)on %ad %C(auto)%d"
+git_global_config_set 'format.pretty' "${GIT_COMMIT_FORMAT}"
 # Add Git global config setting for "git pull" behaviour.
 git_global_config_set 'pull.rebase' 'true'
 # Add Git global config setting for "git push" behaviour when no refspec is
@@ -663,3 +664,9 @@ chmod 440 $SUDOERS_DIR/cryptsetup
 
 # Install Thunderbird.
 apt install --yes thunderbird
+
+# Make the "git_wrapper" command available everywhere.
+GIT_WRAPPER_SCRIPT_PATH="$USER_BIN_DIR/git_wrapper"
+cp $LOCAL_DIR/git_wrapper.sh "$GIT_WRAPPER_SCRIPT_PATH"
+chown "$USERNAME":"$USERNAME" "$GIT_WRAPPER_SCRIPT_PATH"
+chmod 755 "$GIT_WRAPPER_SCRIPT_PATH"
