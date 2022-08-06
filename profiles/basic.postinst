@@ -71,6 +71,7 @@ cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
 cp $INSTALLER_DIR/stylua-linux.zip $LOCAL_DIR
 cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
+cp $INSTALLER_DIR/sudoers_apt $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_ufw $LOCAL_DIR
 cp $INSTALLER_DIR/trash-cli-0.22.4.16-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt-dlp.tar.gz $LOCAL_DIR
@@ -558,3 +559,7 @@ mkdir -p "$IPYTHON_PROFILE_DIR"
 cp $LOCAL_DIR/ipython_config.py "$IPYTHON_PROFILE_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$IPYTHON_DIR"
 chmod 644 "$IPYTHON_PROFILE_DIR"/ipython_config.py
+
+# Allow passwordless sudo for the apt update and apt upgrade commands.
+cp $LOCAL_DIR/sudoers_apt $SUDOERS_DIR/apt
+chmod 440 $SUDOERS_DIR/apt

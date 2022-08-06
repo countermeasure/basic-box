@@ -24,6 +24,7 @@ extra/dotfiles/ranger_scope.sh
 extra/dotfiles/sources_syncthing.list
 extra/dotfiles/starship.toml
 extra/dotfiles/stylua.toml
+extra/dotfiles/sudoers_apt
 extra/dotfiles/sudoers_ufw
 extra/dotfiles/yt_dlp_config
 extra/dotfiles/zathurarc

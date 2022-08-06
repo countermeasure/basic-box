@@ -1,0 +1,12 @@
+# The apt update and apt upgrade commands are used frequently, so it's
+# convenient to make them passwordless. There doesn't seem to be a significant
+# security risk associated with this because the packages which will be
+# upgraded have already been installed.
+%sudo ALL=(root) NOPASSWD: \
+    /usr/bin/apt update, \
+    /usr/bin/apt * update, \
+    /usr/bin/apt update *
+%sudo ALL=(root) NOPASSWD: \
+    /usr/bin/apt upgrade, \
+    /usr/bin/apt * upgrade, \
+    /usr/bin/apt upgrade *
