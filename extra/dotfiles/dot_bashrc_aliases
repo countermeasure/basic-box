@@ -17,82 +17,77 @@ source /usr/share/bash-completion/completions/git
 
 alias g='git'
 __git_complete g __git_main
-alias ga='git_add_then_git_status'
+alias ga='git_wrapper add'
 __git_complete ga _git_add
-alias gad='git_add_then_git_diff'
+alias gaa='git_wrapper add_all'
+alias gad='git_wrapper add_then_git_diff'
 __git_complete gad _git_add
-alias gap='git add --patch'
+alias gap='git_wrapper add_with_patch'
 __git_complete gap _git_add
-GIT_BRANCH_FORMAT="\
-%(if)%(HEAD)%(then)%(color:bold green)\
-%(else)%(color:yellow)\
-%(end)\
-%(align:width=30)%(refname:short)%(HEAD)%(color:reset)%(end) \
-%(color:dim white)Last commit%(color:reset) %(committerdate:relative)\
-%(color:dim white) by%(color:reset) %(authorname)\
-%(if)%(upstream)%(then)\
-%(if:equals==)%(upstream:trackshort)%(then) %(color:bold green)(synced)\
-%(else)\
-%(if:equals=<)%(upstream:trackshort)%(then) %(color:bold yellow)\
-%(else) \
-%(color:bold red)%(end)(%(upstream:track,nobracket))\
-%(end)\
-%(end)"
-alias gb="git branch --format=\"$GIT_BRANCH_FORMAT\""
+alias gb='git_wrapper branch'
 __git_complete gb _git_branch
-alias gba="git branch --all --format=\"$GIT_BRANCH_FORMAT\""
-__git_complete gba _git_branch
-alias gbr="git branch --format=\"$GIT_BRANCH_FORMAT\" --remote"
+alias gbc='git_wrapper branch_create'
+__git_complete gbc _git_branch
+alias gbd='git_wrapper branches_delete'
+__git_complete gbd _git_branch
+alias gbla='git_wrapper branch_list_all'
+alias gbll='git_wrapper branch_list_local'
+alias gblr='git_wrapper branch_list_remote'
+alias gbr='git_wrapper branch_rename'
 __git_complete gbr _git_branch
-alias gch='git_checkout_then_git_status'
-__git_complete gch _git_checkout
-alias gco='git commit'
+alias gcl='git_wrapper clean'
+__git_complete gcl _git_clean
+alias gco='git_wrapper commit'
 __git_complete gco _git_commit
-alias gcoa='git commit --amend'
-alias gcoar='git commit --amend --reuse-message=HEAD'
-alias gcoc='git_commit_checkpoint'
-alias gcof='git commit --fixup'
-__git_complete gcof _git_commit
-alias gcp='git cherry-pick'
+alias gcoa='git_wrapper commit_amend'
+alias gcoar='git_wrapper commit_amend_reuse_message'
+alias gcoc='git_wrapper commit_checkpoint'
+alias gcof='git_wrapper commit_fixup'
+alias gcp='git_wrapper cherry_pick'
 __git_complete gcp _git_cherry_pick
-alias gd='git diff'
+alias gcpa='git_wrapper cherry_pick_abort'
+alias gcpc='git_wrapper cherry_pick_continue'
+alias gd='git_wrapper diff'
 __git_complete gd _git_diff
-alias gds='git diff --staged'
-__git_complete gds _git_diff
-alias gf='git fetch'
+alias gdr='git_wrapper diff_remote'
+alias gds='git_wrapper diff_staged'
+alias gdu='git_wrapper diff_unstaged'
+alias gf='git_wrapper fetch'
 __git_complete gf _git_fetch
-alias gfa='git fetch --all'
-__git_complete gfa _git_fetch
-alias gfap='git fetch --all --prune'
-__git_complete gfap _git_fetch
 alias gk='gitk &'
-alias gl='git log'
-__git_complete gl _git_log
-alias glg='git log --all --graph'
-__git_complete glg _git_log
-# "gls" for "git log short".
-alias gls='git log --max-count=20'
-__git_complete gls _git_log
-alias gm='git merge'
+alias gl='git_wrapper log'
+alias gla='git_wrapper log_all'
+alias glb='git_wrapper log_branch'
+alias gm='git_wrapper merge'
 __git_complete gm _git_merge
-alias gp='git push'
+alias gp='git_wrapper push'
 __git_complete gp _git_push
-alias gpoh='git push origin HEAD'
-__git_complete gpoh _git_push
-alias gr='git_rebase_then_git_status'
+alias gpf='git_wrapper push_force_with_lease'
+__git_complete gpf _git_push
+alias gpull='git_wrapper pull'
+__git_complete gpull _git_pull
+alias gr='git_wrapper rebase'
 __git_complete gr _git_rebase
-alias gra='git rebase --abort'
-alias grc='git rebase --continue'
-alias gri='git_rebase_interactive'
+alias gra='git_wrapper rebase_abort'
+alias grc='git_wrapper rebase_continue'
+alias gri='git_wrapper rebase_interactive'
 __git_complete gri _git_rebase
-alias gria='git_rebase_interactive_with_autosquash'
+alias gria='git_wrapper rebase_interactive_with_autosquash'
 __git_complete gria _git_rebase
-alias grsh='git reset HEAD'
-__git_complete grsh _git_reset
-alias gs='git status'
+alias gs='git_wrapper status'
 __git_complete gs _git_status
-alias gsh='git show'
+alias gsh='git_wrapper show'
 __git_complete gsh _git_show
+alias gstash='git_wrapper stash'
+__git_complete gstash _git_stash
+alias gsw='git_wrapper switch'
+__git_complete gsw _git_switch
+alias gswr='git_wrapper switch_remote'
+__git_complete gsw _git_switch
+alias guc='git_wrapper unchange'
+__git_complete guc _git_restore  # TODO: retore or reset? Get tab completion working.
+alias gus='git_wrapper unstage'
+__git_complete gus _git_restore  # TODO: retore or reset? Get tab completion working.
 
 # "l" for "list".
 alias l='exa --colour-scale --group-directories-first --long'
