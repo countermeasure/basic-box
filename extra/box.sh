@@ -10,15 +10,19 @@ battery () {
 
 
 destroy () {
-    boot_device_name=$(
-        lsblk --list | grep /boot$ | awk '{print $1}' | head --lines 1
+    boot_device=$(
+        lsblk --list --paths |
+        awk '$7 == "/boot" { print $1 }' |
+        head --lines 1
     )
-    if [ "$boot_device_name" = 'nvme0n1p2' ]; then
-        target_device='/dev/nvme0n1p3'
-    elif [ "$boot_device_name" = 'sda1' ]; then
-        target_device='/dev/sda5'
-    else
-        echo 'Boot device could not be determined.'
+    target_device=$(
+        lsblk --fs --list --paths |
+        grep "${boot_device%?}" |
+        awk '$2 == "crypto_LUKS" { print $1 }' |
+        head --lines 1
+    )
+    if [ -z "${target_device}" ]; then
+        echo "Couldn't determine which device to destroy."
         echo 'Operation cancelled.'
         exit 1
     fi
