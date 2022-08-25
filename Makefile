@@ -1,16 +1,30 @@
-boot_device_name != \
-	lsblk --list | grep /boot$$ | awk '{print $$1}' | head --lines 1
-
 firmware_iwlwifi_deb = 'firmware-iwlwifi_20210315-3_all.deb'
 
-target_device != \
-	if [ $(boot_device_name) = 'nvme0n1p2' ]; then \
-		echo '/dev/sda'; \
-	elif [ $(boot_device_name) = 'sda1' ]; then \
-		echo '/dev/sdb'; \
-	else \
-		echo 'unknown'; \
+target_device != lsblk --output tran,path | awk '$$1 == "usb" { print $$2 }'
+
+target_device_description != \
+	 lsblk --output tran,size,model,path | \
+	 awk '$$1 == "usb" { print $$2 " " $$3 " (device " $$4 ")" }'
+
+usb_drive_count != lsblk --output tran | grep '^usb$$' | wc --lines
+
+check:
+	@echo
+	@if [ $(usb_drive_count) -eq 0 ]; then \
+		echo 'There was no USB drive found.'; \
+		echo; \
+		echo 'Connect a USB drive.'; \
+		exit 1; \
+	elif [ $(usb_drive_count) -gt 1 ]; then \
+		echo "There were $(usb_drive_count) USB drives found."; \
+		echo; \
+		echo 'Make sure that only one USB drive is connected.'; \
+		exit 1; \
 	fi
+	@echo "The $(target_device_description) will become an installer."
+	@echo
+	@echo 'All data on that device will be lost.'
+	@echo
 
 image:
 	@./get_extra_downloads.sh
@@ -25,17 +39,10 @@ image:
 			../pool/non-free/f/firmware-nonfree/$(firmware_iwlwifi_deb) \
 			firmware/$(firmware_iwlwifi_deb)
 
-usb: image
-	@lsblk
-	@echo
-	@if [ $(target_device) != 'unknown' ]; then \
-		echo "Writing to $(target_device)."; \
-	else \
-		echo 'Target device could not be determined.'; \
-		echo 'Operation cancelled.'; \
-		exit 1; \
-	fi
-	@echo
+sudo:
+	@sudo -v
+
+usb: check sudo image
 	@sudo cp images/debian-11-amd64-CD-1.iso $(target_device)
 
-.PHONY: image usb
+.PHONY: check image sudo usb
