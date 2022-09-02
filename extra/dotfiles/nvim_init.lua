@@ -170,6 +170,7 @@ which_key.register({
   ["]f"] = { "Next function start" },
   ["]F"] = { "Next function end" },
   ["]g"] = { "<cmd>Gitsigns next_hunk<CR>", "Next Git hunk" },
+  ["s"] = { "<Plug>Lightspeed_omni_s", "Lightspeed search" },
 })
 
 -- Single leader mappings for mappings which are more frequently used.
