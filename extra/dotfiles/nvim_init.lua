@@ -319,6 +319,18 @@ end
 
 -- Plugin: nvim-lualine/lualine.nvim --
 
+local function word_count()
+  if vim.bo.filetype == "markdown" or vim.bo.filetype == "rst" then
+    if vim.fn.wordcount().visual_words == nil then
+      return " " .. vim.fn.wordcount().words
+    else
+      return " " .. vim.fn.wordcount().visual_words
+    end
+  else
+    return ""
+  end
+end
+
 require("lualine").setup({
   options = {
     section_separators = { left = "", right = "" },
@@ -392,6 +404,7 @@ require("lualine").setup({
       },
     },
     lualine_z = {
+      { word_count },
       {
         "%v",
         icon = "",
