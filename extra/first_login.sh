@@ -28,7 +28,7 @@ while [[ $EXIT_CODE != 0 ]] ; do
     printf 'Enter your Mullvad account number to enable the VPN: '
     read -r ACCOUNT_NUMBER
     echo
-    echo "$ACCOUNT_NUMBER" | mullvad account set
+    echo "$ACCOUNT_NUMBER" | mullvad account login
     echo
     mullvad account get && EXIT_CODE=$? || EXIT_CODE=$?
     echo
