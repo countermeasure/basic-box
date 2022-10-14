@@ -549,3 +549,6 @@ chmod 644 "$IPYTHON_PROFILE_DIR"/ipython_config.py
 # Allow passwordless sudo for the apt update and apt upgrade commands.
 cp $LOCAL_DIR/sudoers_apt $SUDOERS_DIR/apt
 chmod 440 $SUDOERS_DIR/apt
+
+# Install Lynis.
+apt install --yes lynis

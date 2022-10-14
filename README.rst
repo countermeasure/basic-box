@@ -96,6 +96,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - zathura installed
 - acpi installed
 - Syncthing installed
+- Lynis installed
 
 
 Set up
