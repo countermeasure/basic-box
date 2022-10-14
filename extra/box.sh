@@ -4,6 +4,12 @@
 set -o errexit -o nounset -o pipefail
 
 
+audit () {
+    echo "Auditing the system with Lynis..."
+    sudo lynis audit system
+}
+
+
 battery () {
     acpi
 }
@@ -132,6 +138,7 @@ main_help () {
     echo 'Commands:'
     echo
     echo '  -h|--help  Show this help.'
+    echo '  audit      Audit system with Lynis.'
     echo '  battery    Show battery information.'
     echo '  destroy    Destroy all data on this machine.'
     echo '  ip         Show public IP address.'
@@ -197,6 +204,9 @@ echo
 case "${1-}" in
     -h|--help)
         main_help
+        ;;
+    audit)
+        audit
         ;;
     battery)
         battery

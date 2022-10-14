@@ -72,6 +72,7 @@ cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
 cp $INSTALLER_DIR/stylua-linux-x86_64.zip $LOCAL_DIR
 cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_apt $LOCAL_DIR
+cp $INSTALLER_DIR/sudoers_lynis $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_ufw $LOCAL_DIR
 cp $INSTALLER_DIR/trash-cli-0.22.8.27-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt-dlp.tar.gz $LOCAL_DIR
@@ -552,3 +553,6 @@ chmod 440 $SUDOERS_DIR/apt
 
 # Install Lynis.
 apt install --yes lynis
+# Allow passwordless sudo for the "lynis audit system" command.
+cp $LOCAL_DIR/sudoers_lynis $SUDOERS_DIR/lynis
+chmod 440 $SUDOERS_DIR/lynis
