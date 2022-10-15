@@ -145,6 +145,7 @@ main_help () {
     echo '  keyboard   Control key mapping.'
     echo '  off        Power off.'
     echo '  reboot     Reboot.'
+    echo '  scan       Scan for malware or rootkits.'
     echo '  sync       Start Syncthing.'
     echo '  upgrade    Upgrade firmware and software packages.'
 }
@@ -161,6 +162,116 @@ reboot () {
     echo 'Rebooting...'
     sleep 1
     systemctl reboot
+}
+
+
+scan () {
+    scan_for_malware () {
+        echo "Scanning ${1} with ClamAV..."
+        clamscan \
+            --alert-exceeds-max=yes \
+            --infected \
+            --max-filesize=4000M \
+            --max-scansize=4000M \
+            --max-scantime=0 \
+            --recursive=yes \
+            "${1}"
+    }
+    case "${1-}" in
+        -h|--help)
+            scan_help
+            ;;
+        malware)
+            case "${2-}" in
+                -h|--help)
+                    scan_for_malware_help
+                    ;;
+                downloads)
+                    scan_for_malware "${HOME}/Downloads"
+                    ;;
+                home)
+                    scan_for_malware "${HOME}"
+                    ;;
+                root)
+                    scan_for_malware /
+                    ;;
+                '')
+                    echo 'An argument is required.'
+                    echo
+                    echo 'Here is the relevant help...'
+                    echo
+                    echo
+                    scan_for_malware_help
+                    exit 1
+                    ;;
+                *)
+                    if [[ ${2} == /* ]]; then
+                        scan_for_malware "${2}"
+                    else
+                        scan_for_malware "${PWD}/${2}"
+                    fi
+                    ;;
+            esac
+            ;;
+        rootkits)
+            echo "Scanning the system with Rootkit Hunter..."
+            echo
+            sudo rkhunter \
+                --check \
+                --quiet \
+                --report-warnings-only \
+                --skip-keypress \
+                --summary
+            ;;
+        *)
+            scan_catchall "${1-}"
+            ;;
+    esac
+}
+
+
+scan_catchall () {
+    if [[ ${1} = '' ]]; then
+        echo 'An argument is required.'
+    else
+        echo "\"${1}\" is not a recognised argument."
+    fi
+    echo
+    echo 'Here is the relevant help...'
+    echo
+    echo
+    scan_help
+    exit 1
+}
+
+
+scan_for_malware_help () {
+    echo 'usage: box scan malware <arg>'
+    echo
+    echo 'Scan for malware with ClamAV.'
+    echo
+    echo 'Arguments:'
+    echo
+    echo '  -h|--help  Show this help.'
+    # shellcheck disable=2016
+    echo '  downloads  Scan the $HOME/Downloads directory'
+    # shellcheck disable=2016
+    echo '  home       Scan the $HOME directory'
+    echo '  root       Scan the / directory'
+    echo '  <path>     Scan <path>, which can be an absolute or relative path'
+}
+
+
+scan_help () {
+    echo 'usage: box scan <arg>'
+    echo
+    echo 'Scan for malware or rootkits.'
+    echo
+    echo 'Arguments:'
+    echo
+    echo '  -h|--help  Show this help.'
+    echo '  malware    Scan for Malware with ClamAV'
+    echo '  rootkits   Scan for rootkits with Rootkit Hunter'
 }
 
 
@@ -225,6 +336,9 @@ case "${1-}" in
         ;;
     reboot)
         reboot
+        ;;
+    scan)
+        scan "${@:2}"
         ;;
     sync)
         sync

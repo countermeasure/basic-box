@@ -73,6 +73,7 @@ cp $INSTALLER_DIR/stylua-linux-x86_64.zip $LOCAL_DIR
 cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_apt $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_lynis $LOCAL_DIR
+cp $INSTALLER_DIR/sudoers_rkhunter $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_ufw $LOCAL_DIR
 cp $INSTALLER_DIR/trash-cli-0.22.8.27-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt-dlp.tar.gz $LOCAL_DIR
@@ -562,3 +563,6 @@ apt install --yes clamav
 
 # Install Rootkit Hunter.
 apt install --yes rkhunter
+# Allow passwordless sudo for the "rkhunter" command.
+cp $LOCAL_DIR/sudoers_rkhunter $SUDOERS_DIR/rkhunter
+chmod 440 $SUDOERS_DIR/rkhunter
