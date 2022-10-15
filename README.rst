@@ -97,6 +97,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - acpi installed
 - Syncthing installed
 - Lynis installed
+- ClamAV installed
 
 
 Set up

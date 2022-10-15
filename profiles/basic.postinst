@@ -556,3 +556,6 @@ apt install --yes lynis
 # Allow passwordless sudo for the "lynis audit system" command.
 cp $LOCAL_DIR/sudoers_lynis $SUDOERS_DIR/lynis
 chmod 440 $SUDOERS_DIR/lynis
+
+# Install ClamAV.
+apt install --yes clamav
