@@ -559,3 +559,6 @@ chmod 440 $SUDOERS_DIR/lynis
 
 # Install ClamAV.
 apt install --yes clamav
+
+# Install Rootkit Hunter.
+apt install --yes rkhunter

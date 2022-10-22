@@ -98,6 +98,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Syncthing installed
 - Lynis installed
 - ClamAV installed
+- Rootkit Hunter installed
 
 
 Set up
