@@ -30,3 +30,8 @@ eval "$(starship init bash)"
 # Enable direnv.
 # This should appear after shell extensions that manipulate the prompt.
 eval "$(direnv hook bash)"
+
+# Enable pyenv.
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"

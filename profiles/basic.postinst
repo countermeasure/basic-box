@@ -60,6 +60,7 @@ cp $INSTALLER_DIR/keyd_default.conf $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2022.4_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim-linux64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_init.lua $LOCAL_DIR
+cp $INSTALLER_DIR/pyenv-v2.3.5-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_colourscheme.py $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rifle.conf $LOCAL_DIR
@@ -566,3 +567,33 @@ apt install --yes rkhunter
 # Allow passwordless sudo for the "rkhunter" command.
 cp $LOCAL_DIR/sudoers_rkhunter $SUDOERS_DIR/rkhunter
 chmod 440 $SUDOERS_DIR/rkhunter
+
+# Install pyenv.
+PYENV_DIR="$USER_DIR/.pyenv"
+tar --extract -f $LOCAL_DIR/pyenv-v2.3.5-source.tar.gz --directory /tmp
+mkdir -p "$PYENV_DIR"
+cp --recursive /tmp/pyenv-2.3.5/* "$PYENV_DIR"
+chown --recursive "$USERNAME":"$USERNAME" "$PYENV_DIR"
+# Install Python build dependencies. This is the complete list taken from
+# https://github.com/pyenv/pyenv/wiki#suggested-build-environment. Even though
+# some of these packages are already installed, the list is used here without
+# modification in case in the future something changes so that a package which
+# is currently installed and in the list is no longer installed.
+apt install --yes \
+    build-essential \
+    curl \
+    libbz2-dev \
+    libffi-dev \
+    liblzma-dev \
+    libncursesw5-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxmlsec1-dev \
+    llvm \
+    make \
+    tk-dev \
+    wget\
+    xz-utils \
+    zlib1g-dev

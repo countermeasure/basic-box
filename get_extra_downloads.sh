@@ -118,3 +118,11 @@ wget --timestamping "https://github.com/imsnif/bandwhich/archive/refs/tags/\
 # with bandwhich in its name. Simply saving with this different filename will
 # stop wget's --timestamping option working.
 cp 0.20.0.tar.gz bandwhich-0.20.0-source.tar.gz
+
+# Ensure the pyenv package is present.
+wget --timestamping "https://github.com/pyenv/pyenv/archive/refs/tags/\
+v2.3.5.tar.gz"
+# As the pyenv archive doesn't include pyenv in its name, make a copy with
+# pyenv in its name. Simply saving with this different filename will stop
+# wget's --timestamping option working.
+cp v2.3.5.tar.gz pyenv-v2.3.5-source.tar.gz

@@ -99,6 +99,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Lynis installed
 - ClamAV installed
 - Rootkit Hunter installed
+- pyenv installed
 
 
 Set up
