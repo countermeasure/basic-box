@@ -108,7 +108,7 @@ apt install --yes torbrowser-launcher
 
 # Install pipx.
 apt install --yes python3-pip python3-venv
-runuser -l "$USERNAME" -c 'pip3 install pipx'
+runuser -l "$USERNAME" -c 'pip3 install pipx==1.1.0'
 
 # Copy .bashrc extensions into place and enable them.
 cp $LOCAL_DIR/dot_bashrc_aliases "$USER_DIR"/.bashrc_aliases
