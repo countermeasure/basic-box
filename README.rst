@@ -101,6 +101,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Rootkit Hunter installed
 - pyenv installed
 - geckodriver installed
+- JupyterLab installed
 
 
 Set up

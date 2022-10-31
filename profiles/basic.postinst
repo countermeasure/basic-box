@@ -55,6 +55,8 @@ cp $INSTALLER_DIR/git_global_ignore $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
 cp $INSTALLER_DIR/httpie-completion.bash $LOCAL_DIR
 cp $INSTALLER_DIR/ipython_config.py $LOCAL_DIR
+cp $INSTALLER_DIR/jupyterlab_apputils_settings $LOCAL_DIR
+cp $INSTALLER_DIR/jupyterlab_codemirror_settings $LOCAL_DIR
 cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
 cp $INSTALLER_DIR/keyd-v2.4.2-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.conf $LOCAL_DIR
@@ -602,3 +604,23 @@ apt install --yes \
 # Install geckodriver.
 tar --extract -f $LOCAL_DIR/geckodriver-v0.32.0-linux64.tar.gz --directory /tmp
 cp /tmp/geckodriver /usr/local/bin
+
+# Install JupyterLab.
+runuser -l "$USERNAME" -c 'pipx install jupyterlab==3.5.0'
+# Share JupyterLab user settings across all JupyterLab environments.
+JUPYTER_DIR="$USER_DIR/.jupyter"
+JUPYTERLAB_APPUTILS_EXTENSION_DIR="$JUPYTER_DIR/lab/user-settings/\
+@jupyterlab/apputils-extension"
+mkdir -p "$JUPYTERLAB_APPUTILS_EXTENSION_DIR"
+cp \
+    $LOCAL_DIR/jupyterlab_apputils_settings \
+    "$JUPYTERLAB_APPUTILS_EXTENSION_DIR/themes.jupyterlab-settings"
+JUPYTERLAB_CODEMIROR_EXTENSION_DIR="$JUPYTER_DIR/lab/user-settings/\
+@jupyterlab/codemirror-extension"
+mkdir "$JUPYTERLAB_CODEMIROR_EXTENSION_DIR"
+cp \
+    $LOCAL_DIR/jupyterlab_codemirror_settings \
+    "$JUPYTERLAB_CODEMIROR_EXTENSION_DIR/commands.jupyterlab-settings"
+chown --recursive "$USERNAME":"$USERNAME" "$JUPYTER_DIR"
+chmod 644 "$JUPYTERLAB_APPUTILS_EXTENSION_DIR/themes.jupyterlab-settings"
+chmod 644 "$JUPYTERLAB_CODEMIROR_EXTENSION_DIR/commands.jupyterlab-settings"
