@@ -126,3 +126,7 @@ v2.3.5.tar.gz"
 # pyenv in its name. Simply saving with this different filename will stop
 # wget's --timestamping option working.
 cp v2.3.5.tar.gz pyenv-v2.3.5-source.tar.gz
+
+# Ensure the geckodriver package is present.
+wget --timestamping "https://github.com/mozilla/geckodriver/releases/download/\
+v0.32.0/geckodriver-v0.32.0-linux64.tar.gz"

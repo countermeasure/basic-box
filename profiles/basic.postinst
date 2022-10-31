@@ -49,6 +49,7 @@ cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
 cp $INSTALLER_DIR/fzf-0.33.0-linux_amd64.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/fzf-0.33.0-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/geckodriver-v0.32.0-linux64.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/git_global_ignore $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
@@ -597,3 +598,7 @@ apt install --yes \
     wget\
     xz-utils \
     zlib1g-dev
+
+# Install geckodriver.
+tar --extract -f $LOCAL_DIR/geckodriver-v0.32.0-linux64.tar.gz --directory /tmp
+cp /tmp/geckodriver /usr/local/bin

@@ -100,6 +100,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - ClamAV installed
 - Rootkit Hunter installed
 - pyenv installed
+- geckodriver installed
 
 
 Set up
