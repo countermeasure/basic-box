@@ -77,6 +77,7 @@ cp $INSTALLER_DIR/stylua-linux-x86_64.zip $LOCAL_DIR
 cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_apt $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_lynis $LOCAL_DIR
+cp $INSTALLER_DIR/sudoers_powertop $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_rkhunter $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_ufw $LOCAL_DIR
 cp $INSTALLER_DIR/trash-cli-0.22.8.27-source.tar.gz $LOCAL_DIR
@@ -624,3 +625,7 @@ cp \
 chown --recursive "$USERNAME":"$USERNAME" "$JUPYTER_DIR"
 chmod 644 "$JUPYTERLAB_APPUTILS_EXTENSION_DIR/themes.jupyterlab-settings"
 chmod 644 "$JUPYTERLAB_CODEMIROR_EXTENSION_DIR/commands.jupyterlab-settings"
+
+# Allow passwordless sudo for the "powertop" command.
+cp $LOCAL_DIR/sudoers_powertop $SUDOERS_DIR/powertop
+chmod 440 $SUDOERS_DIR/powertop

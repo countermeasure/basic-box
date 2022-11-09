@@ -28,6 +28,7 @@ extra/dotfiles/starship.toml
 extra/dotfiles/stylua.toml
 extra/dotfiles/sudoers_apt
 extra/dotfiles/sudoers_lynis
+extra/dotfiles/sudoers_powertop
 extra/dotfiles/sudoers_rkhunter
 extra/dotfiles/sudoers_ufw
 extra/dotfiles/yt_dlp_config

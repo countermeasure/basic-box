@@ -67,6 +67,18 @@ OfflineIMAP
 Copy your ``.offlineimaprc`` file into the ``$HOME`` directory.
 
 
+PowerTOP
+--------
+
+Do an initial callibration of PowerTOP (which will make the machine unusable
+for a few minutes) with::
+
+   $ ptop --calibrate
+
+After this, the longer you let PowerTOP run on battery power, the more accurate
+it should become.
+
+
 SSH
 ---
 
