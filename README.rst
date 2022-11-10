@@ -102,6 +102,8 @@ The **Basic Box** installer creates a Debian 11 system with:
 - pyenv installed
 - geckodriver installed
 - JupyterLab installed
+- TLP installed and configured so that batteries start charging at 75% capacity
+  and stop charging at 80% capacity
 
 
 Set up

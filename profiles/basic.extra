@@ -30,7 +30,9 @@ extra/dotfiles/sudoers_apt
 extra/dotfiles/sudoers_lynis
 extra/dotfiles/sudoers_powertop
 extra/dotfiles/sudoers_rkhunter
+extra/dotfiles/sudoers_tlp
 extra/dotfiles/sudoers_ufw
+extra/dotfiles/tlp_charging_thresholds.conf
 extra/dotfiles/yt_dlp_config
 extra/dotfiles/zathurarc
 

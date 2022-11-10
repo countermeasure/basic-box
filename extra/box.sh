@@ -12,6 +12,18 @@ audit () {
 
 battery () {
     acpi
+    echo
+    for battery in {0..1}; do
+        directory="/sys/class/power_supply/BAT${battery}"
+        if [[ -d ${directory} ]]; then
+            start_threshold=$(< ${directory}/charge_start_threshold)
+            stop_threshold=$(< ${directory}/charge_stop_threshold)
+            charging_output="Battery ${battery}: "
+            charging_output+="Charging starts below ${start_threshold}%, "
+            charging_output+="stops at ${stop_threshold}%"
+            echo "${charging_output}"
+        fi
+    done
 }
 
 

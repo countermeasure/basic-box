@@ -79,7 +79,9 @@ cp $INSTALLER_DIR/sudoers_apt $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_lynis $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_powertop $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_rkhunter $LOCAL_DIR
+cp $INSTALLER_DIR/sudoers_tlp $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_ufw $LOCAL_DIR
+cp $INSTALLER_DIR/tlp_charging_thresholds.conf $LOCAL_DIR
 cp $INSTALLER_DIR/trash-cli-0.22.8.27-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt-dlp.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt_dlp_config $LOCAL_DIR
@@ -629,3 +631,14 @@ chmod 644 "$JUPYTERLAB_CODEMIROR_EXTENSION_DIR/commands.jupyterlab-settings"
 # Allow passwordless sudo for the "powertop" command.
 cp $LOCAL_DIR/sudoers_powertop $SUDOERS_DIR/powertop
 chmod 440 $SUDOERS_DIR/powertop
+
+# Install TLP.
+apt install --yes tlp
+# Allow passwordless sudo for the "tlp" and "tlp-stat" commands.
+cp $LOCAL_DIR/sudoers_tlp $SUDOERS_DIR/tlp
+chmod 440 $SUDOERS_DIR/tlp
+# Configure battery charging thresholds.
+cp \
+    $LOCAL_DIR/tlp_charging_thresholds.conf \
+    /etc/tlp.d/10-charging-thresholds.conf
+chmod 644 /etc/tlp.d/10-charging-thresholds.conf
