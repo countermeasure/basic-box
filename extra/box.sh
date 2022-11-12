@@ -11,6 +11,27 @@ audit () {
 
 
 battery () {
+    discharging_power=0
+    for battery in {0..1}; do
+        battery_power_file="/sys/class/power_supply/BAT${battery}/power_now"
+        if [[ -f ${battery_power_file} ]]; then
+            battery_status_file="/sys/class/power_supply/BAT${battery}/status"
+            battery_status=$(< ${battery_status_file})
+            if [[ ${battery_status} = 'Discharging' ]]; then
+                discharging_power_in_microwatts=$(< ${battery_power_file})
+                discharging_power=$(
+                    echo "scale=1; ${discharging_power_in_microwatts} / 10^6" |
+                    bc
+                )
+                echo "Battery ${battery}: Discharging at ${discharging_power}W"
+                break
+            fi
+        fi
+    done
+    if [[ ${discharging_power} = 0 ]]; then
+        echo "Currently on mains power."
+    fi
+    echo
     acpi
     echo
     for battery in {0..1}; do
