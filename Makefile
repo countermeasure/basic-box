@@ -43,6 +43,14 @@ sudo:
 	@sudo -v
 
 usb: check sudo image
-	@sudo cp images/debian-11-amd64-CD-1.iso $(target_device)
+	@echo "Writing the image to the $(target_device_description)..."
+	@# If sync is not called, eject will run before the copy completes.
+	@sudo cp images/debian-11-amd64-CD-1.iso $(target_device); sync
+	@sudo eject $(target_device)
+	@notify-send \
+		'Installer created' \
+		'The USB drive can be removed.' \
+		--icon \
+		/usr/share/icons/Adwaita/scalable/devices/media-removable-symbolic.svg
 
 .PHONY: check image sudo usb
