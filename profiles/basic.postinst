@@ -642,3 +642,7 @@ cp \
     $LOCAL_DIR/tlp_charging_thresholds.conf \
     /etc/tlp.d/10-charging-thresholds.conf
 chmod 644 /etc/tlp.d/10-charging-thresholds.conf
+
+# Install Libnotify.
+# This provides the notify-send command.
+apt install --yes libnotify-bin
