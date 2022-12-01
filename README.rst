@@ -5,6 +5,8 @@ Builds a basic Debian 11 (Bullseye) installer which asks very few questions.
 
 Includes firmware for Thinkpad P1 and T-series laptops.
 
+When more than one drive is present, the installer targets the smallest drive.
+
 Runs on Debian 11.
 
 

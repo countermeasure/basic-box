@@ -13,11 +13,39 @@ d-i passwd/user-password-again password basic
 d-i time/zone string Australia/Melbourne
 
 # Partition the device.
-# Different machines will have different primary drives, such as sda or
-# nvme0n1. Use partman/early_command to identify and select the primary drive
-# which is present.
-d-i partman/early_command string debconf-set \
-    partman-auto/disk "$(list-devices disk | head -n1)"
+# If there is more than one disk, install to the smallest disk.
+# To compile the list of disks to select the disk to install to from:
+# 1. Look at each device in /sys/block.
+# 2. Exclude it if it is a USB device.
+# 3. Exclude it if it is a virtual device.
+# 4. If it hasn't been excluded, add an item to the list in the form
+#    "/dev/nvme0n1 256 GB".
+d-i partman/early_command string \
+    disks_with_sizes=$( \
+        for device in /sys/block/*; do \
+            device_path=$(echo "${device}" | sed 's/^\/sys\/block/\/dev/'); \
+            device_info=$(udevadm info -q env "${device_path}"); \
+            if ! echo "${device_info}" | grep '^ID_BUS=usb' > /dev/null; then \
+                if ! echo "${device}" | grep '^/sys/block/dm-' > /dev/null; then \
+                    device_size=$(cat "${device}/size"); \
+                    device_size_in_gb=$((device_size * 512 / 10**9)); \
+                    echo "${device_path} ${device_size_in_gb} GB"; \
+                fi; \
+            fi; \
+        done; \
+    ); \
+    echo "${disks_with_sizes}" | while read -r disk_with_size; do \
+        echo "Disk found: ${disk_with_size}"; \
+    done; \
+    primary_disk=$( \
+        echo "${disks_with_sizes}" | \
+        sort -k 2,2 -n | \
+        head -n 1 | \
+        cut -d ' ' -f 1 \
+    ); \
+    echo "Installing to: ${primary_disk}"; \
+    debconf-set partman-auto/disk "${primary_disk}"; \
+    debconf-set grub-installer/bootdev "${primary_disk}"
 d-i partman-auto/method string crypto
 d-i partman-lvm/confirm boolean true
 d-i partman-auto-crypto/erase_disks boolean false
@@ -39,9 +67,6 @@ popularity-contest popularity-contest/participate boolean false
 
 # Install standard and desktop tasks with tasksel.
 tasksel tasksel/first multiselect standard, desktop
-
-# Configure the bootloader.
-di grub-installer/bootdev string default
 
 # Set hostname and domain. This isn't needed to prevent installer questions,
 # but it stops the hostname and domain being set to "unassigned".
