@@ -1,0 +1,3 @@
+# Don't show the "We trust you have received the usual lecture..." message on
+# first sudo use.
+Defaults lecture=never

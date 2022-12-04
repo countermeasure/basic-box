@@ -76,6 +76,7 @@ cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
 cp $INSTALLER_DIR/stylua-linux-x86_64.zip $LOCAL_DIR
 cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_apt $LOCAL_DIR
+cp $INSTALLER_DIR/sudoers_lecture $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_lynis $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_powertop $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_rkhunter $LOCAL_DIR
@@ -646,3 +647,7 @@ chmod 644 /etc/tlp.d/10-charging-thresholds.conf
 # Install Libnotify.
 # This provides the notify-send command.
 apt install --yes libnotify-bin
+
+# Don't show the lecture message the first time "sudo" is used.
+cp $LOCAL_DIR/sudoers_lecture $SUDOERS_DIR/lecture
+chmod 440 $SUDOERS_DIR/lecture
