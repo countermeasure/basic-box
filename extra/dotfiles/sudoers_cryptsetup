@@ -1,0 +1,4 @@
+# The "cryptsetup isLuks" command appears to only inspect the system, and
+# doesn't appear to modify it in any way, so there doesn't seem to be a
+# significant security risk associated with making it passwordless.
+%sudo ALL=(root) NOPASSWD: /usr/sbin/cryptsetup isLuks *

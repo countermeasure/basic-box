@@ -10,17 +10,116 @@ echo '-----------------------------'
 echo
 echo 'The final configuration steps have to be done interactively.'
 echo
-echo 'Step 1: Enable the Mullvad VPN'
-echo 'Step 2: Install the Firefox browser extensions'
-echo 'Step 3: Change some Firefox preferences'
-echo 'Step 4: Change some KeePassXC settings'
+echo 'Step 1: Set up an additional encrypted disk'
+echo 'Step 2: Enable the Mullvad VPN'
+echo 'Step 3: Install the Firefox browser extensions'
+echo 'Step 4: Change some Firefox preferences'
+echo 'Step 5: Change some KeePassXC settings'
 echo
 read -n 1 -p 'Press any key to continue...' -r -s
+
+# Set up an additional encrypted disk.
+clear
+echo
+echo 'Step 1 of 5: Set up an additional encrypted disk'
+echo '------------------------------------------------'
+echo
+boot_device_partition_table_uuid=$(
+    lsblk --output mountpoint,ptuuid |
+    awk '$1 == "/boot" { print $2 }' |
+    head --lines 1
+)
+boot_disk=$(
+    lsblk --output ptuuid,type,path |
+    grep "^${boot_device_partition_table_uuid}" |
+    awk '$2 == "disk" { print $3 }'
+)
+non_boot_disks=$(
+    lsblk --output path,type |
+    grep --invert-match "^${boot_disk}" |
+    awk '$2 == "disk" { print $1 }'
+)
+non_boot_encrypted_disks=$(
+    for disk in ${non_boot_disks}; do
+        if sudo cryptsetup isLuks "${disk}"; then
+            echo "${disk}"
+        fi
+    done
+)
+non_boot_encrypted_disks_count=$(
+    if [[ -z ${non_boot_encrypted_disks} ]]; then
+        echo 0
+    else
+        echo "${non_boot_encrypted_disks}" | wc --lines
+    fi
+)
+if [[ ${non_boot_encrypted_disks_count} = 0 ]]; then
+    echo 'No additional encrypted disk was found.'
+    echo
+    echo 'There is nothing to do at this step.'
+elif [[ ${non_boot_encrypted_disks_count} = 1 ]]; then
+    disk="${non_boot_encrypted_disks}"
+    disk_description=$(
+        lsblk --output path,size,model |
+        grep "^${disk} " |
+        awk '{$1=""; print substr($0,2)}'
+    )
+    echo "The additional encrypted ${disk_description} disk was found."
+    echo
+    echo 'A new keyfile will be created and added to keyslot 31 for this disk.'
+    echo
+    echo 'If there is an existing key at keyslot 31, it will be removed first.'
+    echo
+    sudo -v
+    echo
+    keyfile="/root/luks_keyfile"
+    head --bytes 256 /dev/random | sudo tee "${keyfile}" > /dev/null
+    sudo chmod 400 "${keyfile}"
+    echo 'Removing the old key at keyslot 31, if one exists...'
+    echo
+    sudo cryptsetup luksKillSlot "${disk}" 31 || true
+    echo
+    echo 'Adding a new keyfile to keyslot 31...'
+    echo
+    sudo cryptsetup luksAddKey --key-slot 31 "${disk}" "${keyfile}"
+    device_name='data'
+    disk_uuid=$(sudo cryptsetup luksUUID "${disk}")
+    crypttab_entry="${device_name} UUID=${disk_uuid} ${keyfile} luks"
+    entry_label='# Additional encrypted disk.'
+    echo "$entry_label" | sudo tee --append /etc/crypttab > /dev/null
+    echo "$crypttab_entry" | sudo tee --append /etc/crypttab > /dev/null
+    mount_point="/mnt/${device_name}"
+    sudo mkdir "${mount_point}"
+    home_data_directory="${HOME}/Data"
+    ln --symbolic "${mount_point}" "${home_data_directory}"
+    device_path="/dev/mapper/${device_name}"
+    fstab_entry="${device_path} ${mount_point} ext4 defaults 0 2"
+    echo "$entry_label" | sudo tee --append /etc/fstab > /dev/null
+    echo "$fstab_entry" | sudo tee --append /etc/fstab > /dev/null
+    sudo cryptsetup open --key-file="${keyfile}" "${disk}" "${device_name}"
+    sudo mount "${device_path}" "${mount_point}"
+    # The chown operation must come after the mount operation, because if it
+    # comes before, the mount operation will return ownership of the mount
+    # point to root.
+    sudo chown "${USER}":"${USER}" "${mount_point}"
+    echo
+    echo "The ${disk} disk is now available at ${home_data_directory}."
+elif [[ ${non_boot_encrypted_disks_count} -gt 1 ]]; then
+    echo 'More than one encrypted disk was found.'
+    echo
+    echo "This step can't automatically configure more than one encrypted"
+    echo 'disk, so you will need to manage them manually.'
+    echo
+    echo "There is nothing to do at this step."
+fi
+echo
+read -n 1 -p 'Press any key to continue...' -r -s
+
 
 # Enable and configure the Mullvad VPN.
 clear
 echo
-echo 'Step 1 of 4: Enable the Mullvad VPN'
+echo 'Step 2 of 5: Enable the Mullvad VPN'
 echo '-----------------------------------'
 echo
 EXIT_CODE=''
@@ -50,7 +149,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 # Open Firefox extension installation tabs.
 clear
 echo
-echo 'Step 2 of 4: Install the Firefox browser extensions'
+echo 'Step 3 of 5: Install the Firefox browser extensions'
 echo '---------------------------------------------------'
 echo
 echo 'Installing browser extensions requires user interactions in Firefox.'
@@ -83,7 +182,7 @@ firefox \
 # Change Firefox preferences.
 clear
 echo
-echo 'Step 3 of 4: Change some Firefox preferences'
+echo 'Step 4 of 5: Change some Firefox preferences'
 echo '--------------------------------------------'
 echo
 echo "Although many of Firefox's preferences can be changed without user"
@@ -99,7 +198,7 @@ echo
 read -n 1 -p 'Press any key to continue...' -r -s
 clear
 echo
-echo 'Step 3 of 4: Change some Firefox preferences'
+echo 'Step 4 of 5: Change some Firefox preferences'
 echo '--------------------------------------------'
 echo
 echo 'Operation 1 of 3: Set Enhanced Tracking Protection to Strict'
@@ -112,7 +211,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 firefox about:preferences#privacy
 clear
 echo
-echo 'Step 3 of 4: Change some Firefox preferences'
+echo 'Step 4 of 5: Change some Firefox preferences'
 echo '--------------------------------------------'
 echo
 echo 'Operation 2 of 3: Set Default Search Engine to DuckDuckGo'
@@ -125,7 +224,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 firefox about:preferences#search
 clear
 echo
-echo 'Step 3 of 4: Change some Firefox preferences'
+echo 'Step 4 of 5: Change some Firefox preferences'
 echo '--------------------------------------------'
 echo
 echo 'Operation 3 of 3: Set Theme to Dark'
@@ -141,7 +240,7 @@ firefox about:addons
 # Change KeePassXC settings.
 clear
 echo
-echo 'Step 4 of 4: Change some KeePassXC settings'
+echo 'Step 5 of 5: Change some KeePassXC settings'
 echo '-------------------------------------------'
 echo
 echo "Some of KeePassXC's settings can't be set with its configuration file,"
@@ -157,7 +256,7 @@ echo
 read -n 1 -p 'Press any key to continue...' -r -s
 clear
 echo
-echo 'Step 4 of 4: Change some KeePassXC settings'
+echo 'Step 5 of 5: Change some KeePassXC settings'
 echo '-------------------------------------------'
 echo
 echo 'Operation 1 of 2: Enable Firefox integration'
@@ -172,7 +271,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 keepassxc 2> /dev/null
 clear
 echo
-echo 'Step 4 of 4: Change some KeePassXC settings'
+echo 'Step 5 of 5: Change some KeePassXC settings'
 echo '-------------------------------------------'
 echo
 echo 'Operation 2 of 2: Set clipboard clearing timeout'

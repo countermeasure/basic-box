@@ -27,6 +27,7 @@ extra/dotfiles/sources_syncthing.list
 extra/dotfiles/starship.toml
 extra/dotfiles/stylua.toml
 extra/dotfiles/sudoers_apt
+extra/dotfiles/sudoers_cryptsetup
 extra/dotfiles/sudoers_lecture
 extra/dotfiles/sudoers_lynis
 extra/dotfiles/sudoers_powertop
