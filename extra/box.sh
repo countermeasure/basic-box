@@ -49,15 +49,15 @@ battery () {
 
 
 destroy () {
-    boot_device=$(
-        lsblk --list --paths |
-        awk '$7 == "/boot" { print $1 }' |
+    boot_device_partition_table_uuid=$(
+        lsblk --output mountpoint,ptuuid |
+        awk '$1 == "/boot" { print $2 }' |
         head --lines 1
     )
     target_device=$(
-        lsblk --fs --list --paths |
-        grep "${boot_device%?}" |
-        awk '$2 == "crypto_LUKS" { print $1 }' |
+        lsblk --output ptuuid,fstype,path |
+        grep "^${boot_device_partition_table_uuid}" |
+        awk '$2 == "crypto_LUKS" { print $3 }' |
         head --lines 1
     )
     if [ -z "${target_device}" ]; then
