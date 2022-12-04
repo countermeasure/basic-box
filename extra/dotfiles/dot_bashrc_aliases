@@ -103,6 +103,7 @@ alias la='exa --all --colour-scale --group-directories-first --long'
 alias less='less --HILITE-UNREAD --ignore-case --LONG-PROMPT --QUIET'
 alias ln='ln --interactive --verbose'
 alias ls='printf "\nPrefer l to ls.\n\n"'
+alias lsblk='lsblk --output name,size,type,tran,mountpoint,path'
 
 alias mkdir='mkdir --parents --verbose'
 alias mv='mv --interactive --verbose'
