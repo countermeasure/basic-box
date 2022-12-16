@@ -658,3 +658,6 @@ chmod 440 $SUDOERS_DIR/lecture
 # when looking for additional encrypted disks.
 cp $LOCAL_DIR/sudoers_cryptsetup $SUDOERS_DIR/cryptsetup
 chmod 440 $SUDOERS_DIR/cryptsetup
+
+# Install Thunderbird.
+apt install --yes thunderbird
