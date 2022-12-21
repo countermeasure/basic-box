@@ -4,76 +4,76 @@
 
 require("packer").startup(function()
   -- Buffer line.
-  use({ "akinsho/bufferline.nvim", commit = "f02e19b" })
+  use({ "akinsho/bufferline.nvim", commit = "4ecfa81" })
   -- Diagnostics list.
-  use({ "folke/trouble.nvim", commit = "691d490" })
+  use({ "folke/trouble.nvim", commit = "897542f" })
   -- Key binding list.
-  use({ "folke/which-key.nvim", commit = "a3c19ec" })
+  use({ "folke/which-key.nvim", commit = "61553ae" })
   -- Ranger integration.
   use({ "francoiscabrol/ranger.vim", commit = "91e82de" })
   -- Motions.
-  use({ "ggandor/lightspeed.nvim", commit = "cfde2b2" })
+  use({ "ggandor/lightspeed.nvim", commit = "299eefa" })
   -- Auto-completion source for buffer contents.
-  use({ "hrsh7th/cmp-buffer", commit = "d66c4c2" })
+  use({ "hrsh7th/cmp-buffer", commit = "3022dbc" })
   -- Auto-completion source for LSP client.
-  use({ "hrsh7th/cmp-nvim-lsp", commit = "ebdfc20" })
+  use({ "hrsh7th/cmp-nvim-lsp", commit = "5922477" })
   -- Auto-completion source for functions with parameter highlighting.
-  use({ "hrsh7th/cmp-nvim-lsp-signature-help", commit = "8014f6d" })
+  use({ "hrsh7th/cmp-nvim-lsp-signature-help", commit = "d2768cb" })
   -- Auto-completion source for filesystem paths.
-  use({ "hrsh7th/cmp-path", commit = "466b6b8" })
+  use({ "hrsh7th/cmp-path", commit = "91ff86c" })
   -- Auto-completion engine.
-  use({ "hrsh7th/nvim-cmp", commit = "433af3d" })
+  use({ "hrsh7th/nvim-cmp", commit = "8868cf9" })
   -- Use non-LSP sources with LSP client.
-  use({ "jose-elias-alvarez/null-ls.nvim", commit = "0c7624f" })
+  use({ "jose-elias-alvarez/null-ls.nvim", commit = "db1c7cb" })
   -- Colourscheme.
-  use({ "joshdick/onedark.vim", commit = "7db2ed5" })
+  use({ "joshdick/onedark.vim", commit = "b6b5ffe" })
   -- Icons. Required by bufferline.nvim, lualine.nvim, trouble.nvim.
-  use({ "kyazdani42/nvim-web-devicons", commit = "4febe73" })
+  use({ "kyazdani42/nvim-web-devicons", commit = "05e1072" })
   -- Git decorations and functionality.
-  use({ "lewis6991/gitsigns.nvim", commit = "ead0d48" })
+  use({ "lewis6991/gitsigns.nvim", commit = "2ab3bdf" })
   -- Tag manager.
-  use({ "ludovicchabant/vim-gutentags", commit = "50705e8" })
+  use({ "ludovicchabant/vim-gutentags", commit = "1337b18" })
   -- Indentation guides, including on blank lines.
-  use({ "lukas-reineke/indent-blankline.nvim", commit = "045d958" })
+  use({ "lukas-reineke/indent-blankline.nvim", commit = "c4c203c" })
   -- LSP client configurations.
-  use({ "neovim/nvim-lspconfig", commit = "ad9903c" })
+  use({ "neovim/nvim-lspconfig", commit = "5292d60" })
   -- Miscellaneous Lua functions. Required by null-ls.nvim, telescope.nvim.
-  use({ "nvim-lua/plenary.nvim", commit = "9069d14" })
+  use({ "nvim-lua/plenary.nvim", commit = "4b7e520" })
   -- Status line.
-  use({ "nvim-lualine/lualine.nvim", commit = "18a07f7" })
+  use({ "nvim-lualine/lualine.nvim", commit = "bfa0d99" })
   -- Fuzzy finder.
-  use({ "nvim-telescope/telescope.nvim", commit = "8b02088" })
+  use({ "nvim-telescope/telescope.nvim", commit = "cabf991" })
   -- Port of fzf to improve the performance of telescope.nvim.
   use({
     "nvim-telescope/telescope-fzf-native.nvim",
-    commit = "8ec164b",
+    commit = "fab3e22",
     run = "make",
   })
   -- Parser for syntax highlighting, navigation, etc.
   use({
     "nvim-treesitter/nvim-treesitter",
-    commit = "3c50297",
+    commit = "eedb7b9",
     run = ":TSUpdate",
   })
   -- Additional mappings for nvim-treesitter/nvim-treesitter.
-  use({ "nvim-treesitter/nvim-treesitter-textobjects", commit = "094e8ad" })
+  use({ "nvim-treesitter/nvim-treesitter-textobjects", commit = "e2ee8fd" })
   -- Delete buffer without closing window. Required by ranger.vim.
   use({ "rbgrouleff/bclose.vim", commit = "99018b4" })
   -- Commenting.
-  use({ "tpope/vim-commentary", commit = "3654775" })
+  use({ "tpope/vim-commentary", commit = "e87cd90" })
   -- Git integration.
-  use({ "tpope/vim-fugitive", commit = "b5bbd0d" })
+  use({ "tpope/vim-fugitive", commit = "5b0b138" })
   -- Repeating plugin maps. Used by gitsigns.nvim, lightspeed.nvim,
   -- surround.vim.
   use({ "tpope/vim-repeat", commit = "24afe92" })
   -- Automatic buffer option adjustment.
-  use({ "tpope/vim-sleuth", commit = "e116c2c" })
+  use({ "tpope/vim-sleuth", commit = "8332f12" })
   -- Surroundings.
-  use({ "tpope/vim-surround", commit = "bf3480d" })
+  use({ "tpope/vim-surround", commit = "3d188ed" })
   -- Plugin manager.
-  use({ "wbthomason/packer.nvim", commit = "4dedd3b" })
+  use({ "wbthomason/packer.nvim", commit = "dac4088" })
   -- Autopairing.
-  use({ "windwp/nvim-autopairs", commit = "e9b47f0" })
+  use({ "windwp/nvim-autopairs", commit = "b5994e6" })
 end)
 
 -- Plugin: akinsho/bufferline.nvim --
@@ -306,7 +306,7 @@ local servers = {
   },
 }
 
-local capabilities = require("cmp_nvim_lsp").update_capabilities(
+local capabilities = require("cmp_nvim_lsp").default_capabilities(
   vim.lsp.protocol.make_client_capabilities()
 )
 for server, settings in pairs(servers) do
