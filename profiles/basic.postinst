@@ -32,23 +32,23 @@ cp $INSTALLER_DIR/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/bat_0.22.1_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/black $LOCAL_DIR
 cp $INSTALLER_DIR/box.sh $LOCAL_DIR
-cp $INSTALLER_DIR/delta-0.14.0-source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/delta-0.14.0-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/direnv-v2.32.1-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/delta-0.15.1-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/delta-0.15.1-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/direnv-v2.32.2-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/direnv.linux-amd64 $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_functions $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/dot_profile_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/exa-linux-x86_64-v0.10.1.zip $LOCAL_DIR
-cp $INSTALLER_DIR/fd_8.4.0_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/fd_8.6.0_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/Fira_Code_Regular_Nerd_Font_Complete.ttf $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
-cp $INSTALLER_DIR/fzf-0.33.0-linux_amd64.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/fzf-0.33.0-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/fzf-0.35.1-linux_amd64.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/fzf-0.35.1-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/geckodriver-v0.32.0-linux64.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/git_global_ignore $LOCAL_DIR
@@ -60,10 +60,10 @@ cp $INSTALLER_DIR/jupyterlab_codemirror_settings $LOCAL_DIR
 cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
 cp $INSTALLER_DIR/keyd-v2.4.2-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.conf $LOCAL_DIR
-cp $INSTALLER_DIR/MullvadVPN-2022.4_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/MullvadVPN-2022.5_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim-linux64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_init.lua $LOCAL_DIR
-cp $INSTALLER_DIR/pyenv-v2.3.5-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/pyenv-v2.3.9-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_colourscheme.py $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rifle.conf $LOCAL_DIR
@@ -84,7 +84,7 @@ cp $INSTALLER_DIR/sudoers_rkhunter $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_tlp $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_ufw $LOCAL_DIR
 cp $INSTALLER_DIR/tlp_charging_thresholds.conf $LOCAL_DIR
-cp $INSTALLER_DIR/trash-cli-0.22.8.27-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/trash-cli-0.22.10.20-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt-dlp.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt_dlp_config $LOCAL_DIR
 cp $INSTALLER_DIR/zathurarc $LOCAL_DIR
@@ -101,7 +101,7 @@ systemctl enable first_boot.service
 apt install ufw
 
 # Install the Mullvad VPN app.
-apt install --yes $LOCAL_DIR/MullvadVPN-2022.4_amd64.deb
+apt install --yes $LOCAL_DIR/MullvadVPN-2022.5_amd64.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
@@ -137,7 +137,7 @@ printf '\n# Enable .profile modifications.\n' >> "$USER_DIR"/.profile
 echo '. "$HOME/.profile_modifications"' >> "$USER_DIR"/.profile
 
 # Install yt-dlp.
-runuser -l "$USERNAME" -c 'pipx install yt-dlp==2022.9.1'
+runuser -l "$USERNAME" -c 'pipx install yt-dlp==2022.11.11'
 tar --extract -f $LOCAL_DIR/yt-dlp.tar.gz --directory /tmp
 mkdir /usr/local/share/man/man1
 cp /tmp/yt-dlp/yt-dlp.1 /usr/local/share/man/man1
@@ -180,7 +180,7 @@ sed -i \
     /etc/gdm3/daemon.conf
 
 # Install fd.
-dpkg -i $LOCAL_DIR/fd_8.4.0_amd64.deb
+dpkg -i $LOCAL_DIR/fd_8.6.0_amd64.deb
 
 # Install ripgrep.
 dpkg -i $LOCAL_DIR/ripgrep_13.0.0_amd64.deb
@@ -200,13 +200,13 @@ mandb
 dpkg -i $LOCAL_DIR/bat_0.22.1_amd64.deb
 
 # Install fzf.
-tar --extract -f $LOCAL_DIR/fzf-0.33.0-linux_amd64.tar.gz --directory /tmp
-tar --extract -f $LOCAL_DIR/fzf-0.33.0-source.tar.gz --directory /tmp
+tar --extract -f $LOCAL_DIR/fzf-0.35.1-linux_amd64.tar.gz --directory /tmp
+tar --extract -f $LOCAL_DIR/fzf-0.35.1-source.tar.gz --directory /tmp
 cp /tmp/fzf /usr/local/bin
-cp /tmp/fzf-0.33.0/man/man1/fzf.1 /usr/local/share/man/man1
+cp /tmp/fzf-0.35.1/man/man1/fzf.1 /usr/local/share/man/man1
 mkdir /usr/local/share/fzf
-cp /tmp/fzf-0.33.0/shell/completion.bash /usr/local/share/fzf
-cp /tmp/fzf-0.33.0/shell/key-bindings.bash /usr/local/share/fzf
+cp /tmp/fzf-0.35.1/shell/completion.bash /usr/local/share/fzf
+cp /tmp/fzf-0.35.1/shell/key-bindings.bash /usr/local/share/fzf
 mandb
 
 # Install zoxide.
@@ -230,12 +230,12 @@ apt install --yes ncdu
 
 # Install delta.
 tar \
-    --extract -f $LOCAL_DIR/delta-0.14.0-x86_64-unknown-linux-gnu.tar.gz \
+    --extract -f $LOCAL_DIR/delta-0.15.1-x86_64-unknown-linux-musl.tar.gz \
     --directory /tmp
-tar --extract -f $LOCAL_DIR/delta-0.14.0-source.tar.gz --directory /tmp
-cp /tmp/delta-0.14.0-x86_64-unknown-linux-gnu/delta /usr/local/bin
+tar --extract -f $LOCAL_DIR/delta-0.15.1-source.tar.gz --directory /tmp
+cp /tmp/delta-0.15.1-x86_64-unknown-linux-musl/delta /usr/local/bin
 cp \
-    /tmp/delta-0.14.0/etc/completion/completion.bash \
+    /tmp/delta-0.15.1/etc/completion/completion.bash \
     /usr/share/bash-completion/completions/delta.bash
 
 # Install Git
@@ -300,11 +300,11 @@ chmod 755 "$BOX_SCRIPT_PATH"
 DIRENV_EXECUTABLE_PATH='/usr/local/bin/direnv'
 cp $LOCAL_DIR/direnv.linux-amd64 $DIRENV_EXECUTABLE_PATH
 chmod 755 $DIRENV_EXECUTABLE_PATH
-tar --extract -f $LOCAL_DIR/direnv-v2.32.1-source.tar.gz --directory /tmp
-cp /tmp/direnv-2.32.1/man/direnv-fetchurl.1 /usr/local/share/man/man1
-cp /tmp/direnv-2.32.1/man/direnv-stdlib.1 /usr/local/share/man/man1
-cp /tmp/direnv-2.32.1/man/direnv.1 /usr/local/share/man/man1
-cp /tmp/direnv-2.32.1/man/direnv.toml.1 /usr/local/share/man/man1
+tar --extract -f $LOCAL_DIR/direnv-v2.32.2-source.tar.gz --directory /tmp
+cp /tmp/direnv-2.32.2/man/direnv-fetchurl.1 /usr/local/share/man/man1
+cp /tmp/direnv-2.32.2/man/direnv-stdlib.1 /usr/local/share/man/man1
+cp /tmp/direnv-2.32.2/man/direnv.1 /usr/local/share/man/man1
+cp /tmp/direnv-2.32.2/man/direnv.toml.1 /usr/local/share/man/man1
 mandb
 
 # Install Fira Code Nerd Font.
@@ -357,7 +357,7 @@ chown "$USERNAME":"$USERNAME" "$USER_DIR"/setup.rst
 chmod 644 "$USER_DIR"/setup.rst
 
 # Install IPython.
-runuser -l "$USERNAME" -c 'pipx install ipython==8.5.0'
+runuser -l "$USERNAME" -c 'pipx install ipython==8.7.0'
 
 # Install Entomb.
 runuser -l "$USERNAME" -c 'pipx install entomb==0.4.0'
@@ -385,14 +385,14 @@ chown "$USERNAME":"$USERNAME" "$GIT_DIR"/ignore
 chmod 644 "$GIT_DIR"/ignore
 
 # Install trash-cli.
-runuser -l "$USERNAME" -c 'pipx install trash-cli==0.22.8.27'
-tar --extract -f $LOCAL_DIR/trash-cli-0.22.8.27-source.tar.gz --directory /tmp
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash-empty.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash-list.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash-put.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash-restore.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash-rm.1 /usr/local/share/man/man1
+runuser -l "$USERNAME" -c 'pipx install trash-cli==0.22.10.20'
+tar --extract -f $LOCAL_DIR/trash-cli-0.22.10.20-source.tar.gz --directory /tmp
+cp /tmp/trash-cli-0.22.10.20/man/man1/trash.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.22.10.20/man/man1/trash-empty.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.22.10.20/man/man1/trash-list.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.22.10.20/man/man1/trash-put.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.22.10.20/man/man1/trash-restore.1 /usr/local/share/man/man1
+cp /tmp/trash-cli-0.22.10.20/man/man1/trash-rm.1 /usr/local/share/man/man1
 mandb
 
 # Add a Ranger rc.conf file.
@@ -460,7 +460,7 @@ chmod 644 "$STYLUA_CONFIG_DIR"/stylua.toml
 # Install universal-ctags.
 apt install --yes universal-ctags
 # Install Python LSP Server and its third-party plugins.
-runuser -l "$USERNAME" -c 'pipx install python-lsp-server[flake8]==1.5.0'
+runuser -l "$USERNAME" -c 'pipx install python-lsp-server[flake8]==1.6.0'
 runuser -l "$USERNAME" -c 'pipx inject python-lsp-server pyls-isort==0.2.2'
 runuser \
   -l "$USERNAME" \
@@ -578,9 +578,9 @@ chmod 440 $SUDOERS_DIR/rkhunter
 
 # Install pyenv.
 PYENV_DIR="$USER_DIR/.pyenv"
-tar --extract -f $LOCAL_DIR/pyenv-v2.3.5-source.tar.gz --directory /tmp
+tar --extract -f $LOCAL_DIR/pyenv-v2.3.9-source.tar.gz --directory /tmp
 mkdir -p "$PYENV_DIR"
-cp --recursive /tmp/pyenv-2.3.5/* "$PYENV_DIR"
+cp --recursive /tmp/pyenv-2.3.9/* "$PYENV_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$PYENV_DIR"
 # Install Python build dependencies. This is the complete list taken from
 # https://github.com/pyenv/pyenv/wiki#suggested-build-environment. Even though
@@ -611,7 +611,7 @@ tar --extract -f $LOCAL_DIR/geckodriver-v0.32.0-linux64.tar.gz --directory /tmp
 cp /tmp/geckodriver /usr/local/bin
 
 # Install JupyterLab.
-runuser -l "$USERNAME" -c 'pipx install jupyterlab==3.5.0'
+runuser -l "$USERNAME" -c 'pipx install jupyterlab==3.5.2'
 # Share JupyterLab user settings across all JupyterLab environments.
 JUPYTER_DIR="$USER_DIR/.jupyter"
 JUPYTERLAB_APPUTILS_EXTENSION_DIR="$JUPYTER_DIR/lab/user-settings/\
