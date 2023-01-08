@@ -267,6 +267,8 @@ git_global_config_set 'interactive.diffFilter' 'delta --color-only'
 git_global_config_set 'merge.conflictstyle' 'diff3'
 # Add Git global config settings for line numbers for delta.
 git_global_config_set 'delta.line-numbers' 'true'
+# Add Git global config setting for default branch in new repositories.
+git_global_config_set 'init.defaultBranch' 'main'
 
 # Install gitk
 apt install --yes gitk
