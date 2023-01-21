@@ -21,7 +21,7 @@ format = "[(+${added} )(-${deleted} )](bold purple)"
 [git_status]
 ahead = "⇡${count}"
 behind = "⇣${count}"
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+diverged = "⇡${ahead_count}⇣${behind_count}"
 
 [python]
 format = "via [${symbol}(${version})](${style}) "
