@@ -40,3 +40,6 @@ eval "$(pyenv init -)"
 # this, each JupyterLab installation in each virtual environment will have its
 # own user settings.
 export JUPYTERLAB_SETTINGS_DIR="$HOME/.jupyter/lab/user-settings"
+
+# Don't show direnv messages when changing directory.
+export DIRENV_LOG_FORMAT=
