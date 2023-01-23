@@ -39,3 +39,7 @@ style = "bold bright-black"
 
 [vagrant]
 disabled = true
+
+[custom.direnv]
+format = "[\\(direnv\\)](yellow bold) "
+when = "env | grep '^DIRENV_FILE='"
