@@ -1,5 +1,22 @@
 command_timeout = 1000
-format = "[(${cmd_duration}${status}\n)${all}](bold bright-black)"
+format = """
+[\
+(${cmd_duration}${status}\n)\
+${directory}\
+${git_branch}\
+${git_commit}\
+${git_state}\
+${git_metrics}\
+${git_status}\
+${python}\
+${sudo}\
+${line_break}\
+${jobs}\
+${battery}\
+${character}\
+]\
+(bold bright-black)\
+"""
 
 [character]
 success_symbol = "❯"
