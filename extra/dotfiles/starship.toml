@@ -36,3 +36,6 @@ symbol = "💥"
 [sudo]
 disabled = false
 style = "bold bright-black"
+
+[vagrant]
+disabled = true
