@@ -108,6 +108,7 @@ The **Basic Box** installer creates a Debian 11 system with:
   and stop charging at 80% capacity
 - Libnotify installed
 - Thunderbird installed
+- jq installed
 
 
 Set up

@@ -670,3 +670,6 @@ GIT_WRAPPER_SCRIPT_PATH="$USER_BIN_DIR/git_wrapper"
 cp $LOCAL_DIR/git_wrapper.sh "$GIT_WRAPPER_SCRIPT_PATH"
 chown "$USERNAME":"$USERNAME" "$GIT_WRAPPER_SCRIPT_PATH"
 chmod 755 "$GIT_WRAPPER_SCRIPT_PATH"
+
+# Install jq.
+apt install --yes jq
