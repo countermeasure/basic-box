@@ -1,7 +1,59 @@
 #!/bin/bash
 
+
 # Set intuitive error behaviour.
 set -o errexit -o nounset -o pipefail
+
+
+# Utility functions.
+
+
+_off () {
+    echo
+    echo 'Powering off...'
+    sleep 1
+    systemctl poweroff
+}
+
+
+_reboot () {
+    echo
+    echo 'Rebooting...'
+    sleep 1
+    systemctl reboot
+}
+
+
+_wipe (){
+    echo
+    echo 'Wiping...'
+    boot_device_partition_table_uuid=$(
+        lsblk --output mountpoint,ptuuid |
+        awk '$1 == "/boot" { print $2 }' |
+        head --lines 1
+    )
+    target_device=$(
+        lsblk --output ptuuid,fstype,path |
+        grep "^${boot_device_partition_table_uuid}" |
+        awk '$2 == "crypto_LUKS" { print $3 }' |
+        head --lines 1
+    )
+    if [ -z "${target_device}" ]; then
+        echo "Couldn't determine which device to destroy."
+        echo 'Operation cancelled.'
+        exit 1
+    fi
+    echo
+    echo 'This will PERMANENTLY DESTROY ALL DATA on this machine.'
+    echo
+    sudo cryptsetup --verbose erase $target_device
+    echo
+    echo 'Done.'
+    sleep 1
+}
+
+
+# Command functions.
 
 
 audit () {
@@ -49,32 +101,8 @@ battery () {
 
 
 destroy () {
-    boot_device_partition_table_uuid=$(
-        lsblk --output mountpoint,ptuuid |
-        awk '$1 == "/boot" { print $2 }' |
-        head --lines 1
-    )
-    target_device=$(
-        lsblk --output ptuuid,fstype,path |
-        grep "^${boot_device_partition_table_uuid}" |
-        awk '$2 == "crypto_LUKS" { print $3 }' |
-        head --lines 1
-    )
-    if [ -z "${target_device}" ]; then
-        echo "Couldn't determine which device to destroy."
-        echo 'Operation cancelled.'
-        exit 1
-    fi
-    echo 'This will PERMANENTLY DESTROY ALL DATA on this machine.'
-    echo
-    sudo cryptsetup --verbose erase $target_device
-    echo
-    echo 'Done.'
-    sleep 1
-    echo
-    echo 'Powering off...'
-    sleep 1
-    systemctl poweroff
+    _wipe
+    _off
 }
 
 
@@ -178,6 +206,7 @@ main_help () {
     echo '  keyboard   Control key mapping.'
     echo '  off        Power off.'
     echo '  reboot     Reboot.'
+    echo '  reinstall  Destroy all data on this machine then reboot.'
     echo '  scan       Scan for malware or rootkits.'
     echo '  sync       Start Syncthing.'
     echo '  upgrade    Upgrade firmware and software packages.'
@@ -185,16 +214,33 @@ main_help () {
 
 
 off () {
-    echo 'Powering off...'
-    sleep 1
-    systemctl poweroff
+    _off
 }
 
 
 reboot () {
-    echo 'Rebooting...'
-    sleep 1
-    systemctl reboot
+    _reboot
+}
+
+
+reinstall () {
+    echo 'Logging out of Mullvad VPN...'
+    echo
+    mullvad account logout
+    _wipe
+    echo
+    echo 'Preparing to reboot...'
+    echo
+    echo 'Insert the USB installer.'
+    echo
+    echo 'Once the installer is inserted the machine is ready to reboot.'
+    echo
+    echo 'When it reboots, enter the boot menu by pressing F12 and then select'
+    echo 'the installer.'
+    echo
+    read -n 1 -p 'Press any key to reboot.' -r -s
+    echo
+    _reboot
 }
 
 
@@ -344,6 +390,9 @@ upgrade () {
 }
 
 
+# Command selector.
+
+
 echo
 case "${1-}" in
     -h|--help)
@@ -369,6 +418,9 @@ case "${1-}" in
         ;;
     reboot)
         reboot
+        ;;
+    reinstall)
+        reinstall
         ;;
     scan)
         scan "${@:2}"
