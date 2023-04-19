@@ -30,7 +30,6 @@ gsettings_set () {
 cp $INSTALLER_DIR/bandwhich-0.20.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/bat_0.22.1_amd64.deb $LOCAL_DIR
-cp $INSTALLER_DIR/black $LOCAL_DIR
 cp $INSTALLER_DIR/box.sh $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.14.0-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/delta-0.14.0-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
@@ -62,8 +61,26 @@ cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
 cp $INSTALLER_DIR/keyd-v2.4.2-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.conf $LOCAL_DIR
 cp $INSTALLER_DIR/MullvadVPN-2023.4_amd64.deb $LOCAL_DIR
-cp $INSTALLER_DIR/nvim-linux64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/nvim-v0.9.1-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/nvim.appimage $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_config_autocmds.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_config_keymaps.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_config_lazy.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_config_options.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_init.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_lazy_lock.json $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_colourscheme.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_lualine.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_luasnip.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_mason.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_neotree.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_null_ls.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_nvim_cmp.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_nvim_lspconfig.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_ranger.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_telescope.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_treesitter.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_which_key.lua $LOCAL_DIR
 cp $INSTALLER_DIR/pyenv-v2.3.5-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_colourscheme.py $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
@@ -74,8 +91,6 @@ cp $INSTALLER_DIR/setup.rst $LOCAL_DIR
 cp $INSTALLER_DIR/sources_syncthing.list $LOCAL_DIR
 cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
-cp $INSTALLER_DIR/stylua-linux-x86_64.zip $LOCAL_DIR
-cp $INSTALLER_DIR/stylua.toml $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_apt $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_cryptsetup $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_lecture $LOCAL_DIR
@@ -408,10 +423,13 @@ chmod 644 "$RANGER_DIR"/rc.conf
 # Install Neovim.
 # The default Vim package is no longer required, so remove it first.
 apt purge --yes vim-tiny
-apt install --yes $LOCAL_DIR/nvim-linux64.deb
+NVIM_PATH=/usr/local/bin/nvim
+cp $LOCAL_DIR/nvim.appimage $NVIM_PATH
+chmod 755 $NVIM_PATH
+tar --extract -f $LOCAL_DIR/nvim-v0.9.1-source.tar.gz --directory /tmp
+cp /tmp/neovim-0.9.1/src/man/nvim.1 /usr/local/share/man/man1
 # Set Neovim as the alternative for the editor, ex, rview, rvim, vi, view, vim
 # and vimdiff commands.
-NVIM_PATH=/usr/bin/nvim
 update-alternatives --install /usr/bin/editor editor $NVIM_PATH 50
 update-alternatives --install /usr/bin/ex ex $NVIM_PATH 50
 update-alternatives --install /usr/bin/rview rview $NVIM_PATH 50
@@ -429,49 +447,60 @@ update-alternatives --install /usr/bin/vimdiff vimdiff $NVIM_PATH 50
 runuser -l root -c 'echo 1 | select-editor'
 
 # Configure Neovim.
-# Put the init file in place.
+# Put the LazyVim files in place.
 NVIM_CONFIG_DIR="$USER_CONFIG_DIR/nvim"
-mkdir "$NVIM_CONFIG_DIR"
-cp $LOCAL_DIR/nvim_init.lua "$NVIM_CONFIG_DIR"/init.lua
+mkdir -p "$NVIM_CONFIG_DIR/lua/config"
+cp $LOCAL_DIR/nvim_init.lua "$NVIM_CONFIG_DIR/init.lua"
+cp $LOCAL_DIR/nvim_lazy_lock.json "$NVIM_CONFIG_DIR/lazy-lock.json"
+cp \
+    $LOCAL_DIR/nvim_config_autocmds.lua \
+    "$NVIM_CONFIG_DIR/lua/config/autocmds.lua"
+cp $LOCAL_DIR/nvim_config_keymaps.lua "$NVIM_CONFIG_DIR/lua/config/keymaps.lua"
+cp $LOCAL_DIR/nvim_config_lazy.lua "$NVIM_CONFIG_DIR/lua/config/lazy.lua"
+cp $LOCAL_DIR/nvim_config_options.lua "$NVIM_CONFIG_DIR/lua/config/options.lua"
+mkdir "$NVIM_CONFIG_DIR/lua/plugins"
+cp \
+    $LOCAL_DIR/nvim_plugins_colourscheme.lua \
+    "$NVIM_CONFIG_DIR/lua/plugins/colourscheme.lua"
+cp \
+    $LOCAL_DIR/nvim_plugins_lualine.lua \
+    "$NVIM_CONFIG_DIR/lua/plugins/lualine.lua"
+cp \
+    $LOCAL_DIR/nvim_plugins_luasnip.lua \
+    "$NVIM_CONFIG_DIR/lua/plugins/luasnip.lua"
+cp $LOCAL_DIR/nvim_plugins_mason.lua "$NVIM_CONFIG_DIR/lua/plugins/mason.lua"
+cp \
+    $LOCAL_DIR/nvim_plugins_neotree.lua \
+    "$NVIM_CONFIG_DIR/lua/plugins/neotree.lua"
+cp \
+    $LOCAL_DIR/nvim_plugins_null_ls.lua \
+    "$NVIM_CONFIG_DIR/lua/plugins/null_ls.lua"
+cp \
+    $LOCAL_DIR/nvim_plugins_nvim_cmp.lua \
+    "$NVIM_CONFIG_DIR/lua/plugins/nvim_cmp.lua"
+cp \
+    $LOCAL_DIR/nvim_plugins_nvim_lspconfig.lua \
+    "$NVIM_CONFIG_DIR/lua/plugins/nvim_lspconfig.lua"
+cp $LOCAL_DIR/nvim_plugins_ranger.lua "$NVIM_CONFIG_DIR/lua/plugins/ranger.lua"
+cp \
+    $LOCAL_DIR/nvim_plugins_telescope.lua \
+    "$NVIM_CONFIG_DIR/lua/plugins/telescope.lua"
+cp \
+    $LOCAL_DIR/nvim_plugins_treesitter.lua \
+    "$NVIM_CONFIG_DIR/lua/plugins/treesitter.lua"
+cp \
+    $LOCAL_DIR/nvim_plugins_which_key.lua \
+    "$NVIM_CONFIG_DIR/lua/plugins/which_key.lua"
 chown --recursive "$USERNAME":"$USERNAME" "$NVIM_CONFIG_DIR"
-chmod 644 "$NVIM_CONFIG_DIR"/init.lua
-# Install the Neovim Python client.
-PYNVIM_DIR="$USER_DIR"/.local/pip/venvs/pynvim
-runuser -l "$USERNAME" -c "python3 -m venv $PYNVIM_DIR"
-runuser -l "$USERNAME" -c "$PYNVIM_DIR/bin/pip install pynvim==0.4.3"
-# Install plugins.
-git clone \
-    --depth 1 \
-    https://github.com/wbthomason/packer.nvim \
-    "$USER_SHARE_DIR/nvim/site/pack/packer/start/packer.nvim"
-chown --recursive "$USERNAME":"$USERNAME" "$USER_SHARE_DIR/nvim"
-runuser \
-    -l "$USERNAME" \
-    -c \
-    'nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerSync"'
-# Install ShellCheck.
-apt install --yes shellcheck
-# Install StyLua.
-unzip -d /usr/local/bin $LOCAL_DIR/stylua-linux-x86_64.zip stylua
-chmod 755 /usr/local/bin/stylua
-# Copy StyLua configuration file into place.
-STYLUA_CONFIG_DIR="$USER_CONFIG_DIR/stylua"
-mkdir "$STYLUA_CONFIG_DIR"
-cp $LOCAL_DIR/stylua.toml "$STYLUA_CONFIG_DIR"/stylua.toml
-chown --recursive "$USERNAME":"$USERNAME" "$STYLUA_CONFIG_DIR"
-chmod 644 "$STYLUA_CONFIG_DIR"/stylua.toml
-# Install universal-ctags.
-apt install --yes universal-ctags
+find "$NVIM_CONFIG_DIR" -type f -exec chmod 644 {} \;
 # Install Python LSP Server and its third-party plugins.
-runuser -l "$USERNAME" -c 'pipx install python-lsp-server[flake8]==1.5.0'
+runuser -l "$USERNAME" -c 'pipx install python-lsp-server[flake8]==1.7.4'
 runuser -l "$USERNAME" -c 'pipx inject python-lsp-server pyls-isort==0.2.2'
 runuser \
   -l "$USERNAME" \
-  -c 'pipx inject python-lsp-server python-lsp-black==1.2.1'
-# Copy Black configuration file into place.
-cp $LOCAL_DIR/black "$USER_CONFIG_DIR"
-chown "$USERNAME":"$USERNAME" "$USER_CONFIG_DIR"/black
-chmod 644 "$USER_CONFIG_DIR"/black
+  -c 'pipx inject python-lsp-server python-lsp-black==1.3.0'
+# Set up LazyVim.
+runuser -l "$USERNAME" -c 'nvim --headless "+Lazy! restore" +qa'
 
 # Install curl.
 apt install --yes curl

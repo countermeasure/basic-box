@@ -99,11 +99,13 @@ cp 0.22.8.27.tar.gz trash-cli-0.22.8.27-source.tar.gz
 
 # Ensure the Neovim package is present.
 wget --timestamping "https://github.com/neovim/neovim/releases/download/\
-v0.7.2/nvim-linux64.deb"
-
-# Ensure the StyLua package is present.
-wget --timestamping "https://github.com/JohnnyMorganz/StyLua/releases/\
-download/v0.15.1/stylua-linux-x86_64.zip"
+v0.9.1/nvim.appimage"
+wget --timestamping "https://github.com/neovim/neovim/archive/refs/tags/\
+v0.9.1.tar.gz"
+# As the Neovim archive doesn't include nvim in its name, make a copy
+# with nvim in its name. Simply saving with this different filename will
+# stop wget's --timestamping option working.
+cp v0.9.1.tar.gz nvim-v0.9.1-source.tar.gz
 
 # Ensure the yt-dlp package is present.
 wget --timestamping "https://github.com/yt-dlp/yt-dlp/releases/download/\

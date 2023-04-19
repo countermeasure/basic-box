@@ -87,7 +87,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - OfflineIMAP installed
 - a global Git ignore file
 - trash-cli installed and integrated with ranger
-- Neovim installed and configured as a development environment
+- Neovim installed and configured with LazyVim
 - curl installed
 - Bluetooth turned off when the system boots
 - atool installed
