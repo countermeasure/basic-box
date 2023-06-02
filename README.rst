@@ -17,7 +17,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 
 - full disk encryption (FDE)
 - no ``root`` user
-- an ordinary user called ``basic`` with password ``basic``
+- an ordinary user called ``user`` with password ``basic``
 - locale and timezone set to Melbourne, Australia
 - the GNOME desktop environment
 - the UFW firewall installed and enabled

@@ -4,8 +4,8 @@
 d-i passwd/root-login boolean false
 
 # Create a normal user account.
-d-i passwd/user-fullname string basic
-d-i passwd/username string basic
+d-i passwd/user-fullname string user
+d-i passwd/username string user
 d-i passwd/user-password password basic
 d-i passwd/user-password-again password basic
 
@@ -71,4 +71,4 @@ tasksel tasksel/first multiselect standard, desktop
 # Set hostname and domain. This isn't needed to prevent installer questions,
 # but it stops the hostname and domain being set to "unassigned".
 d-i netcfg/get_domain string
-d-i netcfg/get_hostname string basic
+d-i netcfg/get_hostname string host
