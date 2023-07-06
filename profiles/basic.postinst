@@ -61,7 +61,7 @@ cp $INSTALLER_DIR/jupyterlab_codemirror_settings $LOCAL_DIR
 cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
 cp $INSTALLER_DIR/keyd-v2.4.2-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.conf $LOCAL_DIR
-cp $INSTALLER_DIR/MullvadVPN-2022.4_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/MullvadVPN-2023.4_amd64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim-linux64.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_init.lua $LOCAL_DIR
 cp $INSTALLER_DIR/pyenv-v2.3.5-source.tar.gz $LOCAL_DIR
@@ -102,7 +102,7 @@ systemctl enable first_boot.service
 apt install ufw
 
 # Install the Mullvad VPN app.
-apt install --yes $LOCAL_DIR/MullvadVPN-2022.4_amd64.deb
+apt install --yes $LOCAL_DIR/MullvadVPN-2023.4_amd64.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
