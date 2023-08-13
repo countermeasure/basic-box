@@ -59,3 +59,29 @@ only_allow_pip3_in_virtualenvs() {
         echo "Prefer pipx to pip3 when not in a virtualenv.";
     fi
 }
+
+
+###############################################################################
+#
+#  Set the window title to the truncated current working directory.
+#
+###############################################################################
+set_window_title() {
+    condensed_pwd=$(pwd | sed "s|^${HOME}|~|")
+    directories="${condensed_pwd//[!\/]}"
+    non_home_directory_count="${#directories}"
+    non_home_directories_to_show=2
+    if [ ${non_home_directory_count} -gt ${non_home_directories_to_show} ]
+        then
+        base_title=$(
+            echo "${condensed_pwd}" |
+            rev |
+            cut -d '/' -f -"${non_home_directories_to_show}" |
+            rev
+        )
+        window_title="…/${base_title}"
+    else
+        window_title="${condensed_pwd}"
+    fi
+    echo -ne "\033]0;📂  ${window_title} \007"
+}
