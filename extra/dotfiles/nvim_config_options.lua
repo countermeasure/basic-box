@@ -25,3 +25,9 @@ vim.opt.listchars:append("trail:•")
 
 -- The maximum width of text is 79 characters unless otherwise specified.
 vim.opt.textwidth = 79
+
+-- Set the window title.
+vim.opt.title = true
+
+-- Set the window title to the filename.
+vim.opt.titlestring = " 📝  %t"
