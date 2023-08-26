@@ -44,6 +44,9 @@ truncation_symbol = "…/"
 [git_branch]
 symbol = "🌱 "
 
+[git_commit]
+only_detached = false
+
 [git_metrics]
 disabled = false
 format = "[(+${added} )(-${deleted} )](bold purple)"
