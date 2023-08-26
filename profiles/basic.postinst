@@ -702,3 +702,6 @@ chmod 755 "$GIT_WRAPPER_SCRIPT_PATH"
 
 # Install jq.
 apt install --yes jq
+
+# Install wl-clipboard.
+apt install --yes wl-clipboard

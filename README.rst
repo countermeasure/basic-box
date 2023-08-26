@@ -109,6 +109,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Libnotify installed
 - Thunderbird installed
 - jq installed
+- wl-clipboard installed
 
 
 Set up
