@@ -210,6 +210,7 @@ main_help () {
     echo '  scan       Scan for malware or rootkits.'
     echo '  sync       Start Syncthing.'
     echo '  upgrade    Upgrade firmware and software packages.'
+    echo '  wifi       Show wifi access points.'
 }
 
 
@@ -390,6 +391,12 @@ upgrade () {
 }
 
 
+wifi () {
+    nmcli dev wifi rescan
+    nmcli dev wifi list
+}
+
+
 # Command selector.
 
 
@@ -430,6 +437,9 @@ case "${1-}" in
         ;;
     upgrade)
         upgrade
+        ;;
+    wifi)
+        wifi
         ;;
     *)
         main_catchall "${1-}"
