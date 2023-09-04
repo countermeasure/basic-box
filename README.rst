@@ -110,6 +110,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Thunderbird installed
 - jq installed
 - wl-clipboard installed
+- Podman installed
 
 
 Set up

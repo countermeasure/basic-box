@@ -705,3 +705,6 @@ apt install --yes jq
 
 # Install wl-clipboard.
 apt install --yes wl-clipboard
+
+# Install Podman.
+apt install --yes podman
