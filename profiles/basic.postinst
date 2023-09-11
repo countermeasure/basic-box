@@ -708,3 +708,8 @@ apt install --yes wl-clipboard
 
 # Install Podman.
 apt install --yes podman
+
+# Set the terminal bell to visual rather than audible.
+gsettings_set 'desktop.wm.preferences audible-bell false'
+gsettings_set 'desktop.wm.preferences visual-bell true'
+gsettings_set 'desktop.wm.preferences visual-bell-type "frame-flash"'
