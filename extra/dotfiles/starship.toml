@@ -2,7 +2,7 @@ command_timeout = 1000
 format = """
 [\
 (${cmd_duration}${status}\n)\
-${custom.divider}\
+${fill}\
 ${line_break}\
 ${directory}\
 ${git_branch}\
@@ -32,14 +32,13 @@ show_notifications = true
 format = "[\\(direnv\\)](yellow bold) "
 when = "env | grep '^DIRENV_FILE='"
 
-[custom.divider]
-command = "printf '%.s─' $(seq 1 $(tput cols))"
-format = "[${output}](bold bright-black)"
-when = "true"
-
 [directory]
 format = "In 📂 [${path}](${style})[${read_only}](${read_only_style}) "
 truncation_symbol = "…/"
+
+[fill]
+style = "bold bright-black"
+symbol = "─"
 
 [git_branch]
 symbol = "🌱 "
