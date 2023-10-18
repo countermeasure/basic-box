@@ -12,12 +12,27 @@ USER_BIN_DIR="$USER_DIR/.local/bin"
 USER_CONFIG_DIR="$USER_DIR/.config"
 AUTOSTART_DIR="$USER_CONFIG_DIR/autostart"
 
+extract_tar() {
+  # Make a directory and extract the contents of a tarfile into it.
+  mkdir "$2"
+  tar --extract --file $LOCAL_DIR/"$1" --directory "$2" --strip-component 1
+}
+
+get_version() {
+  # Get the version of a package.
+  # Remove anything within square brackets from the string supplied to get the
+  # package name as it appears in versions.json.
+  PACKAGE_NAME=${1//\[*\]/}
+  jq ".[\"$PACKAGE_NAME\"]" ${INSTALLER_DIR}/versions.json | tr --delete '"'
+}
+
 git_global_config_set() {
   # Add a setting to the Git global configuration. It's necessary to wrap the
   # second argument in double quotes to set the configuration values
   # correctly.
   runuser --login "$USERNAME" --command "git config --global $1 \"$2\""
 }
+
 gsettings_set() {
   # Change a dconf setting. It's necessary to use dbus-launch ahead of
   # gsettings when invoking this as the root user.
@@ -26,42 +41,50 @@ gsettings_set() {
     --command "dbus-launch gsettings set org.gnome.$1"
 }
 
+install_with_pipx() {
+  # Install a Python package with pipx.
+  PACKAGE_VERSION=$(get_version "$1")
+  runuser --login "$USERNAME" --command "pipx install $1==${PACKAGE_VERSION}"
+}
+
+# Install jq.
+apt install --yes jq
+
 # Copy extra files onto the new installation.
-cp $INSTALLER_DIR/bandwhich-0.20.0-source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/bat_0.22.1_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/bandwhich.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/bandwhich_source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/bat.deb $LOCAL_DIR
 cp $INSTALLER_DIR/box.sh $LOCAL_DIR
-cp $INSTALLER_DIR/delta-0.14.0-source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/delta-0.14.0-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/direnv-v2.32.1-source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/direnv.linux-amd64 $LOCAL_DIR
+cp $INSTALLER_DIR/delta.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/delta_source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/direnv.linux $LOCAL_DIR
+cp $INSTALLER_DIR/direnv_source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_functions $LOCAL_DIR
 cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/dot_profile_modifications $LOCAL_DIR
-cp $INSTALLER_DIR/exa-linux-x86_64-v0.10.1.zip $LOCAL_DIR
-cp $INSTALLER_DIR/fd_8.4.0_amd64.deb $LOCAL_DIR
-cp $INSTALLER_DIR/Fira_Code_Regular_Nerd_Font_Complete.ttf $LOCAL_DIR
+cp $INSTALLER_DIR/exa.zip $LOCAL_DIR
+cp $INSTALLER_DIR/fd.deb $LOCAL_DIR
+cp $INSTALLER_DIR/fira_code.ttf $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
-cp $INSTALLER_DIR/fzf-0.33.0-linux_amd64.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/fzf-0.33.0-source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/geckodriver-v0.32.0-linux64.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/gitk $LOCAL_DIR
+cp $INSTALLER_DIR/fzf.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/fzf_source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/geckodriver.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/git_global_ignore $LOCAL_DIR
 cp $INSTALLER_DIR/git_wrapper.sh $LOCAL_DIR
+cp $INSTALLER_DIR/gitk $LOCAL_DIR
 cp $INSTALLER_DIR/htoprc $LOCAL_DIR
 cp $INSTALLER_DIR/httpie-completion.bash $LOCAL_DIR
 cp $INSTALLER_DIR/ipython_config.py $LOCAL_DIR
 cp $INSTALLER_DIR/jupyterlab_apputils_settings $LOCAL_DIR
 cp $INSTALLER_DIR/jupyterlab_codemirror_settings $LOCAL_DIR
 cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
-cp $INSTALLER_DIR/keyd-v2.4.2-source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/keyd_default.conf $LOCAL_DIR
-cp $INSTALLER_DIR/MullvadVPN-2023.4_amd64.deb $LOCAL_DIR
-cp $INSTALLER_DIR/nvim-v0.9.1-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/keyd_source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/mullvad.deb $LOCAL_DIR
 cp $INSTALLER_DIR/nvim.appimage $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_config_autocmds.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_config_keymaps.lua $LOCAL_DIR
@@ -81,15 +104,16 @@ cp $INSTALLER_DIR/nvim_plugins_ranger.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_telescope.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_treesitter.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_which_key.lua $LOCAL_DIR
-cp $INSTALLER_DIR/pyenv-v2.3.5-source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/pyenv_source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_colourscheme.py $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_rifle.conf $LOCAL_DIR
 cp $INSTALLER_DIR/ranger_scope.sh $LOCAL_DIR
-cp $INSTALLER_DIR/ripgrep_13.0.0_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/ripgrep.deb $LOCAL_DIR
 cp $INSTALLER_DIR/setup.rst $LOCAL_DIR
 cp $INSTALLER_DIR/sources_syncthing.list $LOCAL_DIR
-cp $INSTALLER_DIR/starship-x86_64-unknown-linux-gnu.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/starship.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_apt $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_cryptsetup $LOCAL_DIR
@@ -100,11 +124,11 @@ cp $INSTALLER_DIR/sudoers_rkhunter $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_tlp $LOCAL_DIR
 cp $INSTALLER_DIR/sudoers_ufw $LOCAL_DIR
 cp $INSTALLER_DIR/tlp_charging_thresholds.conf $LOCAL_DIR
-cp $INSTALLER_DIR/trash-cli-0.22.8.27-source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/yt-dlp.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/trash_cli_source.tar.gz $LOCAL_DIR
+cp $INSTALLER_DIR/yt_dlp.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/yt_dlp_config $LOCAL_DIR
 cp $INSTALLER_DIR/zathurarc $LOCAL_DIR
-cp $INSTALLER_DIR/zoxide_0.8.3_amd64.deb $LOCAL_DIR
+cp $INSTALLER_DIR/zoxide.deb $LOCAL_DIR
 
 # Copy first_boot systemd unit file into place.
 cp $LOCAL_DIR/first_boot.service /etc/systemd/system
@@ -117,7 +141,7 @@ systemctl enable first_boot.service
 apt install ufw
 
 # Install the Mullvad VPN app.
-apt install --yes $LOCAL_DIR/MullvadVPN-2023.4_amd64.deb
+apt install --yes $LOCAL_DIR/mullvad.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
@@ -132,7 +156,8 @@ apt install --yes torbrowser-launcher
 
 # Install pipx.
 apt install --yes python3-pip python3-venv
-runuser -l "$USERNAME" -c 'pip3 install pipx==1.1.0'
+PIPX_VERSION=$(get_version 'pipx')
+runuser --login "$USERNAME" --command "pip3 install pipx==${PIPX_VERSION}"
 
 # Copy .bashrc extensions into place and enable them.
 cp $LOCAL_DIR/dot_bashrc_aliases "$USER_DIR"/.bashrc_aliases
@@ -153,11 +178,11 @@ printf '\n# Enable .profile modifications.\n' >>"$USER_DIR"/.profile
 echo '. "$HOME/.profile_modifications"' >>"$USER_DIR"/.profile
 
 # Install yt-dlp.
-runuser -l "$USERNAME" -c 'pipx install yt-dlp==2022.9.1'
-tar --extract -f $LOCAL_DIR/yt-dlp.tar.gz --directory /tmp
+install_with_pipx 'yt-dlp'
+extract_tar yt_dlp.tar.gz /tmp/yt_dlp
 mkdir /usr/local/share/man/man1
-cp /tmp/yt-dlp/yt-dlp.1 /usr/local/share/man/man1
-cp /tmp/yt-dlp/completions/bash/yt-dlp /usr/share/bash-completion/completions
+cp /tmp/yt_dlp/yt-dlp.1 /usr/local/share/man/man1
+cp /tmp/yt_dlp/completions/bash/yt-dlp /usr/share/bash-completion/completions
 mandb
 
 apt install --yes ffmpeg
@@ -196,37 +221,34 @@ sed -i \
   /etc/gdm3/daemon.conf
 
 # Install fd.
-dpkg -i $LOCAL_DIR/fd_8.4.0_amd64.deb
+dpkg -i $LOCAL_DIR/fd.deb
 
 # Install ripgrep.
-dpkg -i $LOCAL_DIR/ripgrep_13.0.0_amd64.deb
+dpkg -i $LOCAL_DIR/ripgrep.deb
 
 # Install exa.
-unzip -d /tmp/exa_0.10.1 $LOCAL_DIR/exa-linux-x86_64-v0.10.1.zip
-cp /tmp/exa_0.10.1/bin/exa /usr/local/bin
-cp \
-  /tmp/exa_0.10.1/completions/exa.bash \
-  /usr/share/bash-completion/completions
-cp /tmp/exa_0.10.1/man/exa.1 /usr/local/share/man/man1
+unzip -d /tmp/exa $LOCAL_DIR/exa.zip
+cp /tmp/exa/bin/exa /usr/local/bin
+cp /tmp/exa/completions/exa.bash /usr/share/bash-completion/completions
+cp /tmp/exa/man/exa.1 /usr/local/share/man/man1
 mkdir /usr/local/share/man/man5
-cp /tmp/exa_0.10.1/man/exa_colors.5 /usr/local/share/man/man5
+cp /tmp/exa/man/exa_colors.5 /usr/local/share/man/man5
 mandb
 
 # Install bat.
-dpkg -i $LOCAL_DIR/bat_0.22.1_amd64.deb
+dpkg -i $LOCAL_DIR/bat.deb
 
 # Install fzf.
-tar --extract -f $LOCAL_DIR/fzf-0.33.0-linux_amd64.tar.gz --directory /tmp
-tar --extract -f $LOCAL_DIR/fzf-0.33.0-source.tar.gz --directory /tmp
-cp /tmp/fzf /usr/local/bin
-cp /tmp/fzf-0.33.0/man/man1/fzf.1 /usr/local/share/man/man1
+tar --extract --file $LOCAL_DIR/fzf.tar.gz --directory /usr/local/bin
+extract_tar fzf_source.tar.gz /tmp/fzf_source
+cp /tmp/fzf_source/man/man1/fzf.1 /usr/local/share/man/man1
 mkdir /usr/local/share/fzf
-cp /tmp/fzf-0.33.0/shell/completion.bash /usr/local/share/fzf
-cp /tmp/fzf-0.33.0/shell/key-bindings.bash /usr/local/share/fzf
+cp /tmp/fzf_source/shell/completion.bash /usr/local/share/fzf
+cp /tmp/fzf_source/shell/key-bindings.bash /usr/local/share/fzf
 mandb
 
 # Install zoxide.
-apt install --yes $LOCAL_DIR/zoxide_0.8.3_amd64.deb
+apt install --yes $LOCAL_DIR/zoxide.deb
 
 # Install htop.
 apt install --yes htop
@@ -245,13 +267,11 @@ gsettings_set 'Terminal.Legacy.Settings menu-accelerator-enabled false'
 apt install --yes ncdu
 
 # Install delta.
-tar \
-  --extract -f $LOCAL_DIR/delta-0.14.0-x86_64-unknown-linux-gnu.tar.gz \
-  --directory /tmp
-tar --extract -f $LOCAL_DIR/delta-0.14.0-source.tar.gz --directory /tmp
-cp /tmp/delta-0.14.0-x86_64-unknown-linux-gnu/delta /usr/local/bin
+extract_tar delta.tar.gz /tmp/delta
+cp /tmp/delta/delta /usr/local/bin
+extract_tar delta_source.tar.gz /tmp/delta_source
 cp \
-  /tmp/delta-0.14.0/etc/completion/completion.bash \
+  /tmp/delta_source/etc/completion/completion.bash \
   /usr/share/bash-completion/completions/delta.bash
 
 # Install Git
@@ -296,9 +316,9 @@ chmod 644 "$GIT_DIR"/gitk
 
 # Install and configure keyd.
 apt install --yes libudev-dev
-tar --extract -f $LOCAL_DIR/keyd-v2.4.2-source.tar.gz --directory /tmp
-make --directory=/tmp/keyd-2.4.2
-make --directory=/tmp/keyd-2.4.2 install
+extract_tar keyd_source.tar.gz /tmp/keyd_source
+make --directory=/tmp/keyd_source
+make --directory=/tmp/keyd_source install
 # keyd requires the configuration file to be available in /etc/keyd, but prefer
 # to keep it within the user's home directory.
 KEYD_DIR="$USER_CONFIG_DIR/keyd"
@@ -316,26 +336,24 @@ chmod 755 "$BOX_SCRIPT_PATH"
 
 # Install direnv.
 DIRENV_EXECUTABLE_PATH='/usr/local/bin/direnv'
-cp $LOCAL_DIR/direnv.linux-amd64 $DIRENV_EXECUTABLE_PATH
+cp $LOCAL_DIR/direnv.linux $DIRENV_EXECUTABLE_PATH
 chmod 755 $DIRENV_EXECUTABLE_PATH
-tar --extract -f $LOCAL_DIR/direnv-v2.32.1-source.tar.gz --directory /tmp
-cp /tmp/direnv-2.32.1/man/direnv-fetchurl.1 /usr/local/share/man/man1
-cp /tmp/direnv-2.32.1/man/direnv-stdlib.1 /usr/local/share/man/man1
-cp /tmp/direnv-2.32.1/man/direnv.1 /usr/local/share/man/man1
-cp /tmp/direnv-2.32.1/man/direnv.toml.1 /usr/local/share/man/man1
+extract_tar direnv_source.tar.gz /tmp/direnv_source
+cp /tmp/direnv_source/man/direnv-fetchurl.1 /usr/local/share/man/man1
+cp /tmp/direnv_source/man/direnv-stdlib.1 /usr/local/share/man/man1
+cp /tmp/direnv_source/man/direnv.1 /usr/local/share/man/man1
+cp /tmp/direnv_source/man/direnv.toml.1 /usr/local/share/man/man1
 mandb
 
 # Install Fira Code Nerd Font.
 FONTS_DIR='/usr/local/share/fonts'
-cp $LOCAL_DIR/Fira_Code_Regular_Nerd_Font_Complete.ttf $FONTS_DIR
-chmod 664 $FONTS_DIR/Fira_Code_Regular_Nerd_Font_Complete.ttf
+cp $LOCAL_DIR/fira_code.ttf $FONTS_DIR
+chmod 664 $FONTS_DIR/fira_code.ttf
 # Make Fira Code the system-wide monospace font.
 gsettings_set 'desktop.interface monospace-font-name "FiraCode Nerd Font 11"'
 
 # Install Starship.
-tar \
-  --extract -f $LOCAL_DIR/starship-x86_64-unknown-linux-gnu.tar.gz \
-  --directory /usr/local/bin
+tar --extract --file $LOCAL_DIR/starship.tar.gz --directory /usr/local/bin
 # The Starship binary is called with its full path here as calling it just with
 # starship doesn't work.
 /usr/local/bin/starship completions bash > \
@@ -345,7 +363,7 @@ chown "$USERNAME":"$USERNAME" "$USER_CONFIG_DIR"/starship.toml
 chmod 664 "$USER_CONFIG_DIR"/starship.toml
 
 # Install HTTPie.
-runuser -l "$USERNAME" -c 'pipx install httpie==3.2.1'
+install_with_pipx httpie
 USER_SHARE_DIR="$USER_DIR/.local/share"
 USER_COMPLETION_DIR="$USER_SHARE_DIR/bash-completion/completions"
 mkdir -p "$USER_COMPLETION_DIR"
@@ -375,10 +393,10 @@ chown "$USERNAME":"$USERNAME" "$USER_DIR"/setup.rst
 chmod 644 "$USER_DIR"/setup.rst
 
 # Install IPython.
-runuser -l "$USERNAME" -c 'pipx install ipython==8.5.0'
+install_with_pipx ipython
 
 # Install Entomb.
-runuser -l "$USERNAME" -c 'pipx install entomb==0.4.0'
+install_with_pipx entomb
 
 # Install MTR.
 apt install --yes mtr-tiny
@@ -387,7 +405,7 @@ apt install --yes mtr-tiny
 apt install --yes tree
 
 # Install tldr-pages.
-runuser -l "$USERNAME" -c 'pipx install tldr==3.1.0'
+install_with_pipx tldr
 # tldr is called with its full path here as calling it just with tldr doesn't
 # work.
 "$USER_BIN_DIR"/tldr --print-completion bash >"$USER_COMPLETION_DIR"/tldr.bash
@@ -403,14 +421,14 @@ chown "$USERNAME":"$USERNAME" "$GIT_DIR"/ignore
 chmod 644 "$GIT_DIR"/ignore
 
 # Install trash-cli.
-runuser -l "$USERNAME" -c 'pipx install trash-cli==0.22.8.27'
-tar --extract -f $LOCAL_DIR/trash-cli-0.22.8.27-source.tar.gz --directory /tmp
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash-empty.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash-list.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash-put.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash-restore.1 /usr/local/share/man/man1
-cp /tmp/trash-cli-0.22.8.27/man/man1/trash-rm.1 /usr/local/share/man/man1
+install_with_pipx trash-cli
+extract_tar trash_cli_source.tar.gz /tmp/trash_cli_source
+cp /tmp/trash_cli_source/man/man1/trash.1 /usr/local/share/man/man1
+cp /tmp/trash_cli_source/man/man1/trash-empty.1 /usr/local/share/man/man1
+cp /tmp/trash_cli_source/man/man1/trash-list.1 /usr/local/share/man/man1
+cp /tmp/trash_cli_source/man/man1/trash-put.1 /usr/local/share/man/man1
+cp /tmp/trash_cli_source/man/man1/trash-restore.1 /usr/local/share/man/man1
+cp /tmp/trash_cli_source/man/man1/trash-rm.1 /usr/local/share/man/man1
 mandb
 
 # Add a Ranger rc.conf file.
@@ -426,8 +444,8 @@ apt purge --yes vim-tiny
 NVIM_PATH=/usr/local/bin/nvim
 cp $LOCAL_DIR/nvim.appimage $NVIM_PATH
 chmod 755 $NVIM_PATH
-tar --extract -f $LOCAL_DIR/nvim-v0.9.1-source.tar.gz --directory /tmp
-cp /tmp/neovim-0.9.1/src/man/nvim.1 /usr/local/share/man/man1
+extract_tar nvim_source.tar.gz /tmp/nvim_source
+cp /tmp/nvim_source/src/man/nvim.1 /usr/local/share/man/man1
 # Set Neovim as the alternative for the editor, ex, rview, rvim, vi, view, vim
 # and vimdiff commands.
 update-alternatives --install /usr/bin/editor editor $NVIM_PATH 50
@@ -496,11 +514,15 @@ cp \
 chown --recursive "$USERNAME":"$USERNAME" "$NVIM_CONFIG_DIR"
 find "$NVIM_CONFIG_DIR" -type f -exec chmod 644 {} \;
 # Install Python LSP Server and its third-party plugins.
-runuser -l "$USERNAME" -c 'pipx install python-lsp-server[flake8]==1.7.4'
-runuser -l "$USERNAME" -c 'pipx inject python-lsp-server pyls-isort==0.2.2'
+install_with_pipx python-lsp-server[flake8]
+PYLS_ISORT_VERSION=$(get_version 'pyls-isort')
 runuser \
   -l "$USERNAME" \
-  -c 'pipx inject python-lsp-server python-lsp-black==1.3.0'
+  -c "pipx inject python-lsp-server pyls-isort==${PYLS_ISORT_VERSION}"
+PYTHON_LSP_BLACK_VERSION=$(get_version 'python-lsp-black')
+runuser \
+  -l "$USERNAME" \
+  -c "pipx inject python-lsp-server python-lsp-black==${PYTHON_LSP_BLACK_VERSION}"
 # Set up LazyVim.
 runuser -l "$USERNAME" -c 'nvim --headless "+Lazy! restore" +qa'
 
@@ -521,13 +543,9 @@ chmod 644 "$YT_DLP_DIR"/config
 apt install --yes atool
 
 # Install bandwhich.
-tar \
-  --extract \
-  -f $LOCAL_DIR/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz \
-  --directory /tmp
-cp /tmp/bandwhich /usr/local/bin
-tar --extract -f $LOCAL_DIR/bandwhich-0.20.0-source.tar.gz --directory /tmp
-cp /tmp/bandwhich-0.20.0/docs/bandwhich.1 /usr/local/share/man/man1
+tar --extract --file $LOCAL_DIR/bandwhich.tar.gz --directory /usr/local/bin
+extract_tar bandwhich_source.tar.gz /tmp/bandwhich_source
+cp /tmp/bandwhich_source/docs/bandwhich.1 /usr/local/share/man/man1
 mandb
 # Allow bandwhich to run without being called with sudo.
 setcap \
@@ -612,9 +630,9 @@ chmod 440 $SUDOERS_DIR/rkhunter
 
 # Install pyenv.
 PYENV_DIR="$USER_DIR/.pyenv"
-tar --extract -f $LOCAL_DIR/pyenv-v2.3.5-source.tar.gz --directory /tmp
+extract_tar pyenv_source.tar.gz /tmp/pyenv_source
 mkdir -p "$PYENV_DIR"
-cp --recursive /tmp/pyenv-2.3.5/* "$PYENV_DIR"
+cp --recursive /tmp/pyenv_source/* "$PYENV_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$PYENV_DIR"
 # Install Python build dependencies. This is the complete list taken from
 # https://github.com/pyenv/pyenv/wiki#suggested-build-environment. Even though
@@ -640,11 +658,10 @@ apt install --yes \
   zlib1g-dev
 
 # Install geckodriver.
-tar --extract -f $LOCAL_DIR/geckodriver-v0.32.0-linux64.tar.gz --directory /tmp
-cp /tmp/geckodriver /usr/local/bin
+tar --extract --file $LOCAL_DIR/geckodriver.tar.gz --directory /usr/local/bin
 
 # Install JupyterLab.
-runuser -l "$USERNAME" -c 'pipx install jupyterlab==3.5.0'
+install_with_pipx jupyterlab
 # Share JupyterLab user settings across all JupyterLab environments.
 JUPYTER_DIR="$USER_DIR/.jupyter"
 JUPYTERLAB_APPUTILS_EXTENSION_DIR="$JUPYTER_DIR/lab/user-settings/\
@@ -700,9 +717,6 @@ GIT_WRAPPER_SCRIPT_PATH="$USER_BIN_DIR/git_wrapper"
 cp $LOCAL_DIR/git_wrapper.sh "$GIT_WRAPPER_SCRIPT_PATH"
 chown "$USERNAME":"$USERNAME" "$GIT_WRAPPER_SCRIPT_PATH"
 chmod 755 "$GIT_WRAPPER_SCRIPT_PATH"
-
-# Install jq.
-apt install --yes jq
 
 # Install wl-clipboard.
 apt install --yes wl-clipboard

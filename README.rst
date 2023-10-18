@@ -118,7 +118,7 @@ Set up
 
 Install the dependencies::
 
-  $ sudo apt install make simple-cdd wget
+  $ sudo apt install jq make simple-cdd wget
 
 
 Usage

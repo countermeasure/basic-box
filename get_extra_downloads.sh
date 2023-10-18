@@ -3,132 +3,149 @@
 # Set intuitive error behaviour.
 set -o errexit -o nounset -o pipefail
 
+get_version() {
+  # Get the version of a package.
+  jq ".[\"$1\"]" ../../versions.json | tr --delete '"'
+}
+
+link() {
+  # Create a symbolic link, overwriting an existing link or file.
+  ln --force --symbolic "$1" "$2"
+}
+
 # Ensure the extra downloads directory exists and switch into it.
 mkdir -p extra/downloads
 cd extra/downloads || exit 1
 
 # Ensure the Mullvad VPN app package is present.
-wget --timestamping https://mullvad.net/media/app/MullvadVPN-2023.4_amd64.deb
+mullvad_version=$(get_version mullvad)
+wget --timestamping "https://mullvad.net/media/app/\
+MullvadVPN-${mullvad_version}_amd64.deb"
+link "MullvadVPN-${mullvad_version}_amd64.deb" 'mullvad.deb'
 
 # Ensure the fd package is present.
-wget --timestamping "https://github.com/sharkdp/fd/releases/download/v8.4.0/\
-fd_8.4.0_amd64.deb"
+fd_version=$(get_version fd)
+wget --timestamping "https://github.com/sharkdp/fd/releases/download/\
+v${fd_version}/fd_${fd_version}_amd64.deb"
+link "fd_${fd_version}_amd64.deb" 'fd.deb'
 
 # Ensure the ripgrep package is present.
+ripgrep_version=$(get_version ripgrep)
 wget --timestamping "https://github.com/BurntSushi/ripgrep/releases/download/\
-13.0.0/ripgrep_13.0.0_amd64.deb"
+${ripgrep_version}/ripgrep_${ripgrep_version}_amd64.deb"
+link "ripgrep_${ripgrep_version}_amd64.deb" 'ripgrep.deb'
 
 # Ensure the exa package is present.
-wget --timestamping "https://github.com/ogham/exa/releases/download/v0.10.1/\
-exa-linux-x86_64-v0.10.1.zip"
+exa_version=$(get_version exa)
+wget --timestamping "https://github.com/ogham/exa/releases/download/\
+v${exa_version}/exa-linux-x86_64-v${exa_version}.zip"
+link "exa-linux-x86_64-v${exa_version}.zip" 'exa.zip'
 
 # Ensure the bat package is present.
-wget --timestamping "https://github.com/sharkdp/bat/releases/download/v0.22.1/\
-bat_0.22.1_amd64.deb"
+bat_version=$(get_version bat)
+wget --timestamping "https://github.com/sharkdp/bat/releases/download/\
+v${bat_version}/bat_${bat_version}_amd64.deb"
+link "bat_${bat_version}_amd64.deb" 'bat.deb'
 
 # Ensure the fzf package is present.
-wget --timestamping "https://github.com/junegunn/fzf/releases/download/0.33.0/\
-fzf-0.33.0-linux_amd64.tar.gz"
+fzf_version=$(get_version fzf)
+wget --timestamping "https://github.com/junegunn/fzf/releases/download/\
+${fzf_version}/fzf-${fzf_version}-linux_amd64.tar.gz"
+link "fzf-${fzf_version}-linux_amd64.tar.gz" 'fzf.tar.gz'
 wget --timestamping "https://github.com/junegunn/fzf/archive/refs/tags/\
-0.33.0.tar.gz"
-# As the fzf archive doesn't include fzf in its name, make a copy with fzf in
-# its name. Simply saving with this different filename will stop wget's
-# --timestamping option working.
-cp 0.33.0.tar.gz fzf-0.33.0-source.tar.gz
+${fzf_version}.tar.gz"
+link "${fzf_version}.tar.gz" 'fzf_source.tar.gz'
 
 # Ensure the zoxide package is present.
+zoxide_version=$(get_version zoxide)
 wget --timestamping "https://github.com/ajeetdsouza/zoxide/releases/download/\
-v0.8.3/zoxide_0.8.3_amd64.deb"
+v${zoxide_version}/zoxide_${zoxide_version}_amd64.deb"
+link "zoxide_${zoxide_version}_amd64.deb" 'zoxide.deb'
 
 # Ensure the delta package is present.
 # The delta .deb package doesn't contain completions as of version 0.11.3, so
 # manual installation is necessary.
+delta_version=$(get_version delta)
 wget --timestamping "https://github.com/dandavison/delta/releases/download/\
-0.14.0/delta-0.14.0-x86_64-unknown-linux-gnu.tar.gz"
+${delta_version}/delta-${delta_version}-x86_64-unknown-linux-gnu.tar.gz"
+link "delta-${delta_version}-x86_64-unknown-linux-gnu.tar.gz" 'delta.tar.gz'
 wget --timestamping "https://github.com/dandavison/delta/archive/refs/tags/\
-0.14.0.tar.gz"
-# As the delta archive doesn't include delta in its name, make a copy with
-# delta in its name. Simply saving with this different filename will stop
-# wget's --timestamping option working.
-cp 0.14.0.tar.gz delta-0.14.0-source.tar.gz
+${delta_version}.tar.gz"
+link "${delta_version}.tar.gz" 'delta_source.tar.gz'
 
 # Ensure the keyd package is present.
+keyd_version=$(get_version keyd)
 wget --timestamping "https://github.com/rvaiya/keyd/archive/refs/tags/\
-v2.4.2.tar.gz"
-# As the keyd archive doesn't include keyd in its name, make a copy with keyd
-# in its name. Simply saving with this different filename will stop wget's
-# --timestamping option working.
-cp v2.4.2.tar.gz keyd-v2.4.2-source.tar.gz
+v${keyd_version}.tar.gz"
+link "v${keyd_version}.tar.gz" 'keyd_source.tar.gz'
 
 # Ensure the direnv package is present.
+direnv_version=$(get_version direnv)
 wget --timestamping "https://github.com/direnv/direnv/releases/download/\
-v2.32.1/direnv.linux-amd64"
+v${direnv_version}/direnv.linux-amd64"
+link 'direnv.linux-amd64' 'direnv.linux'
 wget --timestamping "https://github.com/direnv/direnv/archive/refs/tags/\
-v2.32.1.tar.gz"
-# As the direnv archive doesn't include direnv in its name, make a copy with
-# direnv in its name. Simply saving with this different filename will stop
-# wget's --timestamping option working.
-cp v2.32.1.tar.gz direnv-v2.32.1-source.tar.gz
+v${direnv_version}.tar.gz"
+link "v${direnv_version}.tar.gz" 'direnv_source.tar.gz'
 
 # Ensure the Fira Code font is present.
-wget --timestamping "https://github.com/ryanoasis/nerd-fonts/raw/v2.2.2/\
-patched-fonts/FiraCode/Regular/complete/\
+nerd_fonts_version=$(get_version nerd-fonts)
+wget --timestamping "https://github.com/ryanoasis/nerd-fonts/raw/\
+v${nerd_fonts_version}/patched-fonts/FiraCode/Regular/complete/\
 Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf"
-# As the file name includes spaces, make a copy replacing them with
-# underscores. Simply saving with this different filename will stop wget's
-# --timestamping option working.
-cp \
-  'Fira Code Regular Nerd Font Complete.ttf' \
-  Fira_Code_Regular_Nerd_Font_Complete.ttf
+link 'Fira Code Regular Nerd Font Complete.ttf' 'fira_code.ttf'
 
 # Ensure the Starship binary is present.
+starship_version=$(get_version starship)
 wget --timestamping "https://github.com/starship/starship/releases/download/\
-v1.10.3/starship-x86_64-unknown-linux-gnu.tar.gz"
+v${starship_version}/starship-x86_64-unknown-linux-gnu.tar.gz"
+link 'starship-x86_64-unknown-linux-gnu.tar.gz' 'starship.tar.gz'
 
 # Ensure the HTTPie completion file is present.
-wget --timestamping "https://github.com/httpie/httpie/raw/3.2.1/extras/\
-httpie-completion.bash"
+httpie_version=$(get_version httpie)
+wget --timestamping "https://github.com/httpie/httpie/raw/${httpie_version}/\
+extras/httpie-completion.bash"
 
 # Ensure the trash-cli package is present.
+trash_cli_version=$(get_version trash-cli)
 wget --timestamping "https://github.com/andreafrancia/trash-cli/archive/refs/\
-tags/0.22.8.27.tar.gz"
-# As the trash-cli archive doesn't include trash-cli in its name, make a copy
-# with trash-cli in its name. Simply saving with this different filename will
-# stop wget's --timestamping option working.
-cp 0.22.8.27.tar.gz trash-cli-0.22.8.27-source.tar.gz
+tags/${trash_cli_version}.tar.gz"
+link "${trash_cli_version}.tar.gz" 'trash_cli_source.tar.gz'
 
 # Ensure the Neovim package is present.
+neovim_version=$(get_version neovim)
 wget --timestamping "https://github.com/neovim/neovim/releases/download/\
-v0.9.1/nvim.appimage"
+v${neovim_version}/nvim.appimage"
 wget --timestamping "https://github.com/neovim/neovim/archive/refs/tags/\
-v0.9.1.tar.gz"
-# As the Neovim archive doesn't include nvim in its name, make a copy
-# with nvim in its name. Simply saving with this different filename will
-# stop wget's --timestamping option working.
-cp v0.9.1.tar.gz nvim-v0.9.1-source.tar.gz
+v${neovim_version}.tar.gz"
+link "v${neovim_version}.tar.gz" 'nvim_source.tar.gz'
 
 # Ensure the yt-dlp package is present.
+yt_dlp_version=$(get_version yt-dlp)
 wget --timestamping "https://github.com/yt-dlp/yt-dlp/releases/download/\
-2022.09.01/yt-dlp.tar.gz"
+${yt_dlp_version}/yt-dlp.tar.gz"
+link 'yt-dlp.tar.gz' 'yt_dlp.tar.gz'
 
 # Ensure the bandwhich package is present.
+bandwhich_version=$(get_version bandwhich)
 wget --timestamping "https://github.com/imsnif/bandwhich/releases/download/\
-0.20.0/bandwhich-v0.20.0-x86_64-unknown-linux-musl.tar.gz"
+${bandwhich_version}/\
+bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl.tar.gz"
+link \
+  "bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl.tar.gz" \
+  'bandwhich.tar.gz'
 wget --timestamping "https://github.com/imsnif/bandwhich/archive/refs/tags/\
-0.20.0.tar.gz"
-# As the bandwhich archive doesn't include bandwhich in its name, make a copy
-# with bandwhich in its name. Simply saving with this different filename will
-# stop wget's --timestamping option working.
-cp 0.20.0.tar.gz bandwhich-0.20.0-source.tar.gz
+${bandwhich_version}.tar.gz"
+link "${bandwhich_version}.tar.gz" 'bandwhich_source.tar.gz'
 
 # Ensure the pyenv package is present.
+pyenv_version=$(get_version pyenv)
 wget --timestamping "https://github.com/pyenv/pyenv/archive/refs/tags/\
-v2.3.5.tar.gz"
-# As the pyenv archive doesn't include pyenv in its name, make a copy with
-# pyenv in its name. Simply saving with this different filename will stop
-# wget's --timestamping option working.
-cp v2.3.5.tar.gz pyenv-v2.3.5-source.tar.gz
+v${pyenv_version}.tar.gz"
+link "v${pyenv_version}.tar.gz" 'pyenv_source.tar.gz'
 
 # Ensure the geckodriver package is present.
+geckodriver_version=$(get_version geckodriver)
 wget --timestamping "https://github.com/mozilla/geckodriver/releases/download/\
-v0.32.0/geckodriver-v0.32.0-linux64.tar.gz"
+v${geckodriver_version}/geckodriver-v${geckodriver_version}-linux64.tar.gz"
+link "geckodriver-v${geckodriver_version}-linux64.tar.gz" 'geckodriver.tar.gz'
