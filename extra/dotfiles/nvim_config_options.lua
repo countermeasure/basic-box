@@ -14,6 +14,9 @@ vim.opt.guicursor:append("a:blinkwait700-blinkoff400-blinkon250")
 -- Show ends of lines as the "↴" character.
 vim.opt.listchars:append("eol:↴")
 
+-- Show multiple leading spaces as the " " character.
+vim.opt.listchars:append("leadmultispace: ")
+
 -- Show multiple spaces as the "•" character.
 vim.opt.listchars:append("multispace:•")
 

@@ -70,12 +70,12 @@ cp $INSTALLER_DIR/nvim_config_options.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_init.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_lazy_lock.json $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_colourscheme.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_conform.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_lualine.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_luasnip.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_mason.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_neotree.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_null_ls.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_nvim_cmp.lua $LOCAL_DIR
+cp $INSTALLER_DIR/nvim_plugins_nvim_lint.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_nvim_lspconfig.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_ranger.lua $LOCAL_DIR
 cp $INSTALLER_DIR/nvim_plugins_telescope.lua $LOCAL_DIR
@@ -463,21 +463,23 @@ cp \
   $LOCAL_DIR/nvim_plugins_colourscheme.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/colourscheme.lua"
 cp \
+  $LOCAL_DIR/nvim_plugins_conform.lua \
+  "$NVIM_CONFIG_DIR/lua/plugins/conform.lua"
+cp \
   $LOCAL_DIR/nvim_plugins_lualine.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/lualine.lua"
 cp \
   $LOCAL_DIR/nvim_plugins_luasnip.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/luasnip.lua"
-cp $LOCAL_DIR/nvim_plugins_mason.lua "$NVIM_CONFIG_DIR/lua/plugins/mason.lua"
 cp \
   $LOCAL_DIR/nvim_plugins_neotree.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/neotree.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_null_ls.lua \
-  "$NVIM_CONFIG_DIR/lua/plugins/null_ls.lua"
-cp \
   $LOCAL_DIR/nvim_plugins_nvim_cmp.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/nvim_cmp.lua"
+cp \
+  $LOCAL_DIR/nvim_plugins_nvim_lint.lua \
+  "$NVIM_CONFIG_DIR/lua/plugins/nvim_lint.lua"
 cp \
   $LOCAL_DIR/nvim_plugins_nvim_lspconfig.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/nvim_lspconfig.lua"

@@ -24,6 +24,7 @@ return {
 
       return {
         options = {
+          component_separators = { left = "•", right = "•" },
           disabled_filetypes = { statusline = { "dashboard", "alpha" } },
           globalstatus = true,
           section_separators = { left = "", right = "" },
@@ -52,36 +53,22 @@ return {
             },
           },
           lualine_c = {
-            {
-              "diagnostics",
-              separator = "•",
-              symbols = {
-                error = icons.diagnostics.Error,
-                hint = icons.diagnostics.Hint,
-                info = icons.diagnostics.Info,
-                warn = icons.diagnostics.Warn,
-              },
-            },
+            Util.lualine.root_dir(),
             {
               "filetype",
               icon_only = true,
               padding = { left = 1 },
               separator = "",
             },
+            { Util.lualine.pretty_path() },
             {
-              "filename",
-              path = 3,
-              separator = "•",
-              symbols = { modified = "", readonly = "", unnamed = "" },
-            },
-            {
-              function()
-                return require("nvim-navic").get_location()
-              end,
-              cond = function()
-                return package.loaded["nvim-navic"]
-                  and require("nvim-navic").is_available()
-              end,
+              "diagnostics",
+              symbols = {
+                error = icons.diagnostics.Error,
+                hint = icons.diagnostics.Hint,
+                info = icons.diagnostics.Info,
+                warn = icons.diagnostics.Warn,
+              },
             },
           },
           lualine_x = {
@@ -93,8 +80,7 @@ return {
                 return package.loaded["noice"]
                   and require("noice").api.status.command.has()
               end,
-              color = Util.fg("Statement"),
-              separator = "•",
+              color = Util.ui.fg("Statement"),
             },
             {
               function()
@@ -104,8 +90,7 @@ return {
                 return package.loaded["noice"]
                   and require("noice").api.status.mode.has()
               end,
-              color = Util.fg("Constant"),
-              separator = "•",
+              color = Util.ui.fg("Constant"),
             },
             {
               function()
@@ -114,15 +99,13 @@ return {
               cond = function()
                 return package.loaded["dap"] and require("dap").status() ~= ""
               end,
-              color = Util.fg("Debug"),
-              separator = "•",
+              color = Util.ui.fg("Debug"),
             },
             {
               require("lazy.status").updates,
               cond = require("lazy.status").has_updates,
-              color = Util.fg("Special"),
+              color = Util.ui.fg("Special"),
               padding = 1,
-              separator = "•",
             },
             {
               "diff",
