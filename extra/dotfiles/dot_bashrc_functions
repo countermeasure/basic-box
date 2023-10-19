@@ -11,22 +11,21 @@
 #
 ###############################################################################
 go_to_parent_directory() {
-    if [ -z "$1" ]; then
-        cd ..
-        return 0
-    elif [[ $1 != [1-9]?([0-9]) ]]; then
-        echo "Argument must be an integer between 1 and 99."
-        return 1
-    else
-        path=''
-        for _ in $(seq "$1"); do
-            path+='../'
-        done
-        cd $path || return 1
-        return 0
-    fi
+  if [ -z "$1" ]; then
+    cd ..
+    return 0
+  elif [[ $1 != [1-9]?([0-9]) ]]; then
+    echo "Argument must be an integer between 1 and 99."
+    return 1
+  else
+    path=''
+    for _ in $(seq "$1"); do
+      path+='../'
+    done
+    cd $path || return 1
+    return 0
+  fi
 }
-
 
 ###############################################################################
 #
@@ -38,13 +37,12 @@ go_to_parent_directory() {
 #
 ###############################################################################
 only_allow_pip_in_virtualenvs() {
-    if [ -n "$VIRTUAL_ENV" ]; then
-        \pip "$@";
-    else
-        echo "Prefer pipx to pip when not in a virtualenv.";
-    fi
+  if [ -n "$VIRTUAL_ENV" ]; then
+    \pip "$@"
+  else
+    echo "Prefer pipx to pip when not in a virtualenv."
+  fi
 }
-
 
 ###############################################################################
 #
@@ -56,13 +54,12 @@ only_allow_pip_in_virtualenvs() {
 #
 ###############################################################################
 only_allow_pip3_in_virtualenvs() {
-    if [ -n "$VIRTUAL_ENV" ]; then
-        \pip3 "$@";
-    else
-        echo "Prefer pipx to pip3 when not in a virtualenv.";
-    fi
+  if [ -n "$VIRTUAL_ENV" ]; then
+    \pip3 "$@"
+  else
+    echo "Prefer pipx to pip3 when not in a virtualenv."
+  fi
 }
-
 
 ###############################################################################
 #
@@ -70,21 +67,20 @@ only_allow_pip3_in_virtualenvs() {
 #
 ###############################################################################
 set_window_title() {
-    condensed_pwd=$(pwd | sed "s|^${HOME}|~|")
-    directories="${condensed_pwd//[!\/]}"
-    non_home_directory_count="${#directories}"
-    non_home_directories_to_show=2
-    if [ ${non_home_directory_count} -gt ${non_home_directories_to_show} ]
-        then
-        base_title=$(
-            echo "${condensed_pwd}" |
-            rev |
-            cut -d '/' -f -"${non_home_directories_to_show}" |
-            rev
-        )
-        window_title="…/${base_title}"
-    else
-        window_title="${condensed_pwd}"
-    fi
-    echo -ne "\033]0;📂  ${window_title} \007"
+  condensed_pwd=$(pwd | sed "s|^${HOME}|~|")
+  directories="${condensed_pwd//[!\/]/}"
+  non_home_directory_count="${#directories}"
+  non_home_directories_to_show=2
+  if [ ${non_home_directory_count} -gt ${non_home_directories_to_show} ]; then
+    base_title=$(
+      echo "${condensed_pwd}" \
+        | rev \
+        | cut -d '/' -f -"${non_home_directories_to_show}" \
+        | rev
+    )
+    window_title="…/${base_title}"
+  else
+    window_title="${condensed_pwd}"
+  fi
+  echo -ne "\033]0;📂  ${window_title} \007"
 }

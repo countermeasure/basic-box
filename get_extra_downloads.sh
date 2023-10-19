@@ -78,8 +78,8 @@ Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf"
 # underscores. Simply saving with this different filename will stop wget's
 # --timestamping option working.
 cp \
-    'Fira Code Regular Nerd Font Complete.ttf' \
-    Fira_Code_Regular_Nerd_Font_Complete.ttf
+  'Fira Code Regular Nerd Font Complete.ttf' \
+  Fira_Code_Regular_Nerd_Font_Complete.ttf
 
 # Ensure the Starship binary is present.
 wget --timestamping "https://github.com/starship/starship/releases/download/\

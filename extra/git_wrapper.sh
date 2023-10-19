@@ -34,7 +34,6 @@ readonly GIT_BRANCH_FORMAT="\
 %(end)\
 %(end)"
 
-
 ###############################################################################
 #
 #  Add files.
@@ -48,32 +47,31 @@ readonly GIT_BRANCH_FORMAT="\
 #
 ###############################################################################
 git_add() {
-    # Get the files to add.
-    if [[ -n ${1-} ]]; then
-        files="$*"
-    else
-        set +o errexit
-        files=$(
-            git -c color.ui=always status --short |
-                fzf --ansi --header='Select files to stage' --multi --no-info |
-                awk '{ print $2 }'
-        )
-        exit_code=$?
-        set -o errexit
-        _exit_on_error ${exit_code} 'No files selected'
-    fi
+  # Get the files to add.
+  if [[ -n ${1-} ]]; then
+    files="$*"
+  else
+    set +o errexit
+    files=$(
+      git -c color.ui=always status --short \
+        | fzf --ansi --header='Select files to stage' --multi --no-info \
+        | awk '{ print $2 }'
+    )
+    exit_code=$?
+    set -o errexit
+    _exit_on_error ${exit_code} 'No files selected'
+  fi
 
-    # Add the files.
-    initial_diff_hash=$(_staged_diff_hash)
-    echo "${files}" | xargs git add
-    final_diff_hash=$(_staged_diff_hash)
+  # Add the files.
+  initial_diff_hash=$(_staged_diff_hash)
+  echo "${files}" | xargs git add
+  final_diff_hash=$(_staged_diff_hash)
 
-    # Show information.
-    _print_result "${initial_diff_hash}" "${final_diff_hash}"
-    _print_changes
-    _print_latest_commit
+  # Show information.
+  _print_result "${initial_diff_hash}" "${final_diff_hash}"
+  _print_changes
+  _print_latest_commit
 }
-
 
 ###############################################################################
 #
@@ -84,17 +82,16 @@ git_add() {
 #
 ###############################################################################
 git_add_all() {
-    # Add the files.
-    initial_diff_hash=$(_staged_diff_hash)
-    git add --all
-    final_diff_hash=$(_staged_diff_hash)
+  # Add the files.
+  initial_diff_hash=$(_staged_diff_hash)
+  git add --all
+  final_diff_hash=$(_staged_diff_hash)
 
-    # Show information.
-    _print_result "${initial_diff_hash}" "${final_diff_hash}"
-    _print_changes
-    _print_latest_commit
+  # Show information.
+  _print_result "${initial_diff_hash}" "${final_diff_hash}"
+  _print_changes
+  _print_latest_commit
 }
-
 
 ###############################################################################
 #
@@ -105,20 +102,19 @@ git_add_all() {
 #
 ###############################################################################
 git_add_all_then_diff() {
-    # Add the files.
-    initial_diff_hash=$(_staged_diff_hash)
-    git add --all
-    final_diff_hash=$(_staged_diff_hash)
+  # Add the files.
+  initial_diff_hash=$(_staged_diff_hash)
+  git add --all
+  final_diff_hash=$(_staged_diff_hash)
 
-    # Show information.
-    if [[ "${initial_diff_hash}" != "${final_diff_hash}" ]]; then
-        git diff --staged
-    fi
-    _print_result "${initial_diff_hash}" "${final_diff_hash}"
-    _print_changes
-    _print_latest_commit
+  # Show information.
+  if [[ "${initial_diff_hash}" != "${final_diff_hash}" ]]; then
+    git diff --staged
+  fi
+  _print_result "${initial_diff_hash}" "${final_diff_hash}"
+  _print_changes
+  _print_latest_commit
 }
-
 
 ###############################################################################
 #
@@ -133,17 +129,16 @@ git_add_all_then_diff() {
 #
 ###############################################################################
 git_add_with_patch() {
-    # Add the files.
-    initial_diff_hash=$(_staged_diff_hash)
-    git add --patch "${@}"
-    final_diff_hash=$(_staged_diff_hash)
+  # Add the files.
+  initial_diff_hash=$(_staged_diff_hash)
+  git add --patch "${@}"
+  final_diff_hash=$(_staged_diff_hash)
 
-    # Show information.
-    _print_result "${initial_diff_hash}" "${final_diff_hash}"
-    _print_changes
-    _print_latest_commit
+  # Show information.
+  _print_result "${initial_diff_hash}" "${final_diff_hash}"
+  _print_changes
+  _print_latest_commit
 }
-
 
 ###############################################################################
 #
@@ -154,9 +149,8 @@ git_add_with_patch() {
 #
 ###############################################################################
 git_branch() {
-    git branch "${@}"
+  git branch "${@}"
 }
-
 
 ###############################################################################
 #
@@ -167,23 +161,22 @@ git_branch() {
 #
 ###############################################################################
 git_branch_create() {
-    # Check that a branch name is given.
-    if [[ -z ${1-} ]]; then
-        _print_failure_message 'A new branch name is required'
-        exit 1
-    fi
+  # Check that a branch name is given.
+  if [[ -z ${1-} ]]; then
+    _print_failure_message 'A new branch name is required'
+    exit 1
+  fi
 
-    # Create the new branch and switch to it.
-    git branch "${@}"
-    git switch --quiet "${1}"
+  # Create the new branch and switch to it.
+  git branch "${@}"
+  git switch --quiet "${1}"
 
-    # Show information.
-    _print_success_message 'Done'
-    _print_changes
-    _print_latest_commit
-    _print_branches local 5
+  # Show information.
+  _print_success_message 'Done'
+  _print_changes
+  _print_latest_commit
+  _print_branches local 5
 }
-
 
 ###############################################################################
 #
@@ -200,65 +193,64 @@ git_branch_create() {
 #
 ###############################################################################
 git_branch_delete() {
-    # Get the branches to delete.
-    if [[ -n ${1-} ]]; then
-        branches=$(printf '%s\n' "$@")
+  # Get the branches to delete.
+  if [[ -n ${1-} ]]; then
+    branches=$(printf '%s\n' "$@")
+  else
+    current_branch=$(_current_branch)
+    fzf_header='Select the branches to delete'
+    set +o errexit
+    branches=$(
+      _branches all \
+        | grep --invert-match "\[32m${current_branch}\*" \
+        | fzf --ansi --header="${fzf_header}" --multi --no-info --nth 1
+    )
+    exit_code=$?
+    set -o errexit
+    _exit_on_error ${exit_code} 'No branches selected'
+  fi
+
+  # Confirm that the branches should be deleted.
+  echo
+  _print_magenta 'Branches to be deleted'
+  # shellcheck disable=2001
+  echo "${branches}"
+  echo
+  read -p 'Delete? (y/n): ' -r response
+  while [[ ${response} != 'y' && ${response} != 'n' ]]; do
+    read -p "Please enter either 'y' or 'n': " -r response
+  done
+  if [[ "${response}" != "y" ]]; then
+    exit 1
+  fi
+
+  # Delete the branches.
+  overall_exit_code=0
+  echo
+  branch_names=$(echo "${branches}" | awk '{ print $1 }')
+  for branch in ${branch_names}; do
+    set +o errexit
+    if [[ "${branch}" =~ '/' ]]; then
+      git push --delete --quiet "${branch%/*}" "${branch#*/}"
     else
-        current_branch=$(_current_branch)
-        fzf_header='Select the branches to delete'
-        set +o errexit
-        branches=$(
-            _branches all |
-                grep --invert-match "\[32m${current_branch}\*" |
-                fzf --ansi --header="${fzf_header}" --multi --no-info --nth 1
-        )
-        exit_code=$?
-        set -o errexit
-        _exit_on_error ${exit_code} 'No branches selected'
+      git branch --delete --force --quiet "${branch}" &>/dev/null
     fi
-
-    # Confirm that the branches should be deleted.
-    echo
-    _print_magenta 'Branches to be deleted'
-    # shellcheck disable=2001
-    echo "${branches}"
-    echo
-    read -p 'Delete? (y/n): ' -r response
-    while [[ ${response} != 'y' && ${response} != 'n' ]] ; do
-        read -p "Please enter either 'y' or 'n': " -r response
-    done
-    if [[ "${response}" != "y" ]]; then
-        exit 1
+    exit_code=$?
+    set -o errexit
+    if [[ ${exit_code} == 0 ]]; then
+      _print_success_message "Branch '${branch}' was deleted"
+    else
+      _print_failure_message "Branch '${branch}' was not deleted"
+      overall_exit_code=${exit_code}
     fi
+  done
 
-    # Delete the branches.
-    overall_exit_code=0
-    echo
-    branch_names=$(echo "${branches}" | awk '{ print $1 }')
-    for branch in ${branch_names}; do
-        set +o errexit
-        if [[ "${branch}" =~ '/' ]]; then
-            git push --delete --quiet "${branch%/*}" "${branch#*/}"
-        else
-            git branch --delete --force --quiet "${branch}" &> /dev/null
-        fi
-        exit_code=$?
-        set -o errexit
-        if [[ ${exit_code} == 0 ]]; then
-            _print_success_message "Branch '${branch}' was deleted"
-        else
-            _print_failure_message "Branch '${branch}' was not deleted"
-            overall_exit_code=${exit_code}
-        fi
-    done
+  # Show information.
+  _print_branches all 10
 
-    # Show information.
-    _print_branches all 10
-
-    # Exit with a non-zero code if any branches could not be deleted.
-    exit ${overall_exit_code}
+  # Exit with a non-zero code if any branches could not be deleted.
+  exit ${overall_exit_code}
 }
-
 
 ###############################################################################
 #
@@ -269,17 +261,16 @@ git_branch_delete() {
 #
 ###############################################################################
 git_branch_list_all() {
-    # Get the branches.
-    branches=$(_branches all)
+  # Get the branches.
+  branches=$(_branches all)
 
-    # Show the branches.
-    if [[ -n ${1-} ]]; then
-        echo "${branches}" | awk -v pattern="${1}" '$1 ~ pattern'
-    else
-        echo "${branches}"
-    fi
+  # Show the branches.
+  if [[ -n ${1-} ]]; then
+    echo "${branches}" | awk -v pattern="${1}" '$1 ~ pattern'
+  else
+    echo "${branches}"
+  fi
 }
-
 
 ###############################################################################
 #
@@ -290,17 +281,16 @@ git_branch_list_all() {
 #
 ###############################################################################
 git_branch_list_local() {
-    # Get the branches.
-    branches=$(_branches local)
+  # Get the branches.
+  branches=$(_branches local)
 
-    # Show the branches.
-    if [[ -n ${1-} ]]; then
-        echo "${branches}" | awk -v pattern="${1}" '$1 ~ pattern'
-    else
-        echo "${branches}"
-    fi
+  # Show the branches.
+  if [[ -n ${1-} ]]; then
+    echo "${branches}" | awk -v pattern="${1}" '$1 ~ pattern'
+  else
+    echo "${branches}"
+  fi
 }
-
 
 ###############################################################################
 #
@@ -311,17 +301,16 @@ git_branch_list_local() {
 #
 ###############################################################################
 git_branch_list_remote() {
-    # Get the branches.
-    branches=$(_branches remote)
+  # Get the branches.
+  branches=$(_branches remote)
 
-    # Show the branches.
-    if [[ -n ${1-} ]]; then
-        echo "${branches}" | awk -v pattern="${1}" '$1 ~ pattern'
-    else
-        echo "${branches}"
-    fi
+  # Show the branches.
+  if [[ -n ${1-} ]]; then
+    echo "${branches}" | awk -v pattern="${1}" '$1 ~ pattern'
+  else
+    echo "${branches}"
+  fi
 }
-
 
 ###############################################################################
 #
@@ -332,22 +321,21 @@ git_branch_list_remote() {
 #
 ###############################################################################
 git_branch_rename() {
-    # Check that a new branch name is given.
-    if [[ -z ${1-} ]]; then
-        _print_failure_message 'A new branch name is required'
-        exit 1
-    fi
+  # Check that a new branch name is given.
+  if [[ -z ${1-} ]]; then
+    _print_failure_message 'A new branch name is required'
+    exit 1
+  fi
 
-    # Rename the branch.
-    old_branch_name=$(_current_branch)
-    git branch --move "${1}"
-    new_branch_name=$(_current_branch)
+  # Rename the branch.
+  old_branch_name=$(_current_branch)
+  git branch --move "${1}"
+  new_branch_name=$(_current_branch)
 
-    # Show information.
-    _print_result "${old_branch_name}" "${new_branch_name}"
-    _print_branches local 5
+  # Show information.
+  _print_result "${old_branch_name}" "${new_branch_name}"
+  _print_branches local 5
 }
-
 
 ###############################################################################
 #
@@ -358,15 +346,14 @@ git_branch_rename() {
 #
 ###############################################################################
 git_branch_set_upstream() {
-    # Set the upstream branch.
-    remote=$(git remote)
-    branch=$(_current_branch)
-    git branch --set-upstream-to="${remote}/${branch}" "${branch}"
+  # Set the upstream branch.
+  remote=$(git remote)
+  branch=$(_current_branch)
+  git branch --set-upstream-to="${remote}/${branch}" "${branch}"
 
-    # Show information.
-    _print_success_message "Done"
+  # Show information.
+  _print_success_message "Done"
 }
-
 
 ###############################################################################
 #
@@ -377,17 +364,17 @@ git_branch_set_upstream() {
 #
 ###############################################################################
 git_checkout() {
-    # Do the checkout.
-    initial_branch=$(_current_branch)
-    git checkout --quiet "${@}"
-    final_branch=$(_current_branch)
+  # Do the checkout.
+  initial_branch=$(_current_branch)
+  git checkout --quiet "${@}"
+  final_branch=$(_current_branch)
 
-    # Show information.
-    _print_result "${initial_branch}" "${final_branch}"
-    if [[ "${initial_branch}" != "${final_branch}" ]]; then
-        _print_changes
-        _print_recent_commits
-    fi
+  # Show information.
+  _print_result "${initial_branch}" "${final_branch}"
+  if [[ "${initial_branch}" != "${final_branch}" ]]; then
+    _print_changes
+    _print_recent_commits
+  fi
 }
 
 ###############################################################################
@@ -401,35 +388,34 @@ git_checkout() {
 #
 ###############################################################################
 git_cherry_pick() {
-    # Do the cherry-pick.
-    initial_commit_hash=$(_latest_commit_hash)
-    if [[ -n ${1-} ]]; then
-        git cherry-pick "${1}"
-    else
-        set +o errexit
-        branch=$(
-            _select_any_other_branch 'Select the branch to cherry-pick from'
-        )
-        exit_code=$?
-        set -o errexit
-        _exit_on_error ${exit_code} 'No branch selected'
+  # Do the cherry-pick.
+  initial_commit_hash=$(_latest_commit_hash)
+  if [[ -n ${1-} ]]; then
+    git cherry-pick "${1}"
+  else
+    set +o errexit
+    branch=$(
+      _select_any_other_branch 'Select the branch to cherry-pick from'
+    )
+    exit_code=$?
+    set -o errexit
+    _exit_on_error ${exit_code} 'No branch selected'
 
-        set +o errexit
-        commit=$(_select_commit 'Select the commit to cherry-pick' "${branch}")
-        exit_code=$?
-        set -o errexit
-        _exit_on_error ${exit_code} 'No commit selected'
+    set +o errexit
+    commit=$(_select_commit 'Select the commit to cherry-pick' "${branch}")
+    exit_code=$?
+    set -o errexit
+    _exit_on_error ${exit_code} 'No commit selected'
 
-        git cherry-pick "${commit}"
-    fi
-    final_commit_hash=$(_latest_commit_hash)
+    git cherry-pick "${commit}"
+  fi
+  final_commit_hash=$(_latest_commit_hash)
 
-    # Show information.
-    _print_result "${initial_commit_hash}" "${final_commit_hash}"
-    _print_changes
-    _print_recent_commits
+  # Show information.
+  _print_result "${initial_commit_hash}" "${final_commit_hash}"
+  _print_changes
+  _print_recent_commits
 }
-
 
 ###############################################################################
 #
@@ -440,15 +426,14 @@ git_cherry_pick() {
 #
 ###############################################################################
 git_cherry_pick_abort() {
-    # Abort the cherry-pick.
-    git cherry-pick --abort
+  # Abort the cherry-pick.
+  git cherry-pick --abort
 
-    # Show information.
-    _print_success_message 'Cherry-pick aborted'
-    _print_changes
-    _print_recent_commits
+  # Show information.
+  _print_success_message 'Cherry-pick aborted'
+  _print_changes
+  _print_recent_commits
 }
-
 
 ###############################################################################
 #
@@ -459,9 +444,8 @@ git_cherry_pick_abort() {
 #
 ###############################################################################
 git_cherry_pick_continue() {
-    git cherry-pick --continue
+  git cherry-pick --continue
 }
-
 
 ###############################################################################
 #
@@ -472,16 +456,15 @@ git_cherry_pick_continue() {
 #
 ###############################################################################
 git_clean() {
-    # Do the clean.
-    initial_untracked_files=$(_untracked_files)
-    git clean -d --force --quiet
-    final_untracked_files=$(_untracked_files)
+  # Do the clean.
+  initial_untracked_files=$(_untracked_files)
+  git clean -d --force --quiet
+  final_untracked_files=$(_untracked_files)
 
-    # Show information.
-    _print_result "${initial_untracked_files}" "${final_untracked_files}"
-    _print_changes
+  # Show information.
+  _print_result "${initial_untracked_files}" "${final_untracked_files}"
+  _print_changes
 }
-
 
 ###############################################################################
 #
@@ -492,19 +475,18 @@ git_clean() {
 #
 ###############################################################################
 git_commit() {
-    # Make the commit.
-    if [[ -n ${1-} ]]; then
-        git commit --message="${*}" --quiet
-    else
-        git commit --quiet
-    fi
+  # Make the commit.
+  if [[ -n ${1-} ]]; then
+    git commit --message="${*}" --quiet
+  else
+    git commit --quiet
+  fi
 
-    # Show information.
-    _print_success_message 'Done'
-    _print_changes
-    _print_recent_commits
+  # Show information.
+  _print_success_message 'Done'
+  _print_changes
+  _print_recent_commits
 }
-
 
 ###############################################################################
 #
@@ -515,15 +497,14 @@ git_commit() {
 #
 ###############################################################################
 git_commit_amend() {
-    # Amend the commit.
-    git commit --amend --quiet
+  # Amend the commit.
+  git commit --amend --quiet
 
-    # Show information.
-    _print_success_message 'Done'
-    _print_changes
-    _print_recent_commits
+  # Show information.
+  _print_success_message 'Done'
+  _print_changes
+  _print_recent_commits
 }
-
 
 ###############################################################################
 #
@@ -534,15 +515,14 @@ git_commit_amend() {
 #
 ###############################################################################
 git_commit_amend_reuse_message() {
-    # Amend the commit.
-    git commit --amend --quiet --reuse-message=HEAD
+  # Amend the commit.
+  git commit --amend --quiet --reuse-message=HEAD
 
-    # Show information.
-    _print_success_message 'Done'
-    _print_changes
-    _print_recent_commits
+  # Show information.
+  _print_success_message 'Done'
+  _print_changes
+  _print_recent_commits
 }
-
 
 ###############################################################################
 #
@@ -553,9 +533,8 @@ git_commit_amend_reuse_message() {
 #
 ###############################################################################
 git_commit_checkpoint() {
-    git_commit 'Checkpoint'
+  git_commit 'Checkpoint'
 }
-
 
 ###############################################################################
 #
@@ -566,28 +545,27 @@ git_commit_checkpoint() {
 #
 ###############################################################################
 git_commit_fixup() {
-    # Don't run the commit selector if there is nothing to commit.
-    if [[ -z $(git diff --staged) ]]; then
-        _print_failure_message 'Nothing staged to commit'
-        exit 1
-    fi
+  # Don't run the commit selector if there is nothing to commit.
+  if [[ -z $(git diff --staged) ]]; then
+    _print_failure_message 'Nothing staged to commit'
+    exit 1
+  fi
 
-    # Get the commit to fixup.
-    set +o errexit
-    commit=$(_select_commit 'Select the commit to fixup')
-    exit_code=$?
-    set -o errexit
-    _exit_on_error ${exit_code} 'No commit selected'
+  # Get the commit to fixup.
+  set +o errexit
+  commit=$(_select_commit 'Select the commit to fixup')
+  exit_code=$?
+  set -o errexit
+  _exit_on_error ${exit_code} 'No commit selected'
 
-    # Make the commit.
-    git commit --fixup="${commit}" --quiet
+  # Make the commit.
+  git commit --fixup="${commit}" --quiet
 
-    # Show information.
-    _print_success_message 'Done'
-    _print_changes
-    _print_recent_commits
+  # Show information.
+  _print_success_message 'Done'
+  _print_changes
+  _print_recent_commits
 }
-
 
 ###############################################################################
 #
@@ -598,9 +576,8 @@ git_commit_fixup() {
 #
 ###############################################################################
 git_diff() {
-    git diff "${@}"
+  git diff "${@}"
 }
-
 
 ###############################################################################
 #
@@ -611,25 +588,24 @@ git_diff() {
 #
 ###############################################################################
 git_diff_remote() {
-    # Get remote and branch names.
-    remote=$(git remote)
-    branch=$(_current_branch)
-    remote_branch="${remote}/${branch}"
+  # Get remote and branch names.
+  remote=$(git remote)
+  branch=$(_current_branch)
+  remote_branch="${remote}/${branch}"
 
-    # Don't do the diff if there is no remote branch to diff with.
-    if ! git branch --list --remote | grep --quiet "${remote_branch}"; then
-        _print_failure_message "There is no ${remote_branch} branch"
-        exit 1
-    fi
+  # Don't do the diff if there is no remote branch to diff with.
+  if ! git branch --list --remote | grep --quiet "${remote_branch}"; then
+    _print_failure_message "There is no ${remote_branch} branch"
+    exit 1
+  fi
 
-    # Do the diff.
-    if [[ -n $(git diff "${remote_branch}" "${branch}") ]]; then
-        git diff "${remote_branch}" "${branch}"
-    else
-        _print_success_message 'No difference'
-    fi
+  # Do the diff.
+  if [[ -n $(git diff "${remote_branch}" "${branch}") ]]; then
+    git diff "${remote_branch}" "${branch}"
+  else
+    _print_success_message 'No difference'
+  fi
 }
-
 
 ###############################################################################
 #
@@ -640,9 +616,8 @@ git_diff_remote() {
 #
 ###############################################################################
 git_diff_staged() {
-    git diff --staged
+  git diff --staged
 }
-
 
 ###############################################################################
 #
@@ -653,9 +628,8 @@ git_diff_staged() {
 #
 ###############################################################################
 git_diff_unstaged() {
-    git diff
+  git diff
 }
-
 
 ###############################################################################
 #
@@ -666,14 +640,13 @@ git_diff_unstaged() {
 #
 ###############################################################################
 git_fetch() {
-    # Do the fetch.
-    git fetch --all --prune
+  # Do the fetch.
+  git fetch --all --prune
 
-    # Show information.
-    _print_success_message 'Done'
-    _print_branches remote 10
+  # Show information.
+  _print_success_message 'Done'
+  _print_branches remote 10
 }
-
 
 ###############################################################################
 #
@@ -684,14 +657,13 @@ git_fetch() {
 #
 ###############################################################################
 git_log() {
-    # Show the commits.
-    if [[ -n ${1-} ]]; then
-        git log --max-count="${1}"
-    else
-        git log --max-count=10
-    fi
+  # Show the commits.
+  if [[ -n ${1-} ]]; then
+    git log --max-count="${1}"
+  else
+    git log --max-count=10
+  fi
 }
-
 
 ###############################################################################
 #
@@ -702,9 +674,8 @@ git_log() {
 #
 ###############################################################################
 git_log_graph() {
-    git log --all --graph
+  git log --all --graph
 }
-
 
 ###############################################################################
 #
@@ -717,37 +688,36 @@ git_log_graph() {
 #
 ###############################################################################
 git_merge() {
-    # Do the merge.
-    initial_commit_hash=$(_latest_commit_hash)
-    if [[ -n ${1-} ]]; then
-        git merge --quiet "${@}"
-    else
-        set +o errexit
-        branch=$(
-            _select_any_other_branch \
-                'Select the branch containing the commit to merge'
-        )
-        exit_code=$?
-        set -o errexit
-        _exit_on_error ${exit_code} 'No branch selected'
+  # Do the merge.
+  initial_commit_hash=$(_latest_commit_hash)
+  if [[ -n ${1-} ]]; then
+    git merge --quiet "${@}"
+  else
+    set +o errexit
+    branch=$(
+      _select_any_other_branch \
+        'Select the branch containing the commit to merge'
+    )
+    exit_code=$?
+    set -o errexit
+    _exit_on_error ${exit_code} 'No branch selected'
 
-        set +o errexit
-        commit=$(_select_commit 'Select the commit to merge' "${branch}")
-        exit_code=$?
-        set -o errexit
-        _exit_on_error ${exit_code} 'No commit selected'
-        git merge --quiet "${commit}"
-    fi
-    final_commit_hash=$(_latest_commit_hash)
+    set +o errexit
+    commit=$(_select_commit 'Select the commit to merge' "${branch}")
+    exit_code=$?
+    set -o errexit
+    _exit_on_error ${exit_code} 'No commit selected'
+    git merge --quiet "${commit}"
+  fi
+  final_commit_hash=$(_latest_commit_hash)
 
-    # Show information.
-    _print_result "${initial_commit_hash}" "${final_commit_hash}"
-    if [[ "${initial_commit_hash}" != "${final_commit_hash}" ]]; then
-        _print_changes
-        _print_recent_commits
-    fi
+  # Show information.
+  _print_result "${initial_commit_hash}" "${final_commit_hash}"
+  if [[ "${initial_commit_hash}" != "${final_commit_hash}" ]]; then
+    _print_changes
+    _print_recent_commits
+  fi
 }
-
 
 ###############################################################################
 #
@@ -758,25 +728,24 @@ git_merge() {
 #
 ###############################################################################
 git_pull() {
-    # Do the pull.
-    initial_commit_hash=$(_latest_commit_hash)
-    initial_commit_count=$(_commit_count)
-    git pull --quiet "${@}"
-    final_commit_hash=$(_latest_commit_hash)
-    final_commit_count=$(_commit_count)
+  # Do the pull.
+  initial_commit_hash=$(_latest_commit_hash)
+  initial_commit_count=$(_commit_count)
+  git pull --quiet "${@}"
+  final_commit_hash=$(_latest_commit_hash)
+  final_commit_count=$(_commit_count)
 
-    # Show information.
-    _print_result "${initial_commit_hash}" "${final_commit_hash}"
-    if [[ "${initial_commit_hash}" != "${final_commit_hash}" ]]; then
-        echo
-        _print_magenta 'Commits pulled'
-        commits_pulled_count=$((final_commit_count - initial_commit_count))
-        git log --max-count="${commits_pulled_count}"
-    else
-        _print_success_message "No changes to pull"
-    fi
+  # Show information.
+  _print_result "${initial_commit_hash}" "${final_commit_hash}"
+  if [[ "${initial_commit_hash}" != "${final_commit_hash}" ]]; then
+    echo
+    _print_magenta 'Commits pulled'
+    commits_pulled_count=$((final_commit_count - initial_commit_count))
+    git log --max-count="${commits_pulled_count}"
+  else
+    _print_success_message "No changes to pull"
+  fi
 }
-
 
 ###############################################################################
 #
@@ -787,41 +756,39 @@ git_pull() {
 #
 ###############################################################################
 git_push() {
-    # Get remote and branch names.
-    remote=$(git remote)
-    branch=$(_current_branch)
-    remote_branch="${remote}/${branch}"
+  # Get remote and branch names.
+  remote=$(git remote)
+  branch=$(_current_branch)
+  remote_branch="${remote}/${branch}"
 
-    # If there is no remote branch yet, do the push, show information, then
-    # exit.
-    if ! git branch --list --remote | grep --quiet "${remote_branch}"; then
-        git push --quiet "${@}"
-        _print_success_message 'Done'
-        _print_success_message "New branch ${remote_branch} created"
-        exit 0
-    fi
-
-    # If there is a remote branch, do the push.
-    initial_remote_commit_hash=$(_latest_commit_hash "${remote_branch}")
-    initial_remote_commit_count=$(_commit_count "${remote_branch}")
+  # If there is no remote branch yet, do the push, show information, then
+  # exit.
+  if ! git branch --list --remote | grep --quiet "${remote_branch}"; then
     git push --quiet "${@}"
-    final_remote_commit_hash=$(_latest_commit_hash "${remote_branch}")
-    final_remote_commit_count=$(_commit_count "${remote_branch}")
+    _print_success_message 'Done'
+    _print_success_message "New branch ${remote_branch} created"
+    exit 0
+  fi
 
-    # Show information.
-    _print_result "${initial_remote_commit_hash}" "${final_remote_commit_hash}"
-    if [[
-        ${initial_remote_commit_hash} != "${final_remote_commit_hash}"
-    ]]; then
-        echo
-        _print_magenta 'Commits pushed'
-        remote_commits_pushed_count=$((
-            final_remote_commit_count - initial_remote_commit_count
-        ))
-        git log --max-count="${remote_commits_pushed_count}"
-    fi
+  # If there is a remote branch, do the push.
+  initial_remote_commit_hash=$(_latest_commit_hash "${remote_branch}")
+  initial_remote_commit_count=$(_commit_count "${remote_branch}")
+  git push --quiet "${@}"
+  final_remote_commit_hash=$(_latest_commit_hash "${remote_branch}")
+  final_remote_commit_count=$(_commit_count "${remote_branch}")
+
+  # Show information.
+  _print_result "${initial_remote_commit_hash}" "${final_remote_commit_hash}"
+  if [[ 
+    ${initial_remote_commit_hash} != "${final_remote_commit_hash}" ]] \
+    ; then
+    echo
+    _print_magenta 'Commits pushed'
+    remote_commits_pushed_count=$((\
+      final_remote_commit_count - initial_remote_commit_count))
+    git log --max-count="${remote_commits_pushed_count}"
+  fi
 }
-
 
 ###############################################################################
 #
@@ -832,14 +799,13 @@ git_push() {
 #
 ###############################################################################
 git_push_force_with_lease() {
-    # Do the push.
-    git push --force-with-lease --quiet "${@}"
+  # Do the push.
+  git push --force-with-lease --quiet "${@}"
 
-    # Show information.
-    _print_success_message 'Done'
-    _print_changes
+  # Show information.
+  _print_success_message 'Done'
+  _print_changes
 }
-
 
 ###############################################################################
 #
@@ -850,45 +816,42 @@ git_push_force_with_lease() {
 #
 ###############################################################################
 git_rebase() {
-    # Get the branch to rebase onto.
-    if [[ -n ${1-} ]]; then
-        target_branch="${1}"
-    else
-        set +o errexit
-        target_branch=$(
-            _select_any_other_branch 'Select the branch to rebase onto'
-        )
-        exit_code=$?
-        set -o errexit
-        _exit_on_error ${exit_code} 'No branch selected'
-    fi
+  # Get the branch to rebase onto.
+  if [[ -n ${1-} ]]; then
+    target_branch="${1}"
+  else
+    set +o errexit
+    target_branch=$(
+      _select_any_other_branch 'Select the branch to rebase onto'
+    )
+    exit_code=$?
+    set -o errexit
+    _exit_on_error ${exit_code} 'No branch selected'
+  fi
 
-    # Do the rebase.
-    initial_rebasing_branch_commit_hash=$(_latest_commit_hash)
-    initial_target_branch_commit_count=$(_commit_count "${target_branch}")
-    git rebase --quiet "${target_branch}"
-    final_rebasing_branch_commit_hash=$(_latest_commit_hash)
-    final_rebasing_branch_commit_count=$(_commit_count)
+  # Do the rebase.
+  initial_rebasing_branch_commit_hash=$(_latest_commit_hash)
+  initial_target_branch_commit_count=$(_commit_count "${target_branch}")
+  git rebase --quiet "${target_branch}"
+  final_rebasing_branch_commit_hash=$(_latest_commit_hash)
+  final_rebasing_branch_commit_count=$(_commit_count)
 
-    # Show information.
-    _print_result \
-        "${initial_rebasing_branch_commit_hash}" \
-        "${final_rebasing_branch_commit_hash}"
-    if [[
-        "${initial_rebasing_branch_commit_hash}" != \
-            "${final_rebasing_branch_commit_hash}"
-    ]]; then
-        _print_success_message "Rebased onto ${target_branch}"
-        echo
-        _print_magenta 'Commits rebased'
-        commits_rebased_count=$((
-            final_rebasing_branch_commit_count -
-            initial_target_branch_commit_count
-        ))
-        git log --max-count="${commits_rebased_count}"
-    fi
+  # Show information.
+  _print_result \
+    "${initial_rebasing_branch_commit_hash}" \
+    "${final_rebasing_branch_commit_hash}"
+  if [[ 
+    "${initial_rebasing_branch_commit_hash}" != "${final_rebasing_branch_commit_hash}" ]] \
+    ; then
+    _print_success_message "Rebased onto ${target_branch}"
+    echo
+    _print_magenta 'Commits rebased'
+    commits_rebased_count=$((\
+      final_rebasing_branch_commit_count - \
+      initial_target_branch_commit_count))
+    git log --max-count="${commits_rebased_count}"
+  fi
 }
-
 
 ###############################################################################
 #
@@ -899,15 +862,14 @@ git_rebase() {
 #
 ###############################################################################
 git_rebase_abort() {
-    # Abort the rebase.
-    git rebase --abort
+  # Abort the rebase.
+  git rebase --abort
 
-    # Show information.
-    _print_success_message 'Rebase aborted'
-    _print_latest_commit
-    _print_changes
+  # Show information.
+  _print_success_message 'Rebase aborted'
+  _print_latest_commit
+  _print_changes
 }
-
 
 ###############################################################################
 #
@@ -918,9 +880,8 @@ git_rebase_abort() {
 #
 ###############################################################################
 git_rebase_continue() {
-    git rebase --continue
+  git rebase --continue
 }
-
 
 ###############################################################################
 #
@@ -931,51 +892,49 @@ git_rebase_continue() {
 #
 ###############################################################################
 git_rebase_interactive() {
-    # Unstaged changes will cause the rebase to fail, so exit if there are any.
-    if [[ -n $(git diff) ]]; then
-        _print_failure_message "There are unstaged changes"
-        exit 1
-    fi
+  # Unstaged changes will cause the rebase to fail, so exit if there are any.
+  if [[ -n $(git diff) ]]; then
+    _print_failure_message "There are unstaged changes"
+    exit 1
+  fi
 
-    # Get the commit to rebase from.
-    set +o errexit
-    selected_commit=$(_select_commit 'Select the commit to rebase from')
-    exit_code=$?
-    set -o errexit
-    _exit_on_error ${exit_code} 'No commit selected'
-    # Use git log rather than a plumbing command because it's the only way to
-    # handle a root commit being selected without crashing.
-    parent_commit=$(git log --pretty=%P -n 1 "${selected_commit}")
-    if [[ -n ${parent_commit} ]]; then
-        target_commit="${parent_commit}"
-    else
-        target_commit="${selected_commit}"
-    fi
+  # Get the commit to rebase from.
+  set +o errexit
+  selected_commit=$(_select_commit 'Select the commit to rebase from')
+  exit_code=$?
+  set -o errexit
+  _exit_on_error ${exit_code} 'No commit selected'
+  # Use git log rather than a plumbing command because it's the only way to
+  # handle a root commit being selected without crashing.
+  parent_commit=$(git log --pretty=%P -n 1 "${selected_commit}")
+  if [[ -n ${parent_commit} ]]; then
+    target_commit="${parent_commit}"
+  else
+    target_commit="${selected_commit}"
+  fi
 
-    # Do the rebase.
-    initial_commit_hash=$(_latest_commit_hash)
-    commits_before_target_commit_count=$(_commit_count "${target_commit}")
-    if [[ -n ${parent_commit} ]]; then
-        git rebase --interactive --quiet "${target_commit}"
-    else
-        git rebase --interactive --quiet --root "${target_commit}"
-    fi
-    final_commit_hash=$(_latest_commit_hash)
-    current_branch_commit_count=$(_commit_count)
-    rebased_commits_count=$((
-        current_branch_commit_count -
-        commits_before_target_commit_count
-    ))
+  # Do the rebase.
+  initial_commit_hash=$(_latest_commit_hash)
+  commits_before_target_commit_count=$(_commit_count "${target_commit}")
+  if [[ -n ${parent_commit} ]]; then
+    git rebase --interactive --quiet "${target_commit}"
+  else
+    git rebase --interactive --quiet --root "${target_commit}"
+  fi
+  final_commit_hash=$(_latest_commit_hash)
+  current_branch_commit_count=$(_commit_count)
+  rebased_commits_count=$((\
+    current_branch_commit_count - \
+    commits_before_target_commit_count))
 
-    # Show information.
-    _print_result "${initial_commit_hash}" "${final_commit_hash}"
-    if [[ "${initial_commit_hash}" != "${final_commit_hash}" ]]; then
-        echo
-        _print_magenta 'Rebased commits'
-        git log --max-count="${rebased_commits_count}"
-    fi
+  # Show information.
+  _print_result "${initial_commit_hash}" "${final_commit_hash}"
+  if [[ "${initial_commit_hash}" != "${final_commit_hash}" ]]; then
+    echo
+    _print_magenta 'Rebased commits'
+    git log --max-count="${rebased_commits_count}"
+  fi
 }
-
 
 ###############################################################################
 #
@@ -986,51 +945,49 @@ git_rebase_interactive() {
 #
 ###############################################################################
 git_rebase_interactive_with_autosquash() {
-    # Unstaged changes will cause the rebase to fail, so exit if there are any.
-    if [[ -n $(git diff) ]]; then
-        _print_failure_message "There are unstaged changes"
-        exit 1
-    fi
+  # Unstaged changes will cause the rebase to fail, so exit if there are any.
+  if [[ -n $(git diff) ]]; then
+    _print_failure_message "There are unstaged changes"
+    exit 1
+  fi
 
-    # Get the commit to rebase from.
-    set +o errexit
-    selected_commit=$(_select_commit 'Select the commit to rebase from')
-    exit_code=$?
-    set -o errexit
-    _exit_on_error ${exit_code} 'No commit selected'
-    # Use git log rather than a plumbing command because it's the only way to
-    # handle a root commit being selected without crashing.
-    parent_commit=$(git log --pretty=%P -n 1 "${selected_commit}")
-    if [[ -n ${parent_commit} ]]; then
-        target_commit="${parent_commit}"
-    else
-        target_commit="${selected_commit}"
-    fi
+  # Get the commit to rebase from.
+  set +o errexit
+  selected_commit=$(_select_commit 'Select the commit to rebase from')
+  exit_code=$?
+  set -o errexit
+  _exit_on_error ${exit_code} 'No commit selected'
+  # Use git log rather than a plumbing command because it's the only way to
+  # handle a root commit being selected without crashing.
+  parent_commit=$(git log --pretty=%P -n 1 "${selected_commit}")
+  if [[ -n ${parent_commit} ]]; then
+    target_commit="${parent_commit}"
+  else
+    target_commit="${selected_commit}"
+  fi
 
-    # Do the rebase.
-    initial_commit_hash=$(_latest_commit_hash)
-    commits_before_target_commit_count=$(_commit_count "${target_commit}")
-    if [[ -n ${parent_commit} ]]; then
-        git rebase --autosquash --interactive --quiet "${target_commit}"
-    else
-        git rebase --autosquash --interactive --quiet --root "${target_commit}"
-    fi
-    final_commit_hash=$(_latest_commit_hash)
-    current_branch_commit_count=$(_commit_count)
-    rebased_commits_count=$((
-        current_branch_commit_count -
-        commits_before_target_commit_count
-    ))
+  # Do the rebase.
+  initial_commit_hash=$(_latest_commit_hash)
+  commits_before_target_commit_count=$(_commit_count "${target_commit}")
+  if [[ -n ${parent_commit} ]]; then
+    git rebase --autosquash --interactive --quiet "${target_commit}"
+  else
+    git rebase --autosquash --interactive --quiet --root "${target_commit}"
+  fi
+  final_commit_hash=$(_latest_commit_hash)
+  current_branch_commit_count=$(_commit_count)
+  rebased_commits_count=$((\
+    current_branch_commit_count - \
+    commits_before_target_commit_count))
 
-    # Show information.
-    _print_result "${initial_commit_hash}" "${final_commit_hash}"
-    if [[ "${initial_commit_hash}" != "${final_commit_hash}" ]]; then
-        echo
-        _print_magenta 'Rebased commits'
-        git log --max-count="${rebased_commits_count}"
-    fi
+  # Show information.
+  _print_result "${initial_commit_hash}" "${final_commit_hash}"
+  if [[ "${initial_commit_hash}" != "${final_commit_hash}" ]]; then
+    echo
+    _print_magenta 'Rebased commits'
+    git log --max-count="${rebased_commits_count}"
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1041,21 +998,20 @@ git_rebase_interactive_with_autosquash() {
 #
 ###############################################################################
 git_reset_head() {
-    # Check that the number of commits is given.
-    if [[ -z ${1-} ]]; then
-        _print_failure_message 'The number of commits to undo is required.'
-        exit 1
-    fi
+  # Check that the number of commits is given.
+  if [[ -z ${1-} ]]; then
+    _print_failure_message 'The number of commits to undo is required.'
+    exit 1
+  fi
 
-    # Undo the commits.
-    git reset --quiet HEAD~"${1}"
+  # Undo the commits.
+  git reset --quiet HEAD~"${1}"
 
-    # Show information.
-    _print_success_message "Done"
-    _print_changes
-    _print_recent_commits
+  # Show information.
+  _print_success_message "Done"
+  _print_changes
+  _print_recent_commits
 }
-
 
 ###############################################################################
 #
@@ -1066,9 +1022,8 @@ git_reset_head() {
 #
 ###############################################################################
 git_show() {
-    git show --format=full
+  git show --format=full
 }
-
 
 ###############################################################################
 #
@@ -1079,26 +1034,24 @@ git_show() {
 #
 ###############################################################################
 git_stash() {
-    # Stash the changes.
-    initial_staged_diff=$(_staged_diff_hash)
-    initial_unstaged_diff=$(_unstaged_diff_hash)
-    git stash --quiet
-    final_staged_diff=$(_staged_diff_hash)
-    final_unstaged_diff=$(_unstaged_diff_hash)
+  # Stash the changes.
+  initial_staged_diff=$(_staged_diff_hash)
+  initial_unstaged_diff=$(_unstaged_diff_hash)
+  git stash --quiet
+  final_staged_diff=$(_staged_diff_hash)
+  final_unstaged_diff=$(_unstaged_diff_hash)
 
-    # Show information.
-    _print_result \
-        "${initial_staged_diff}${initial_unstaged_diff}" \
-        "${final_staged_diff}${final_unstaged_diff}"
-    if [[
-        "${initial_staged_diff}${initial_unstaged_diff}" != \
-            "${final_staged_diff}${final_unstaged_diff}"
-    ]]; then
-        _print_changes
-        _print_latest_commit
-    fi
+  # Show information.
+  _print_result \
+    "${initial_staged_diff}${initial_unstaged_diff}" \
+    "${final_staged_diff}${final_unstaged_diff}"
+  if [[ 
+    "${initial_staged_diff}${initial_unstaged_diff}" != "${final_staged_diff}${final_unstaged_diff}" ]] \
+    ; then
+    _print_changes
+    _print_latest_commit
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1109,26 +1062,24 @@ git_stash() {
 #
 ###############################################################################
 git_stash_pop() {
-    # Pop the stashed changes.
-    initial_staged_diff=$(_staged_diff_hash)
-    initial_unstaged_diff=$(_unstaged_diff_hash)
-    git stash pop --quiet
-    final_staged_diff=$(_staged_diff_hash)
-    final_unstaged_diff=$(_unstaged_diff_hash)
+  # Pop the stashed changes.
+  initial_staged_diff=$(_staged_diff_hash)
+  initial_unstaged_diff=$(_unstaged_diff_hash)
+  git stash pop --quiet
+  final_staged_diff=$(_staged_diff_hash)
+  final_unstaged_diff=$(_unstaged_diff_hash)
 
-    # Show information.
-    _print_result \
-        "${initial_staged_diff}${initial_unstaged_diff}" \
-        "${final_staged_diff}${final_unstaged_diff}"
-    if [[
-        "${initial_staged_diff}${initial_unstaged_diff}" != \
-            "${final_staged_diff}${final_unstaged_diff}"
-    ]]; then
-        _print_changes
-        _print_latest_commit
-    fi
+  # Show information.
+  _print_result \
+    "${initial_staged_diff}${initial_unstaged_diff}" \
+    "${final_staged_diff}${final_unstaged_diff}"
+  if [[ 
+    "${initial_staged_diff}${initial_unstaged_diff}" != "${final_staged_diff}${final_unstaged_diff}" ]] \
+    ; then
+    _print_changes
+    _print_latest_commit
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1139,17 +1090,16 @@ git_stash_pop() {
 #
 ###############################################################################
 git_status() {
-    # Check that the command was issued inside a repository.
-    if ! git rev-parse --show-toplevel &> /dev/null; then
-        _print_failure_message 'Not in a repository'
-        exit 1
-    fi
+  # Check that the command was issued inside a repository.
+  if ! git rev-parse --show-toplevel &>/dev/null; then
+    _print_failure_message 'Not in a repository'
+    exit 1
+  fi
 
-    # Show information.
-    _print_changes
-    _print_latest_commit
+  # Show information.
+  _print_changes
+  _print_latest_commit
 }
-
 
 ###############################################################################
 #
@@ -1160,28 +1110,27 @@ git_status() {
 #
 ###############################################################################
 git_switch() {
-    # Switch to a different branch.
-    initial_branch=$(_current_branch)
-    if [[ -n ${1-} ]]; then
-        git switch --quiet "${@}"
-    else
-        set +o errexit
-        branch=$(_select_branch_to_switch_to)
-        exit_code=$?
-        set -o errexit
-        _exit_on_error ${exit_code} 'No branch selected'
-        git switch --quiet "${branch}"
-    fi
-    final_branch=$(_current_branch)
+  # Switch to a different branch.
+  initial_branch=$(_current_branch)
+  if [[ -n ${1-} ]]; then
+    git switch --quiet "${@}"
+  else
+    set +o errexit
+    branch=$(_select_branch_to_switch_to)
+    exit_code=$?
+    set -o errexit
+    _exit_on_error ${exit_code} 'No branch selected'
+    git switch --quiet "${branch}"
+  fi
+  final_branch=$(_current_branch)
 
-    # Show information.
-    _print_result "${initial_branch}" "${final_branch}"
-    if [[ "${initial_branch}" != "${final_branch}" ]]; then
-        _print_changes
-        _print_recent_commits
-    fi
+  # Show information.
+  _print_result "${initial_branch}" "${final_branch}"
+  if [[ "${initial_branch}" != "${final_branch}" ]]; then
+    _print_changes
+    _print_recent_commits
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1191,24 +1140,23 @@ git_switch() {
 #    Strings (optional). The parameters to pass to the restore operation.
 #
 ###############################################################################
-git_unchange () {
-    # Undo the unstaged changes.
-    initial_diff_hash=$(_unstaged_diff_hash)
-    if [[ -n ${1-} ]]; then
-        git restore "${@}"
-    else
-        git restore .
-    fi
-    final_diff_hash=$(_unstaged_diff_hash)
+git_unchange() {
+  # Undo the unstaged changes.
+  initial_diff_hash=$(_unstaged_diff_hash)
+  if [[ -n ${1-} ]]; then
+    git restore "${@}"
+  else
+    git restore .
+  fi
+  final_diff_hash=$(_unstaged_diff_hash)
 
-    # Show information.
-    _print_result "${initial_diff_hash}" "${final_diff_hash}"
-    if [[ "${initial_diff_hash}" != "${final_diff_hash}" ]]; then
-        _print_changes
-        _print_recent_commits
-    fi
+  # Show information.
+  _print_result "${initial_diff_hash}" "${final_diff_hash}"
+  if [[ "${initial_diff_hash}" != "${final_diff_hash}" ]]; then
+    _print_changes
+    _print_recent_commits
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1218,26 +1166,24 @@ git_unchange () {
 #    Strings (optional). The parameters to pass to the restore operation.
 #
 ###############################################################################
-git_unstage () {
-    # Unstage the staged changes.
-    initial_diff_hash=$(_staged_diff_hash)
-    if [[ -n ${1-} ]]; then
-        git restore --staged "${@}"
-    else
-        git restore --staged .
-    fi
-    final_diff_hash=$(_staged_diff_hash)
+git_unstage() {
+  # Unstage the staged changes.
+  initial_diff_hash=$(_staged_diff_hash)
+  if [[ -n ${1-} ]]; then
+    git restore --staged "${@}"
+  else
+    git restore --staged .
+  fi
+  final_diff_hash=$(_staged_diff_hash)
 
-    # Show information.
-    _print_result "${initial_diff_hash}" "${final_diff_hash}"
-    if [[ "${initial_diff_hash}" != "${final_diff_hash}" ]]; then
-        _print_changes
-    fi
+  # Show information.
+  _print_result "${initial_diff_hash}" "${final_diff_hash}"
+  if [[ "${initial_diff_hash}" != "${final_diff_hash}" ]]; then
+    _print_changes
+  fi
 }
 
-
 # Private functions.
-
 
 ###############################################################################
 #
@@ -1248,17 +1194,16 @@ git_unstage () {
 #
 ###############################################################################
 _branches() {
-    # The --color=always switch is required to retain colours when this
-    # function is piped to fzf.
-    if [[ ${1} != 'local' ]]; then
-        option="--${1}"
-        git branch --color=always --format="${GIT_BRANCH_FORMAT}" "${option}"
-    else
-        git branch --color=always --format="${GIT_BRANCH_FORMAT}"
-    fi
+  # The --color=always switch is required to retain colours when this
+  # function is piped to fzf.
+  if [[ ${1} != 'local' ]]; then
+    option="--${1}"
+    git branch --color=always --format="${GIT_BRANCH_FORMAT}" "${option}"
+  else
+    git branch --color=always --format="${GIT_BRANCH_FORMAT}"
+  fi
 
 }
-
 
 ###############################################################################
 #
@@ -1268,14 +1213,13 @@ _branches() {
 #    String (optional). The branch to count on, or the commit to count up to.
 #
 ###############################################################################
-_commit_count () {
-    if [[ -n ${1-} ]]; then
-        git log "${1-}" | wc --lines
-    else
-        git log | wc --lines
-    fi
+_commit_count() {
+  if [[ -n ${1-} ]]; then
+    git log "${1-}" | wc --lines
+  else
+    git log | wc --lines
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1286,9 +1230,8 @@ _commit_count () {
 #
 ###############################################################################
 _current_branch() {
-    git branch --show-current
+  git branch --show-current
 }
-
 
 ###############################################################################
 #
@@ -1300,12 +1243,11 @@ _current_branch() {
 #
 ###############################################################################
 _exit_on_error() {
-    if [[ ${1} != 0 ]]; then
-        _print_failure_message "${2}"
-        exit 1
-    fi
+  if [[ ${1} != 0 ]]; then
+    _print_failure_message "${2}"
+    exit 1
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1318,13 +1260,12 @@ _exit_on_error() {
 #
 ###############################################################################
 _latest_commit_hash() {
-    if [[ -n ${1-} ]]; then
-        git show --no-patch --format=%h "${1}"
-    else
-        git show --no-patch --format=%h
-    fi
+  if [[ -n ${1-} ]]; then
+    git show --no-patch --format=%h "${1}"
+  else
+    git show --no-patch --format=%h
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1336,36 +1277,35 @@ _latest_commit_hash() {
 #
 ###############################################################################
 _print_branches() {
-    branches=$(_branches "${1}")
+  branches=$(_branches "${1}")
 
-    echo
-    case ${1} in
-        all)
-            _print_magenta 'All branches'
-            ;;
-        remote)
-            _print_magenta 'Remote branches'
-            ;;
-        local)
-            _print_magenta 'Local branches'
-            ;;
-        *)
-            echo 'Either "all", "local" or "remote" must be specified'
-            exit 1
-            ;;
-    esac
+  echo
+  case ${1} in
+    all)
+      _print_magenta 'All branches'
+      ;;
+    remote)
+      _print_magenta 'Remote branches'
+      ;;
+    local)
+      _print_magenta 'Local branches'
+      ;;
+    *)
+      echo 'Either "all", "local" or "remote" must be specified'
+      exit 1
+      ;;
+  esac
 
-    branch_count=$(echo "${branches}" | wc --lines)
-    no_of_branches_to_show="${2}"
-    if [[ ${branch_count} -le ${no_of_branches_to_show} ]]; then
-        echo "${branches}"
-    else
-        echo "${branches}" | head --lines="${no_of_branches_to_show}"
-        trimmed_branch_count=$(( branch_count - no_of_branches_to_show ))
-        _print_grey "+ ${trimmed_branch_count} more branches"
-    fi
+  branch_count=$(echo "${branches}" | wc --lines)
+  no_of_branches_to_show="${2}"
+  if [[ ${branch_count} -le ${no_of_branches_to_show} ]]; then
+    echo "${branches}"
+  else
+    echo "${branches}" | head --lines="${no_of_branches_to_show}"
+    trimmed_branch_count=$((branch_count - no_of_branches_to_show))
+    _print_grey "+ ${trimmed_branch_count} more branches"
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1377,13 +1317,12 @@ _print_branches() {
 #
 ###############################################################################
 _print_result() {
-    if [[ ${1} != "${2}" ]]; then
-        _print_success_message 'Done'
-    else
-        _print_failure_message 'Nothing done'
-    fi
+  if [[ ${1} != "${2}" ]]; then
+    _print_success_message 'Done'
+  else
+    _print_failure_message 'Nothing done'
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1394,16 +1333,15 @@ _print_result() {
 #
 ###############################################################################
 _print_changes() {
-    echo
-    _print_magenta 'Changes'
-    changes=$(git -c color.ui=always status --short)
-    if [[ -n ${changes} ]]; then
-        echo "${changes}"
-    else
-        echo '-'
-    fi
+  echo
+  _print_magenta 'Changes'
+  changes=$(git -c color.ui=always status --short)
+  if [[ -n ${changes} ]]; then
+    echo "${changes}"
+  else
+    echo '-'
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1414,9 +1352,8 @@ _print_changes() {
 #
 ###############################################################################
 _print_failure_message() {
-    echo -e "${ANSI_RED}✗ ${1}${ANSI_CLEAR}"
+  echo -e "${ANSI_RED}✗ ${1}${ANSI_CLEAR}"
 }
-
 
 ###############################################################################
 #
@@ -1427,9 +1364,8 @@ _print_failure_message() {
 #
 ###############################################################################
 _print_grey() {
-    echo -e "${ANSI_GREY}${1}${ANSI_CLEAR}"
+  echo -e "${ANSI_GREY}${1}${ANSI_CLEAR}"
 }
-
 
 ###############################################################################
 #
@@ -1439,13 +1375,12 @@ _print_grey() {
 #    None.
 #
 ###############################################################################
-_print_latest_commit () {
-    echo
-    _print_magenta 'Latest commit'
-    format='%C(auto)%h%C(dim white)%C(auto)%Creset %s %C(dim white)by %an %ar'
-    git show --format="${format}" --no-patch
+_print_latest_commit() {
+  echo
+  _print_magenta 'Latest commit'
+  format='%C(auto)%h%C(dim white)%C(auto)%Creset %s %C(dim white)by %an %ar'
+  git show --format="${format}" --no-patch
 }
-
 
 ###############################################################################
 #
@@ -1456,9 +1391,8 @@ _print_latest_commit () {
 #
 ###############################################################################
 _print_magenta() {
-    echo -e "${ANSI_MAGENTA}${1}${ANSI_CLEAR}"
+  echo -e "${ANSI_MAGENTA}${1}${ANSI_CLEAR}"
 }
-
 
 ###############################################################################
 #
@@ -1468,17 +1402,16 @@ _print_magenta() {
 #    None
 #
 ###############################################################################
-_print_recent_commits () {
-    echo
-    _print_magenta 'Latest commits'
-    commits=$(git log --color=always --max-count=5)
-    if [[ -n ${commits} ]]; then
-        echo "${commits}"
-    else
-        echo '-'
-    fi
+_print_recent_commits() {
+  echo
+  _print_magenta 'Latest commits'
+  commits=$(git log --color=always --max-count=5)
+  if [[ -n ${commits} ]]; then
+    echo "${commits}"
+  else
+    echo '-'
+  fi
 }
-
 
 ###############################################################################
 #
@@ -1489,9 +1422,8 @@ _print_recent_commits () {
 #
 ###############################################################################
 _print_success_message() {
-    echo -e "${ANSI_GREEN}🗸 ${1}${ANSI_CLEAR}"
+  echo -e "${ANSI_GREEN}🗸 ${1}${ANSI_CLEAR}"
 }
-
 
 ###############################################################################
 #
@@ -1502,14 +1434,13 @@ _print_success_message() {
 #
 ###############################################################################
 _select_any_other_branch() {
-    current_branch=$(_current_branch)
+  current_branch=$(_current_branch)
 
-    _branches all |
-        grep --invert-match "\[32m${current_branch}\*" |
-        fzf --ansi --header="${1}" --no-info --nth 1 |
-        awk '{ print $1 }'
+  _branches all \
+    | grep --invert-match "\[32m${current_branch}\*" \
+    | fzf --ansi --header="${1}" --no-info --nth 1 \
+    | awk '{ print $1 }'
 }
-
 
 ###############################################################################
 #
@@ -1523,22 +1454,20 @@ _select_any_other_branch() {
 #
 ###############################################################################
 _select_branch_to_switch_to() {
-    remote=$(git remote)
-    current_branch=$(_current_branch)
+  remote=$(git remote)
+  current_branch=$(_current_branch)
 
-    remote_branches_to_exclude=$(git branch | xargs printf "${remote}/%s\n")
-    fzf_header="Select the branch to switch to from '${current_branch}'"
+  remote_branches_to_exclude=$(git branch | xargs printf "${remote}/%s\n")
+  fzf_header="Select the branch to switch to from '${current_branch}'"
 
-    git branch --all --color=always --format="${GIT_BRANCH_FORMAT}" |
-        grep --fixed-strings --invert-match "${remote_branches_to_exclude}" |
-        grep --invert-match "\[31m${remote}/HEAD\s" |
-        grep --invert-match "\[32m${current_branch}\*" |
-        fzf --ansi --header="${fzf_header}" --no-info --nth 1 |
-        awk '{ print $1 }' |
-        sed "s/^${remote}\///"
+  git branch --all --color=always --format="${GIT_BRANCH_FORMAT}" \
+    | grep --fixed-strings --invert-match "${remote_branches_to_exclude}" \
+    | grep --invert-match "\[31m${remote}/HEAD\s" \
+    | grep --invert-match "\[32m${current_branch}\*" \
+    | fzf --ansi --header="${fzf_header}" --no-info --nth 1 \
+    | awk '{ print $1 }' \
+    | sed "s/^${remote}\///"
 }
-
-
 
 ###############################################################################
 #
@@ -1550,17 +1479,16 @@ _select_branch_to_switch_to() {
 #
 ###############################################################################
 _select_commit() {
-    if [[ -n ${2-} ]]; then
-        commits=$(git log --color=always "${2}")
-    else
-        commits=$(git log --color=always)
-    fi
+  if [[ -n ${2-} ]]; then
+    commits=$(git log --color=always "${2}")
+  else
+    commits=$(git log --color=always)
+  fi
 
-    echo "${commits}" |
-        fzf --ansi --header="${1}" --no-info |
-        awk '{ print $1 }'
+  echo "${commits}" \
+    | fzf --ansi --header="${1}" --no-info \
+    | awk '{ print $1 }'
 }
-
 
 ###############################################################################
 #
@@ -1571,9 +1499,8 @@ _select_commit() {
 #
 ###############################################################################
 _staged_diff_hash() {
-    git diff --staged | sha512sum
+  git diff --staged | sha512sum
 }
-
 
 ###############################################################################
 #
@@ -1584,9 +1511,8 @@ _staged_diff_hash() {
 #
 ###############################################################################
 _unstaged_diff_hash() {
-    git diff | sha512sum
+  git diff | sha512sum
 }
-
 
 ###############################################################################
 #
@@ -1597,9 +1523,8 @@ _unstaged_diff_hash() {
 #
 ###############################################################################
 _untracked_files() {
-    git ls-files --exclude-standard --other
+  git ls-files --exclude-standard --other
 }
-
 
 # Run the command.
 # shellcheck disable=2086
