@@ -1,3 +1,6 @@
+# vim: filetype=sh
+# shellcheck shell=bash
+
 alias b='bandwhich'
 
 alias c='clear -x'

@@ -1,3 +1,6 @@
+# vim: filetype=sh
+# shellcheck shell=bash
+
 ###############################################################################
 #
 #  Change to a parent directory.

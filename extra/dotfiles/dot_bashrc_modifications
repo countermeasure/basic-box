@@ -1,3 +1,6 @@
+# vim: filetype=sh
+# shellcheck shell=bash
+
 # Enable pipx autocompletion.
 eval "$(register-python-argcomplete pipx)"
 

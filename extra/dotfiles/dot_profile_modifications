@@ -1,3 +1,6 @@
+# vim: filetype=sh
+# shellcheck shell=bash
+
 # If $EDITOR is not exported, the direnv edit command will fail.
 export EDITOR='vim'
 
