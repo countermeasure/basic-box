@@ -67,8 +67,8 @@ link "zoxide_${zoxide_version}_amd64.deb" 'zoxide.deb'
 # manual installation is necessary.
 delta_version=$(get_version delta)
 wget --timestamping "https://github.com/dandavison/delta/releases/download/\
-${delta_version}/delta-${delta_version}-x86_64-unknown-linux-gnu.tar.gz"
-link "delta-${delta_version}-x86_64-unknown-linux-gnu.tar.gz" 'delta.tar.gz'
+${delta_version}/delta-${delta_version}-x86_64-unknown-linux-musl.tar.gz"
+link "delta-${delta_version}-x86_64-unknown-linux-musl.tar.gz" 'delta.tar.gz'
 wget --timestamping "https://github.com/dandavison/delta/archive/refs/tags/\
 ${delta_version}.tar.gz"
 link "${delta_version}.tar.gz" 'delta_source.tar.gz'
@@ -91,9 +91,9 @@ link "v${direnv_version}.tar.gz" 'direnv_source.tar.gz'
 # Ensure the Fira Code font is present.
 nerd_fonts_version=$(get_version nerd-fonts)
 wget --timestamping "https://github.com/ryanoasis/nerd-fonts/raw/\
-v${nerd_fonts_version}/patched-fonts/FiraCode/Regular/complete/\
-Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf"
-link 'Fira Code Regular Nerd Font Complete.ttf' 'fira_code.ttf'
+v${nerd_fonts_version}/patched-fonts/FiraCode/Regular/\
+FiraCodeNerdFont-Regular.ttf"
+link 'FiraCodeNerdFont-Regular.ttf' 'fira_code.ttf'
 
 # Ensure the Starship binary is present.
 starship_version=$(get_version starship)
@@ -129,14 +129,14 @@ link 'yt-dlp.tar.gz' 'yt_dlp.tar.gz'
 # Ensure the bandwhich package is present.
 bandwhich_version=$(get_version bandwhich)
 wget --timestamping "https://github.com/imsnif/bandwhich/releases/download/\
-${bandwhich_version}/\
+v${bandwhich_version}/\
 bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl.tar.gz"
 link \
   "bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl.tar.gz" \
   'bandwhich.tar.gz'
 wget --timestamping "https://github.com/imsnif/bandwhich/archive/refs/tags/\
-${bandwhich_version}.tar.gz"
-link "${bandwhich_version}.tar.gz" 'bandwhich_source.tar.gz'
+v${bandwhich_version}.tar.gz"
+link "v${bandwhich_version}.tar.gz" 'bandwhich_source.tar.gz'
 
 # Ensure the pyenv package is present.
 pyenv_version=$(get_version pyenv)

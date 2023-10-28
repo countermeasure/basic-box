@@ -5,9 +5,9 @@ local function word_count()
     or vim.bo.filetype == "text"
   then
     if vim.fn.wordcount().visual_words == nil then
-      return " " .. vim.fn.wordcount().words
+      return " " .. vim.fn.wordcount().words
     else
-      return " " .. vim.fn.wordcount().visual_words
+      return " " .. vim.fn.wordcount().visual_words
     end
   else
     return ""
