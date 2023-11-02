@@ -12,16 +12,14 @@ echo 'The final configuration steps have to be done interactively.'
 echo
 echo 'Step 1: Set up an additional encrypted disk'
 echo 'Step 2: Enable the Mullvad VPN'
-echo 'Step 3: Install the Firefox browser extensions'
-echo 'Step 4: Change some Firefox preferences'
-echo 'Step 5: Change some KeePassXC settings'
+echo 'Step 3: Change some KeePassXC settings'
 echo
 read -n 1 -p 'Press any key to continue...' -r -s
 
 # Set up an additional encrypted disk.
 clear
 echo
-echo 'Step 1 of 5: Set up an additional encrypted disk'
+echo 'Step 1 of 3: Set up an additional encrypted disk'
 echo '------------------------------------------------'
 echo
 boot_device_partition_table_uuid=$(
@@ -118,7 +116,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 # Enable and configure the Mullvad VPN.
 clear
 echo
-echo 'Step 2 of 5: Enable the Mullvad VPN'
+echo 'Step 2 of 3: Enable the Mullvad VPN'
 echo '-----------------------------------'
 echo
 EXIT_CODE=''
@@ -150,101 +148,10 @@ mullvad dns set default \
 echo
 read -n 1 -p 'Press any key to continue...' -r -s
 
-# Open Firefox extension installation tabs.
-clear
-echo
-echo 'Step 3 of 5: Install the Firefox browser extensions'
-echo '---------------------------------------------------'
-echo
-echo 'Installing browser extensions requires user interactions in Firefox.'
-echo
-echo 'This step will open these installer pages in tabs in Firefox:'
-echo '- Dark Reader'
-echo '- Decentraleyes'
-echo '- Firefox Multi-Account Containers'
-echo '- HTTPS Everywhere'
-echo '- KeePassXC-Browser'
-echo '- NoScript Security Suite'
-echo '- Privacy Badger'
-echo '- uBlock Origin'
-echo
-echo 'In each tab, you need to click to install the extension.'
-echo
-echo "When you've finished, close Firefox."
-echo
-read -n 1 -p 'Press any key to continue...' -r -s
-firefox \
-  https://addons.mozilla.org/en-US/firefox/addon/darkreader/ \
-  https://addons.mozilla.org/en-US/firefox/addon/decentraleyes/ \
-  https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/ \
-  https://addons.mozilla.org/en-US/firefox/addon/https-everywhere/ \
-  https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/ \
-  https://addons.mozilla.org/en-US/firefox/addon/noscript/ \
-  https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/ \
-  https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
-
-# Change Firefox preferences.
-clear
-echo
-echo 'Step 4 of 5: Change some Firefox preferences'
-echo '--------------------------------------------'
-echo
-echo "Although many of Firefox's preferences can be changed without user"
-echo 'interaction, the configuration machinery is unpredictable and not well'
-echo "documented, so it's more reliable to do it manually."
-echo
-echo 'This step involves 3 small operations.'
-echo
-echo 'Operation 1: Set Enhanced Tracking Protection to Strict'
-echo 'Operation 2: Set Default Search Engine to DuckDuckGo'
-echo 'Operation 3: Set Theme to Dark'
-echo
-read -n 1 -p 'Press any key to continue...' -r -s
-clear
-echo
-echo 'Step 4 of 5: Change some Firefox preferences'
-echo '--------------------------------------------'
-echo
-echo 'Operation 1 of 3: Set Enhanced Tracking Protection to Strict'
-echo
-echo 'This will open the Privacy and Security Preferences page in Firefox.'
-echo
-echo 'Select Strict under Enhanced Tracking Protection, then close Firefox.'
-echo
-read -n 1 -p 'Press any key to continue...' -r -s
-firefox about:preferences#privacy
-clear
-echo
-echo 'Step 4 of 5: Change some Firefox preferences'
-echo '--------------------------------------------'
-echo
-echo 'Operation 2 of 3: Set Default Search Engine to DuckDuckGo'
-echo
-echo 'This will open the Search Preferences page in Firefox.'
-echo
-echo 'Select DuckDuckGo under Default Search Engine, then close Firefox.'
-echo
-read -n 1 -p 'Press any key to continue...' -r -s
-firefox about:preferences#search
-clear
-echo
-echo 'Step 4 of 5: Change some Firefox preferences'
-echo '--------------------------------------------'
-echo
-echo 'Operation 3 of 3: Set Theme to Dark'
-echo
-echo 'This will open the Addons page in Firefox.'
-echo
-echo 'Click Themes, click the Enable button for the Dark theme, then close '
-echo 'Firefox.'
-echo
-read -n 1 -p 'Press any key to continue...' -r -s
-firefox about:addons
-
 # Change KeePassXC settings.
 clear
 echo
-echo 'Step 5 of 5: Change some KeePassXC settings'
+echo 'Step 3 of 3: Change some KeePassXC settings'
 echo '-------------------------------------------'
 echo
 echo "Some of KeePassXC's settings can't be set with its configuration file,"
@@ -260,7 +167,7 @@ echo
 read -n 1 -p 'Press any key to continue...' -r -s
 clear
 echo
-echo 'Step 5 of 5: Change some KeePassXC settings'
+echo 'Step 3 of 3: Change some KeePassXC settings'
 echo '-------------------------------------------'
 echo
 echo 'Operation 1 of 2: Enable Firefox integration'
@@ -275,7 +182,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 keepassxc 2>/dev/null
 clear
 echo
-echo 'Step 5 of 5: Change some KeePassXC settings'
+echo 'Step 3 of 3: Change some KeePassXC settings'
 echo '-------------------------------------------'
 echo
 echo 'Operation 2 of 2: Set clipboard clearing timeout'

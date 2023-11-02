@@ -1,0 +1,73 @@
+{
+  "policies": {
+    "DisableFirefoxAccounts": true,
+    "DisablePocket": true,
+    "DisableSetDesktopBackground": true,
+    "DisableTelemetry": true,
+    "ExtensionSettings": {
+      "@testpilot-containers": {
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/multi-account-containers/latest.xpi",
+        "installation_mode": "normal_installed"
+      },
+      "addon@darkreader.org": {
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi",
+        "installation_mode": "normal_installed"
+      },
+      "jid1-MnnxcxisBPnSXQ@jetpack": {
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/privacy-badger17/latest.xpi",
+        "installation_mode": "normal_installed"
+      },
+      "keepassxc-browser@keepassxc.org": {
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/keepassxc-browser/latest.xpi",
+        "installation_mode": "normal_installed"
+      },
+      "uBlock0@raymondhill.net": {
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi",
+        "installation_mode": "normal_installed"
+      }
+    },
+    "Homepage": {
+      "StartPage": "none"
+    },
+    "NewTabPage": false,
+    "NoDefaultBookmarks": true,
+    "OfferToSaveLogins": false,
+    "Permissions": {
+      "Location": {
+        "BlockNewRequests": true,
+        "Locked": true
+      }
+    },
+    "Preferences": {
+      "browser.contentblocking.category": {
+        "Status": "user",
+        "Value": "strict"
+      },
+      "dom.security.https_only_mode": {
+        "Status": "user",
+        "Value": true
+      }
+    },
+    "SanitizeOnShutdown": {
+      "Cache": true,
+      "Cookies": true,
+      "Downloads": false,
+      "FormData": false,
+      "History": false,
+      "OfflineApps": true,
+      "Sessions": true,
+      "SiteSettings": false,
+      "Locked": true
+    },
+    "SearchEngines": {
+      "Default": "DuckDuckGo",
+      "Remove": [
+        "Amazon.com",
+        "Amazon.se",
+        "Bing",
+        "eBay",
+        "Google"
+      ]
+    }
+  }
+}

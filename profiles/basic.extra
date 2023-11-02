@@ -12,6 +12,7 @@ extra/dotfiles/dot_bashrc_aliases
 extra/dotfiles/dot_bashrc_functions
 extra/dotfiles/dot_bashrc_modifications
 extra/dotfiles/dot_profile_modifications
+extra/dotfiles/firefox_policies.json
 extra/dotfiles/gitk
 extra/dotfiles/git_global_ignore
 extra/dotfiles/htoprc

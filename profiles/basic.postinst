@@ -66,6 +66,7 @@ cp $INSTALLER_DIR/dot_profile_modifications $LOCAL_DIR
 cp $INSTALLER_DIR/exa.zip $LOCAL_DIR
 cp $INSTALLER_DIR/fd.deb $LOCAL_DIR
 cp $INSTALLER_DIR/fira_code.ttf $LOCAL_DIR
+cp $INSTALLER_DIR/firefox_policies.json $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
 cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
 cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
@@ -728,3 +729,8 @@ apt install --yes podman
 gsettings_set 'desktop.wm.preferences audible-bell false'
 gsettings_set 'desktop.wm.preferences visual-bell true'
 gsettings_set 'desktop.wm.preferences visual-bell-type "frame-flash"'
+
+# Configure Firefox.
+FIREFOX_POLICIES_PATH='/usr/share/firefox-esr/distribution/policies.json'
+cp $LOCAL_DIR/firefox_policies.json $FIREFOX_POLICIES_PATH
+chmod 644 $FIREFOX_POLICIES_PATH

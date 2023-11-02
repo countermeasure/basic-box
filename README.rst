@@ -24,23 +24,15 @@ The **Basic Box** installer creates a Debian 11 system with:
 - the Mullvad VPN app installed and enabled with an interactive script which
   runs automatically on the first boot
 - Tor Browser Launcher installed
-- these Firefox extensions installed interactively on the first login:
+- these Firefox extensions installed:
 
   - Dark Reader
-  - Decentraleyes
   - Firefox Multi-Account Containers
-  - HTTPS Everywhere
   - KeePassXC-Browser
-  - NoScript Security Suite
   - Privacy Badger
   - uBlock Origin
 
-- these Firefox preferences set interactively on the first login:
-
-  - Enhanced Tracking Protection to Strict
-  - Default Search Engine to DuckDuckGo
-  - Theme to Dark
-
+- certain Firefox preferences set for better privacy and a simpler interface
 - pipx installed
 - yt-dlp installed
 - ranger installed
