@@ -8,6 +8,7 @@ extra/first_login.sh
 extra/git_wrapper.sh
 extra/setup.rst
 
+extra/dotfiles/backports.list
 extra/dotfiles/dot_bashrc_aliases
 extra/dotfiles/dot_bashrc_functions
 extra/dotfiles/dot_bashrc_modifications

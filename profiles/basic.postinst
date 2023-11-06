@@ -51,6 +51,7 @@ install_with_pipx() {
 apt install --yes jq
 
 # Copy extra files onto the new installation.
+cp $INSTALLER_DIR/backports.list $LOCAL_DIR
 cp $INSTALLER_DIR/bandwhich.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/bandwhich_source.tar.gz $LOCAL_DIR
 cp $INSTALLER_DIR/bat.deb $LOCAL_DIR
@@ -152,8 +153,13 @@ runuser \
   --command \
   "desktop-file-install --dir=$AUTOSTART_DIR $LOCAL_DIR/first_login.desktop"
 
-# Install Tor Browser Launcher.
-apt install --yes torbrowser-launcher
+# Enable Backports to be able to install Tor Browser Launcher.
+cp $LOCAL_DIR/backports.list /etc/apt/sources.list.d
+apt update
+
+# Install Tor Browser Launcher. Only the Backports package works for Bullseye
+# now.
+apt install --target-release bullseye-backports --yes torbrowser-launcher
 
 # Install pipx.
 apt install --yes python3-pip python3-venv
