@@ -6,21 +6,18 @@ set -o errexit -o nounset -o pipefail
 # Utility functions.
 
 _off() {
-  echo
   echo 'Powering off...'
   sleep 1
   systemctl poweroff
 }
 
 _reboot() {
-  echo
   echo 'Rebooting...'
   sleep 1
   systemctl reboot
 }
 
 _wipe() {
-  echo
   echo 'Wiping...'
   boot_device_partition_table_uuid=$(
     lsblk --output mountpoint,ptuuid \
@@ -93,6 +90,7 @@ battery() {
 
 destroy() {
   _wipe
+  echo
   _off
 }
 
@@ -210,6 +208,7 @@ reinstall() {
   echo 'Logging out of Mullvad VPN...'
   echo
   mullvad account logout
+  echo
   _wipe
   echo
   echo 'Preparing to reboot...'
@@ -222,6 +221,7 @@ reinstall() {
   echo 'the installer.'
   echo
   read -n 1 -p 'Press any key to reboot.' -r -s
+  echo
   echo
   _reboot
 }
