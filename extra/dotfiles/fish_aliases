@@ -1,0 +1,199 @@
+# vim: filetype=fish
+
+alias b='bandwhich'
+
+alias c='clear -x'
+alias cp='cp --archive --interactive --verbose'
+
+alias delta='delta --line-numbers --navigate'
+alias df='df --si --total'
+alias diff='printf "\nPrefer delta to diff.\n\n"'
+
+alias f='ranger' # "f" for "file manager".
+alias fd='fd --exclude .git --follow --hidden'
+alias find='printf "\nPrefer fd to find.\n\n"'
+
+alias g='git'
+# alias ga='git_wrapper add'
+function ga --wraps "git add" --description 'alias ga=git_wrapper add'
+    git_wrapper add $argv
+end
+alias gaa='git_wrapper add_all'
+# alias gaad='git_wrapper add_all_then_diff'
+function gaad --wraps "git add" \
+    --description 'alias gaad=git_wrapper add_all_then_diff'
+    git_wrapper add_all_then_diff $argv
+end
+# alias gap='git_wrapper add_with_patch'
+function gap --wraps "git add" \
+    --description 'alias gap=git_wrapper add_with_patch'
+    git_wrapper add_with_patch $argv
+end
+# alias gb='git_wrapper branch'
+function gb --wraps "git branch" --description 'alias gb=git_wrapper branch'
+    git_wrapper branch $argv
+end
+# alias gbc='git_wrapper branch_create'
+function gbc --wraps "git branch" \
+    --description 'alias gbc=git_wrapper branch_create'
+    git_wrapper branch_create $argv
+end
+# alias gbd='git_wrapper branch_delete'
+function gbd --wraps "git branch" \
+    --description 'alias gbd=git_wrapper branch_delete'
+    git_wrapper branch_delete $argv
+end
+alias gbla='git_wrapper branch_list_all'
+alias gbll='git_wrapper branch_list_local'
+alias gblr='git_wrapper branch_list_remote'
+# alias gbr='git_wrapper branch_rename'
+function gbr --wraps "git branch" \
+    --description 'alias gbr=git_wrapper branch_rename'
+    git_wrapper branch_rename $argv
+end
+alias gbsu='git_wrapper branch_set_upstream'
+# alias gch='git_wrapper checkout'
+function gch --wraps "git checkout" \
+    --description 'alias gch=git_wrapper checkout'
+    git_wrapper checkout $argv
+end
+# alias gcl='git_wrapper clean'
+function gcl --wraps "git clean" --description 'alias gcl=git_wrapper clean'
+    git_wrapper clean $argv
+end
+# alias gco='git_wrapper commit'
+function gco --wraps "git commit" --description 'alias gco=git_wrapper commit'
+    git_wrapper commit $argv
+end
+alias gcoa='git_wrapper commit_amend'
+alias gcoar='git_wrapper commit_amend_reuse_message'
+alias gcoc='git_wrapper commit_checkpoint'
+alias gcof='git_wrapper commit_fixup'
+# alias gcp='git_wrapper cherry_pick'
+function gcp --wraps "git cherry_pick" \
+    --description 'alias gcp=git_wrapper cherry_pick'
+    git_wrapper cherry_pick $argv
+end
+alias gcpa='git_wrapper cherry_pick_abort'
+alias gcpc='git_wrapper cherry_pick_continue'
+# alias gd='git_wrapper diff'
+function gd --wraps "git diff" --description 'alias gd=git_wrapper diff'
+    git_wrapper diff $argv
+end
+alias gdr='git_wrapper diff_remote'
+alias gds='git_wrapper diff_staged'
+alias gdu='git_wrapper diff_unstaged'
+# alias gf='git_wrapper fetch'
+function gf --wraps "git fetch" --description 'alias gf=git_wrapper fetch'
+    git_wrapper fetch $argv
+end
+# alias gk='gitk &'
+# This can't be declared as an alias in fish, because doing this will
+# automatically add $argv after the &, and even though the function will run, a
+# warning message will be printed.
+function gk --description 'alias gk=gitk &'
+    gitk &
+end
+alias gl='git_wrapper log'
+alias glg='git_wrapper log_graph'
+# alias gm='git_wrapper merge'
+function gm --wraps "git merge" --description 'alias gm=git_wrapper merge'
+    git_wrapper merge $argv
+end
+# alias gp='git_wrapper push'
+function gp --wraps "git push" --description 'alias gp=git_wrapper push'
+    git_wrapper push $argv
+end
+# alias gpf='git_wrapper push_force_with_lease'
+function gpf --wraps "git push" \
+    --description 'alias gpf=git_wrapper push_force_with_lease'
+    git_wrapper push_force_with_lease $argv
+end
+# alias gpu='git_wrapper pull'
+function gpu --wraps "git pull" --description 'alias gpu=git_wrapper pull'
+    git_wrapper pull $argv
+end
+# alias gr='git_wrapper rebase'
+function gr --wraps "git rebase" --description 'alias gr=git_wrapper rebase'
+    git_wrapper rebase $argv
+end
+alias gra='git_wrapper rebase_abort'
+alias grc='git_wrapper rebase_continue'
+# alias gri='git_wrapper rebase_interactive'
+function gri --wraps "git rebase" \
+    --description 'alias gri=git_wrapper rebase_interactive'
+    git_wrapper rebase_interactive $argv
+end
+# alias gria='git_wrapper rebase_interactive_with_autosquash'
+function gria --wraps "git rebase" \
+    --description 'alias gria=git_wrapper rebase_interactive_with_autosquash'
+    git_wrapper rebase_interactive_with_autosquash $argv
+end
+alias grsh='git_wrapper reset_head'
+# alias gs='git_wrapper status'
+function gs --wraps "git status" --description 'alias gs=git_wrapper status'
+    git_wrapper status $argv
+end
+# alias gsh='git_wrapper show'
+function gsh --wraps "git show" --description 'alias gsh=git_wrapper show'
+    git_wrapper show $argv
+end
+# alias gst='git_wrapper stash'
+function gst --wraps "git stash" --description 'alias gst=git_wrapper stash'
+    git_wrapper stash $argv
+end
+alias gstp='git_wrapper stash_pop'
+# alias gsw='git_wrapper switch'
+function gsw --wraps "git switch" --description 'alias gsw=git_wrapper switch'
+    git_wrapper switch $argv
+end
+# alias guc='git_wrapper unchange'
+function guc --wraps "git restore" \
+    --description 'alias guc=git_wrapper unchange'
+    git_wrapper unchange $argv
+end
+# alias gus='git_wrapper unstage'
+function gus --wraps "git restore" \
+    --description 'alias gus=git_wrapper unstage'
+    git_wrapper unstage $argv
+end
+
+# alias j='jupyter-lab &>/dev/null &'
+function j --description 'alias j=jupyter-lab &>/dev/null &'
+    jupyter-lab &>/dev/null &
+end
+
+# "l" for "list".
+alias l='exa --colour-scale --group-directories-first --long'
+# "la" for "list all".
+alias la='exa --all --colour-scale --group-directories-first --long'
+alias less='less --HILITE-UNREAD --ignore-case --LONG-PROMPT --QUIET'
+alias ln='ln --interactive --verbose'
+alias ls='printf "\nPrefer l to ls.\n\n"'
+alias lsblk='lsblk --output name,size,type,tran,mountpoint,path'
+
+alias mkdir='mkdir --parents --verbose'
+alias mv='mv --interactive --verbose'
+
+alias ncdu='ncdu --color dark -r --si'
+
+alias p='ipython'
+alias ping='ping -c 5 -i 0.2'
+alias pip='only_allow_pip_in_virtualenvs'
+alias pip3='only_allow_pip3_in_virtualenvs'
+alias ptop='sudo powertop --time=5'
+
+alias r='reset'
+alias rg="rg --glob '!.git' --hidden --smart-case"
+alias rm='printf "\nPrefer t to rm.\n\n"'
+alias rmdir='rmdir --verbose'
+
+alias t='trash'
+
+alias whois='whois -H'
+
+# "x" for "extract".
+alias x='aunpack --each --quiet --subdir'
+
+# ".." for "parent directory".
+alias ..='go_to_parent_directory'

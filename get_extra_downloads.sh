@@ -101,10 +101,12 @@ wget --timestamping "https://github.com/starship/starship/releases/download/\
 v${starship_version}/starship-x86_64-unknown-linux-gnu.tar.gz"
 link 'starship-x86_64-unknown-linux-gnu.tar.gz' 'starship.tar.gz'
 
-# Ensure the HTTPie completion file is present.
+# Ensure the HTTPie completion files are present.
 httpie_version=$(get_version httpie)
 wget --timestamping "https://github.com/httpie/httpie/raw/${httpie_version}/\
 extras/httpie-completion.bash"
+wget --timestamping "https://github.com/httpie/httpie/raw/${httpie_version}/\
+extras/httpie-completion.fish"
 
 # Ensure the trash-cli package is present.
 trash_cli_version=$(get_version trash-cli)
@@ -149,3 +151,9 @@ geckodriver_version=$(get_version geckodriver)
 wget --timestamping "https://github.com/mozilla/geckodriver/releases/download/\
 v${geckodriver_version}/geckodriver-v${geckodriver_version}-linux64.tar.gz"
 link "geckodriver-v${geckodriver_version}-linux64.tar.gz" 'geckodriver.tar.gz'
+
+# Ensure the fish package is present.
+fish_version=$(get_version fish)
+wget --timestamping "https://download.opensuse.org/repositories/shells:/fish:/\
+release:/3/Debian_11/amd64/fish_${fish_version}-1_amd64.deb"
+link "fish_${fish_version}-1_amd64.deb" "fish.deb"
