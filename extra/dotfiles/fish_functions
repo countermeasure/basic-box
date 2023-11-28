@@ -1,0 +1,84 @@
+# vim: filetype=fish
+
+###############################################################################
+#
+#  Change to a parent directory.
+#
+#  Arguments:
+#    Int (optional). The number of parent directories to climb by. Values can
+#    be 1 to 99 inclusive.
+#
+###############################################################################
+function go_to_parent_directory
+    if test -z $argv[1]
+        cd ..
+    else if not contains $argv[1] (seq 1 99)
+        echo "Argument must be an integer between 1 and 99"
+        return 1
+    else
+        set path ''
+        for i in (seq $argv[1])
+            set path ../$path
+        end
+        cd $path
+    end
+end
+
+###############################################################################
+#
+#  Allow pip to run if inside a virtualenv. If not inside a virtualenv, show a
+#  message to prefer pipx.
+#
+#  Arguments:
+#    Strings. The arguments to pass to the pip executable.
+#
+###############################################################################
+function only_allow_pip_in_virtualenvs
+    if test -n "$VIRTUAL_ENV"
+        command pip $argv
+    else
+        echo "Prefer pipx to pip when not in a virtualenv."
+    end
+end
+
+###############################################################################
+#
+#  Allow pip3 to run if inside a virtualenv. If not inside a virtualenv, show a
+#  message to prefer pipx.
+#
+#  Arguments:
+#    Strings. The arguments to pass to the pip3 executable.
+#
+###############################################################################
+function only_allow_pip3_in_virtualenvs
+    if test -n "$VIRTUAL_ENV"
+        command pip3 $argv
+    else
+        echo "Prefer pipx to pip3 when not in a virtualenv."
+    end
+end
+
+###############################################################################
+#
+#  Set the window title to the truncated current working directory.
+#
+###############################################################################
+function set_window_title
+    set condensed_pwd (pwd | sed "s|^$HOME|~|")
+    set separators_in_condensed_pwd \
+        (string match --all --regex '/' $condensed_pwd)
+    set non_home_directory_count (count $separators_in_condensed_pwd)
+    set non_home_directories_to_show 2
+    if test $non_home_directory_count -gt $non_home_directories_to_show
+        set base_title (
+            echo $condensed_pwd \
+                | rev \
+                | cut -d / -f -$non_home_directories_to_show \
+                | rev
+        )
+        set window_title …/$base_title
+    else
+        set window_title $condensed_pwd
+    end
+    echo "📂  $window_title"
+end

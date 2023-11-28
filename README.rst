@@ -103,6 +103,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - jq installed
 - wl-clipboard installed
 - Podman installed
+- fish installed and set as the interactive shell
 
 
 Set up

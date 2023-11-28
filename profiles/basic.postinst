@@ -7,8 +7,10 @@ installer_dir=/media/cdrom/simple-cdd
 
 username=$(ls /home)
 user_dir=/home/${username}
+
+bash_completions_dir=${user_dir}/.local/share/bash-completion/completions
+fish_completions_dir=${user_dir}/.config/fish/completions
 user_bin_dir=${user_dir}/.local/bin
-user_completion_dir=${user_dir}/.local/share/bash-completion/completions
 user_config_dir=${user_dir}/.config
 
 sudoers_dir=/etc/sudoers.d
@@ -95,6 +97,27 @@ place_as_root_user_with_mode_644 \
 # which can't be done in this postinst script, and is then removed.
 systemctl enable first_boot.service
 
+# Install and configure fish.
+apt install --yes ${installer_dir}/fish.deb
+fish_config_dir="${user_config_dir}"/fish
+place_as_unprivileged_user_with_mode_644 \
+  ${installer_dir}/config.fish "${fish_config_dir}"/config.fish
+place_as_unprivileged_user_with_mode_644 \
+  ${installer_dir}/fish_aliases "${fish_config_dir}"/fish_aliases
+place_as_unprivileged_user_with_mode_644 \
+  ${installer_dir}/fish.theme "${fish_config_dir}"/themes/box.theme
+place_as_unprivileged_user_with_mode_644 \
+  ${installer_dir}/fish_functions "${fish_config_dir}"/fish_functions
+runuser \
+  --login "${username}" \
+  --command 'yes | fish --command "fish_config theme save box"'
+# Create the $HOME/.config/fish/conf.d directory now. This is to avoid it being
+# created the first time a shell is opened and having a notification shown then
+# as a result.
+runuser \
+  --login "${username}" \
+  --command "install --directory ${fish_config_dir}/conf.d"
+
 # Install the UFW firewall.
 apt install ufw
 
@@ -125,17 +148,25 @@ apt install --target-release bullseye-backports --yes torbrowser-launcher
 apt install --yes python3-pip python3-venv
 pipx_version=$(get_version pipx)
 runuser --login "${username}" --command "pip3 install pipx==${pipx_version}"
+# Add pipx completions for fish.
+runuser \
+  --login \
+  "${username}" \
+  --command \
+  "register-python-argcomplete --shell fish pipx >/tmp/pipx_completions.fish"
+place_as_unprivileged_user_with_mode_644 \
+  /tmp/pipx_completions.fish "${fish_completions_dir}"/pipx.fish
 
 # Copy .bashrc extensions into place and enable them.
 place_as_unprivileged_user_with_mode_644 \
-  ${installer_dir}/dot_bashrc_aliases "${user_dir}"/.bashrc_aliases
+  ${installer_dir}/dot_bash_aliases "${user_dir}"/.bash_aliases
 place_as_unprivileged_user_with_mode_644 \
-  ${installer_dir}/dot_bashrc_functions "${user_dir}"/.bashrc_functions
+  ${installer_dir}/dot_bash_functions "${user_dir}"/.bash_functions
 place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/dot_bashrc_modifications "${user_dir}"/.bashrc_modifications
-printf '\n# Enable .bashrc extensions.\n' >>"${user_dir}"/.bashrc
+printf '\n# Enable .bashrc modifications.\n' >>"${user_dir}"/.bashrc
 # shellcheck disable=SC2016
-echo 'for file in ~/.bashrc_*; do . "${file}"; done' >>"${user_dir}"/.bashrc
+echo '. "${HOME}/.bashrc_modifications"' >>"${user_dir}"/.bashrc
 
 # Copy .profile extension into place and enable it.
 place_as_unprivileged_user_with_mode_644 \
@@ -153,6 +184,9 @@ place_as_root_user_with_mode_644 \
 place_as_root_user_with_mode_644 \
   /tmp/yt_dlp/completions/bash/yt-dlp \
   /usr/share/bash-completion/completions/yt-dlp
+place_as_unprivileged_user_with_mode_644 \
+  /tmp/yt_dlp/completions/fish/yt-dlp.fish \
+  "${fish_completions_dir}"/yt-dlp.fish
 mandb
 
 apt install --yes ffmpeg
@@ -201,6 +235,8 @@ unzip -d /tmp/exa ${installer_dir}/exa.zip
 place_as_root_user_with_mode_755 /tmp/exa/bin/exa /usr/local/bin/exa
 place_as_root_user_with_mode_644 \
   /tmp/exa/completions/exa.bash /usr/share/bash-completion/completions/exa.bash
+place_as_unprivileged_user_with_mode_644 \
+  /tmp/exa/completions/exa.fish "${fish_completions_dir}"/exa.fish
 place_as_root_user_with_mode_644 \
   /tmp/exa/man/exa.1 /usr/local/share/man/man1/exa.1
 place_as_root_user_with_mode_644 \
@@ -220,6 +256,9 @@ place_as_root_user_with_mode_644 \
 place_as_root_user_with_mode_644 \
   /tmp/fzf_source/shell/key-bindings.bash \
   /usr/local/share/fzf/key-bindings.bash
+place_as_unprivileged_user_with_mode_644 \
+  /tmp/fzf_source/shell/key-bindings.fish \
+  "${fish_config_dir}"/functions/fzf_key_bindings.fish
 mandb
 
 # Install zoxide.
@@ -245,6 +284,9 @@ extract_tar delta_source.tar.gz /tmp/delta_source
 place_as_root_user_with_mode_644 \
   tmp/delta_source/etc/completion/completion.bash \
   /usr/share/bash-completion/completions/delta.bash
+place_as_unprivileged_user_with_mode_644 \
+  /tmp/delta_source/etc/completion/completion.fish \
+  "${fish_completions_dir}"/delta.fish
 
 # Install Git
 apt install --yes git
@@ -330,18 +372,31 @@ tar \
 # starship doesn't work.
 /usr/local/bin/starship completions bash > \
   /usr/share/bash-completion/completions/starship.bash
+/usr/local/bin/starship completions fish >/tmp/starship.fish
+place_as_unprivileged_user_with_mode_644 \
+  /tmp/starship.fish "${fish_completions_dir}"/starship.fish
 place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/starship.toml "${user_config_dir}"/starship.toml
 
 # Install HTTPie.
 install_with_pipx httpie
-# The completion files needs to be named with of the commands which it relates
-# to to work, so rather than naming it httpie.bash, it is named https.bash.
+# The completion files need to be named with the commands which they relate to
+# to work, so rather than naming them httpie.*, they are named http[s].*.
 place_as_unprivileged_user_with_mode_644 \
-  ${installer_dir}/httpie-completion.bash "${user_completion_dir}"/http.bash
+  ${installer_dir}/httpie-completion.bash "${bash_completions_dir}"/http.bash
 ln --symbolic \
-  "${user_completion_dir}"/http.bash \
-  "${user_completion_dir}"/https.bash
+  "${bash_completions_dir}"/http.bash \
+  "${bash_completions_dir}"/https.bash
+place_as_unprivileged_user_with_mode_644 \
+  ${installer_dir}/httpie-completion.fish "${fish_completions_dir}"/http.fish
+# HTTPie doesn't provide a fish completion file for https, so the fish
+# completion file for http is used with modifications.
+place_as_unprivileged_user_with_mode_644 \
+  ${installer_dir}/httpie-completion.fish "${fish_completions_dir}"/https.fish
+sed \
+  --in-place \
+  's/^complete -c http/complete -c https/g' \
+  "${fish_completions_dir}"/https.fish
 
 # Install Nmap.
 apt install --yes nmap
@@ -373,7 +428,7 @@ install_with_pipx tldr
 # work.
 "${user_bin_dir}"/tldr --print-completion bash >/tmp/tldr.bash
 place_as_unprivileged_user_with_mode_644 \
-  /tmp/tldr.bash "${user_completion_dir}"/tldr.bash
+  /tmp/tldr.bash "${bash_completions_dir}"/tldr.bash
 
 # Install OfflineIMAP.
 apt install --yes offlineimap
@@ -700,3 +755,10 @@ gsettings_set 'desktop.wm.preferences visual-bell-type "frame-flash"'
 place_as_root_user_with_mode_644 \
   ${installer_dir}/firefox_policies.json \
   /usr/share/firefox-esr/distribution/policies.json
+
+# Generate fish completions.
+# This should stay at the end on the basic.postinst file so that it generates
+# completions after all packages have been installed.
+runuser \
+  --login "${username}" \
+  --command 'fish --command fish_update_completions'

@@ -6,6 +6,7 @@ return {
         -- Add treesitter parsers which are not included by LazyVim.
         "comment",
         "css",
+        "fish",
         "make",
         "scss",
         "toml",

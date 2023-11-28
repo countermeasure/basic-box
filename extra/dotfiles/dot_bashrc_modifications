@@ -1,6 +1,9 @@
 # vim: filetype=sh
 # shellcheck shell=bash
 
+# Source custom functions.
+source ${HOME}/.bash_functions
+
 # Enable pipx autocompletion.
 eval "$(register-python-argcomplete pipx)"
 
@@ -49,3 +52,8 @@ export DIRENV_LOG_FORMAT=
 
 # Set the window title to the truncated current working directory.
 starship_precmd_user_func='set_window_title'
+#
+# If the parent process is not fish, launch the fish shell.
+if [[ $(ps --no-header --pid=$PPID --format=comm) != 'fish' ]]; then
+  exec fish
+fi
