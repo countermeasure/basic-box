@@ -160,6 +160,35 @@ keyboard_help() {
   echo '  default    Ensure all keys have their default behaviour.'
 }
 
+mac() {
+  active_network_device=$(command ip route show default | awk '{ print $5 }')
+  if [[ -z ${active_network_device} ]]; then
+    echo 'No connection.'
+    exit 1
+  fi
+  active_network_name=$(
+    nmcli --get-values device,name connection show --active \
+      | grep "${active_network_device}:" \
+      | cut --delimiter ':' --fields 2
+  )
+  active_network_device_details=$(
+    command ip link show "${active_network_device}" | tail --lines 1
+  )
+  mac_address=$(echo "${active_network_device_details}" | awk '{ print $2 }')
+  permanent_mac_address=$(
+    echo "${active_network_device_details}" \
+      | awk '$5 == "permaddr" { print $6 }'
+  )
+  if [[ -n ${permanent_mac_address} ]]; then
+    echo "${mac_address} (spoofed)"
+    echo "${permanent_mac_address} (permanent)"
+  else
+    echo "${mac_address} (permanent)"
+  fi
+  echo
+  echo "${active_network_name} (device: ${active_network_device})"
+}
+
 main_catchall() {
   if [ "$1" = '' ]; then
     echo 'A command is required.'
@@ -187,6 +216,7 @@ main_help() {
   echo '  destroy    Destroy all data on this machine.'
   echo '  ip         Show public IP address.'
   echo '  keyboard   Control key mapping.'
+  echo '  mac        Show MAC address of active network device.'
   echo '  off        Power off.'
   echo '  reboot     Reboot.'
   echo '  reinstall  Destroy all data on this machine then reboot.'
@@ -392,6 +422,9 @@ case "${1-}" in
     ;;
   keyboard)
     keyboard "${2-}"
+    ;;
+  mac)
+    mac
     ;;
   off)
     off
