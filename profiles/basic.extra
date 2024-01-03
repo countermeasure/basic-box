@@ -27,6 +27,7 @@ extra/dotfiles/jupyterlab_codemirror_settings
 extra/dotfiles/keepassxc.ini
 extra/dotfiles/keyd_default.conf
 extra/dotfiles/nvim_config_autocmds.lua
+extra/dotfiles/nm_mac_randomisation.conf
 extra/dotfiles/nvim_config_keymaps.lua
 extra/dotfiles/nvim_config_lazy.lua
 extra/dotfiles/nvim_config_options.lua

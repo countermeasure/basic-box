@@ -756,6 +756,11 @@ place_as_root_user_with_mode_644 \
   ${installer_dir}/firefox_policies.json \
   /usr/share/firefox-esr/distribution/policies.json
 
+# Randomise MAC address.
+place_as_root_user_with_mode_644 \
+  ${installer_dir}/nm_mac_randomisation.conf \
+  /etc/NetworkManager/conf.d/mac_randomisation.conf
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.

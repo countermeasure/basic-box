@@ -104,6 +104,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - wl-clipboard installed
 - Podman installed
 - fish installed and set as the interactive shell
+- MAC address randomised
 
 
 Set up
