@@ -2,7 +2,7 @@
 Description=Configure system on first boot.
 
 [Service]
-ExecStart=/usr/local/simple-cdd/first_boot.sh
+ExecStart=sh -c '/home/$(ls /home)/.local/bin/first_boot'
 
 [Install]
 WantedBy=multi-user.target

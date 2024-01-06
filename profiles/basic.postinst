@@ -4,7 +4,6 @@
 set -o errexit -o nounset -o pipefail
 
 INSTALLER_DIR='/media/cdrom/simple-cdd'
-LOCAL_DIR='/usr/local/simple-cdd'
 
 USERNAME=$(ls /home)
 USER_DIR="/home/$USERNAME"
@@ -15,7 +14,7 @@ AUTOSTART_DIR="$USER_CONFIG_DIR/autostart"
 extract_tar() {
   # Make a directory and extract the contents of a tarfile into it.
   mkdir "$2"
-  tar --extract --file $LOCAL_DIR/"$1" --directory "$2" --strip-component 1
+  tar --extract --file $INSTALLER_DIR/"$1" --directory "$2" --strip-component 1
 }
 
 get_version() {
@@ -50,90 +49,14 @@ install_with_pipx() {
 # Install jq.
 apt install --yes jq
 
-# Copy extra files onto the new installation.
-cp $INSTALLER_DIR/backports.list $LOCAL_DIR
-cp $INSTALLER_DIR/bandwhich.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/bandwhich_source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/bat.deb $LOCAL_DIR
-cp $INSTALLER_DIR/box.sh $LOCAL_DIR
-cp $INSTALLER_DIR/delta.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/delta_source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/direnv.linux $LOCAL_DIR
-cp $INSTALLER_DIR/direnv_source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/dot_bashrc_aliases $LOCAL_DIR
-cp $INSTALLER_DIR/dot_bashrc_functions $LOCAL_DIR
-cp $INSTALLER_DIR/dot_bashrc_modifications $LOCAL_DIR
-cp $INSTALLER_DIR/dot_profile_modifications $LOCAL_DIR
-cp $INSTALLER_DIR/exa.zip $LOCAL_DIR
-cp $INSTALLER_DIR/fd.deb $LOCAL_DIR
-cp $INSTALLER_DIR/fira_code.ttf $LOCAL_DIR
-cp $INSTALLER_DIR/firefox_policies.json $LOCAL_DIR
-cp $INSTALLER_DIR/first_boot.service $LOCAL_DIR
-cp $INSTALLER_DIR/first_boot.sh $LOCAL_DIR
-cp $INSTALLER_DIR/first_login.desktop $LOCAL_DIR
-cp $INSTALLER_DIR/first_login.sh $LOCAL_DIR
-cp $INSTALLER_DIR/fzf.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/fzf_source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/geckodriver.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/git_global_ignore $LOCAL_DIR
-cp $INSTALLER_DIR/git_wrapper.sh $LOCAL_DIR
-cp $INSTALLER_DIR/gitk $LOCAL_DIR
-cp $INSTALLER_DIR/htoprc $LOCAL_DIR
-cp $INSTALLER_DIR/httpie-completion.bash $LOCAL_DIR
-cp $INSTALLER_DIR/ipython_config.py $LOCAL_DIR
-cp $INSTALLER_DIR/jupyterlab_apputils_settings $LOCAL_DIR
-cp $INSTALLER_DIR/jupyterlab_codemirror_settings $LOCAL_DIR
-cp $INSTALLER_DIR/keepassxc.ini $LOCAL_DIR
-cp $INSTALLER_DIR/keyd_default.conf $LOCAL_DIR
-cp $INSTALLER_DIR/keyd_source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/mullvad.deb $LOCAL_DIR
-cp $INSTALLER_DIR/nvim.appimage $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_config_autocmds.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_config_keymaps.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_config_lazy.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_config_options.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_init.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_lazy_lock.json $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_colourscheme.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_conform.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_lualine.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_luasnip.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_neotree.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_nvim_cmp.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_nvim_lint.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_nvim_lspconfig.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_ranger.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_telescope.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_treesitter.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_plugins_which_key.lua $LOCAL_DIR
-cp $INSTALLER_DIR/nvim_source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/pyenv_source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/ranger_colourscheme.py $LOCAL_DIR
-cp $INSTALLER_DIR/ranger_rc.conf $LOCAL_DIR
-cp $INSTALLER_DIR/ranger_rifle.conf $LOCAL_DIR
-cp $INSTALLER_DIR/ranger_scope.sh $LOCAL_DIR
-cp $INSTALLER_DIR/ripgrep.deb $LOCAL_DIR
-cp $INSTALLER_DIR/setup.rst $LOCAL_DIR
-cp $INSTALLER_DIR/sources_syncthing.list $LOCAL_DIR
-cp $INSTALLER_DIR/starship.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/starship.toml $LOCAL_DIR
-cp $INSTALLER_DIR/sudoers_apt $LOCAL_DIR
-cp $INSTALLER_DIR/sudoers_cryptsetup $LOCAL_DIR
-cp $INSTALLER_DIR/sudoers_lecture $LOCAL_DIR
-cp $INSTALLER_DIR/sudoers_lynis $LOCAL_DIR
-cp $INSTALLER_DIR/sudoers_powertop $LOCAL_DIR
-cp $INSTALLER_DIR/sudoers_rkhunter $LOCAL_DIR
-cp $INSTALLER_DIR/sudoers_tlp $LOCAL_DIR
-cp $INSTALLER_DIR/sudoers_ufw $LOCAL_DIR
-cp $INSTALLER_DIR/tlp_charging_thresholds.conf $LOCAL_DIR
-cp $INSTALLER_DIR/trash_cli_source.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/yt_dlp.tar.gz $LOCAL_DIR
-cp $INSTALLER_DIR/yt_dlp_config $LOCAL_DIR
-cp $INSTALLER_DIR/zathurarc $LOCAL_DIR
-cp $INSTALLER_DIR/zoxide.deb $LOCAL_DIR
-
 # Copy first_boot systemd unit file into place.
-cp $LOCAL_DIR/first_boot.service /etc/systemd/system
+mkdir -p "$USER_BIN_DIR"
+cp $INSTALLER_DIR/first_boot.sh "$USER_BIN_DIR"/first_boot
+# When $USER_BIN_DIR is created, $USER_DIR/.local doesn't exist, so the
+# ownership of $USER_DIR/.local must be changed changed recursively.
+chown --recursive "$USERNAME":"$USERNAME" "$USER_DIR"/.local
+chmod 755 "$USER_BIN_DIR"/first_boot
+cp $INSTALLER_DIR/first_boot.service /etc/systemd/system
 
 # Enable the first_boot systemd service. This performs configuration tasks
 # which can't be done in this postinst script, and is then removed.
@@ -143,18 +66,21 @@ systemctl enable first_boot.service
 apt install ufw
 
 # Install the Mullvad VPN app.
-apt install --yes $LOCAL_DIR/mullvad.deb
+apt install --yes $INSTALLER_DIR/mullvad.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
+cp $INSTALLER_DIR/first_login.sh "$USER_BIN_DIR"/first_login
+chown "$USERNAME":"$USERNAME" "$USER_BIN_DIR"/first_login
+chmod 755 "$USER_BIN_DIR"/first_login
 runuser \
   --login \
   "$USERNAME" \
   --command \
-  "desktop-file-install --dir=$AUTOSTART_DIR $LOCAL_DIR/first_login.desktop"
+  "desktop-file-install --dir=$AUTOSTART_DIR $INSTALLER_DIR/first_login.desktop"
 
 # Enable Backports to be able to install Tor Browser Launcher.
-cp $LOCAL_DIR/backports.list /etc/apt/sources.list.d
+cp $INSTALLER_DIR/backports.list /etc/apt/sources.list.d
 apt update
 
 # Install Tor Browser Launcher. Only the Backports package works for Bullseye
@@ -167,9 +93,9 @@ PIPX_VERSION=$(get_version 'pipx')
 runuser --login "$USERNAME" --command "pip3 install pipx==${PIPX_VERSION}"
 
 # Copy .bashrc extensions into place and enable them.
-cp $LOCAL_DIR/dot_bashrc_aliases "$USER_DIR"/.bashrc_aliases
-cp $LOCAL_DIR/dot_bashrc_functions "$USER_DIR"/.bashrc_functions
-cp $LOCAL_DIR/dot_bashrc_modifications "$USER_DIR"/.bashrc_modifications
+cp $INSTALLER_DIR/dot_bashrc_aliases "$USER_DIR"/.bashrc_aliases
+cp $INSTALLER_DIR/dot_bashrc_functions "$USER_DIR"/.bashrc_functions
+cp $INSTALLER_DIR/dot_bashrc_modifications "$USER_DIR"/.bashrc_modifications
 chown "$USERNAME":"$USERNAME" "$USER_DIR"/.bashrc_*
 chmod 644 "$USER_DIR"/.bashrc_*
 printf '\n# Enable .bashrc extensions.\n' >>"$USER_DIR"/.bashrc
@@ -177,7 +103,7 @@ printf '\n# Enable .bashrc extensions.\n' >>"$USER_DIR"/.bashrc
 echo 'for file in ~/.bashrc_*; do . "$file"; done' >>"$USER_DIR"/.bashrc
 
 # Copy .profile extension into place and enable it.
-cp $LOCAL_DIR/dot_profile_modifications "$USER_DIR"/.profile_modifications
+cp $INSTALLER_DIR/dot_profile_modifications "$USER_DIR"/.profile_modifications
 chown "$USERNAME":"$USERNAME" "$USER_DIR"/.profile_modifications
 chmod 644 "$USER_DIR"/.profile_modifications
 printf '\n# Enable .profile modifications.\n' >>"$USER_DIR"/.profile
@@ -228,13 +154,13 @@ sed -i \
   /etc/gdm3/daemon.conf
 
 # Install fd.
-dpkg -i $LOCAL_DIR/fd.deb
+dpkg -i $INSTALLER_DIR/fd.deb
 
 # Install ripgrep.
-dpkg -i $LOCAL_DIR/ripgrep.deb
+dpkg -i $INSTALLER_DIR/ripgrep.deb
 
 # Install exa.
-unzip -d /tmp/exa $LOCAL_DIR/exa.zip
+unzip -d /tmp/exa $INSTALLER_DIR/exa.zip
 cp /tmp/exa/bin/exa /usr/local/bin
 cp /tmp/exa/completions/exa.bash /usr/share/bash-completion/completions
 cp /tmp/exa/man/exa.1 /usr/local/share/man/man1
@@ -243,10 +169,10 @@ cp /tmp/exa/man/exa_colors.5 /usr/local/share/man/man5
 mandb
 
 # Install bat.
-dpkg -i $LOCAL_DIR/bat.deb
+dpkg -i $INSTALLER_DIR/bat.deb
 
 # Install fzf.
-tar --extract --file $LOCAL_DIR/fzf.tar.gz --directory /usr/local/bin
+tar --extract --file $INSTALLER_DIR/fzf.tar.gz --directory /usr/local/bin
 extract_tar fzf_source.tar.gz /tmp/fzf_source
 cp /tmp/fzf_source/man/man1/fzf.1 /usr/local/share/man/man1
 mkdir /usr/local/share/fzf
@@ -255,13 +181,13 @@ cp /tmp/fzf_source/shell/key-bindings.bash /usr/local/share/fzf
 mandb
 
 # Install zoxide.
-apt install --yes $LOCAL_DIR/zoxide.deb
+apt install --yes $INSTALLER_DIR/zoxide.deb
 
 # Install htop.
 apt install --yes htop
 HTOP_DIR="$USER_CONFIG_DIR/htop"
 mkdir "$HTOP_DIR"
-cp $LOCAL_DIR/htoprc "$HTOP_DIR"
+cp $INSTALLER_DIR/htoprc "$HTOP_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$HTOP_DIR"
 chmod 644 "$HTOP_DIR"/htoprc
 
@@ -317,7 +243,7 @@ git_global_config_set 'init.defaultBranch' 'main'
 apt install --yes gitk
 GIT_DIR="$USER_CONFIG_DIR/git"
 mkdir "$GIT_DIR"
-cp $LOCAL_DIR/gitk "$GIT_DIR"
+cp $INSTALLER_DIR/gitk "$GIT_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$GIT_DIR"
 chmod 644 "$GIT_DIR"/gitk
 
@@ -330,20 +256,20 @@ make --directory=/tmp/keyd_source install
 # to keep it within the user's home directory.
 KEYD_DIR="$USER_CONFIG_DIR/keyd"
 mkdir "$KEYD_DIR"
-cp $LOCAL_DIR/keyd_default.conf "$KEYD_DIR/default.conf"
+cp $INSTALLER_DIR/keyd_default.conf "$KEYD_DIR/default.conf"
 chown --recursive "$USERNAME":"$USERNAME" "$KEYD_DIR"
 chmod 644 "$KEYD_DIR"/default.conf
 ln --symbolic "$KEYD_DIR"/default.conf /etc/keyd/default.conf
 
 # Make the "box" command available everywhere.
 BOX_SCRIPT_PATH="$USER_BIN_DIR/box"
-cp $LOCAL_DIR/box.sh "$BOX_SCRIPT_PATH"
+cp $INSTALLER_DIR/box.sh "$BOX_SCRIPT_PATH"
 chown "$USERNAME":"$USERNAME" "$BOX_SCRIPT_PATH"
 chmod 755 "$BOX_SCRIPT_PATH"
 
 # Install direnv.
 DIRENV_EXECUTABLE_PATH='/usr/local/bin/direnv'
-cp $LOCAL_DIR/direnv.linux $DIRENV_EXECUTABLE_PATH
+cp $INSTALLER_DIR/direnv.linux $DIRENV_EXECUTABLE_PATH
 chmod 755 $DIRENV_EXECUTABLE_PATH
 extract_tar direnv_source.tar.gz /tmp/direnv_source
 cp /tmp/direnv_source/man/direnv-fetchurl.1 /usr/local/share/man/man1
@@ -354,18 +280,18 @@ mandb
 
 # Install Fira Code Nerd Font.
 FONTS_DIR='/usr/local/share/fonts'
-cp $LOCAL_DIR/fira_code.ttf $FONTS_DIR
+cp $INSTALLER_DIR/fira_code.ttf $FONTS_DIR
 chmod 664 $FONTS_DIR/fira_code.ttf
 # Make Fira Code the system-wide monospace font.
 gsettings_set 'desktop.interface monospace-font-name "FiraCode Nerd Font 11"'
 
 # Install Starship.
-tar --extract --file $LOCAL_DIR/starship.tar.gz --directory /usr/local/bin
+tar --extract --file $INSTALLER_DIR/starship.tar.gz --directory /usr/local/bin
 # The Starship binary is called with its full path here as calling it just with
 # starship doesn't work.
 /usr/local/bin/starship completions bash > \
   /usr/share/bash-completion/completions/starship.bash
-cp $LOCAL_DIR/starship.toml "$USER_CONFIG_DIR"
+cp $INSTALLER_DIR/starship.toml "$USER_CONFIG_DIR"
 chown "$USERNAME":"$USERNAME" "$USER_CONFIG_DIR"/starship.toml
 chmod 664 "$USER_CONFIG_DIR"/starship.toml
 
@@ -376,7 +302,7 @@ USER_COMPLETION_DIR="$USER_SHARE_DIR/bash-completion/completions"
 mkdir -p "$USER_COMPLETION_DIR"
 # The completion file needs to be named with of the commands which it relates
 # to to work, so rather than naming it httpie.bash, it is named https.bash.
-cp $LOCAL_DIR/httpie-completion.bash "$USER_COMPLETION_DIR"/http.bash
+cp $INSTALLER_DIR/httpie-completion.bash "$USER_COMPLETION_DIR"/http.bash
 ln --symbolic \
   "$USER_COMPLETION_DIR"/http.bash \
   "$USER_COMPLETION_DIR"/https.bash
@@ -390,12 +316,12 @@ apt install --yes nmap
 apt install --yes keepassxc
 KEEPASSXC_DIR="$USER_CONFIG_DIR/keepassxc"
 mkdir "$KEEPASSXC_DIR"
-cp $LOCAL_DIR/keepassxc.ini "$KEEPASSXC_DIR"
+cp $INSTALLER_DIR/keepassxc.ini "$KEEPASSXC_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$KEEPASSXC_DIR"
 chmod 644 "$KEEPASSXC_DIR"/keepassxc.ini
 
 # Add post-installation setup instructions.
-cp $LOCAL_DIR/setup.rst "$USER_DIR"
+cp $INSTALLER_DIR/setup.rst "$USER_DIR"
 chown "$USERNAME":"$USERNAME" "$USER_DIR"/setup.rst
 chmod 644 "$USER_DIR"/setup.rst
 
@@ -423,7 +349,7 @@ chmod 644 "$USER_COMPLETION_DIR"/tldr.bash
 apt install --yes offlineimap
 
 # Add a global Git ignore file.
-cp $LOCAL_DIR/git_global_ignore "$GIT_DIR"/ignore
+cp $INSTALLER_DIR/git_global_ignore "$GIT_DIR"/ignore
 chown "$USERNAME":"$USERNAME" "$GIT_DIR"/ignore
 chmod 644 "$GIT_DIR"/ignore
 
@@ -441,7 +367,7 @@ mandb
 # Add a Ranger rc.conf file.
 RANGER_DIR="$USER_CONFIG_DIR/ranger"
 mkdir "$RANGER_DIR"
-cp $LOCAL_DIR/ranger_rc.conf "$RANGER_DIR/rc.conf"
+cp $INSTALLER_DIR/ranger_rc.conf "$RANGER_DIR/rc.conf"
 chown --recursive "$USERNAME":"$USERNAME" "$RANGER_DIR"
 chmod 644 "$RANGER_DIR"/rc.conf
 
@@ -449,7 +375,7 @@ chmod 644 "$RANGER_DIR"/rc.conf
 # The default Vim package is no longer required, so remove it first.
 apt purge --yes vim-tiny
 NVIM_PATH=/usr/local/bin/nvim
-cp $LOCAL_DIR/nvim.appimage $NVIM_PATH
+cp $INSTALLER_DIR/nvim.appimage $NVIM_PATH
 chmod 755 $NVIM_PATH
 extract_tar nvim_source.tar.gz /tmp/nvim_source
 cp /tmp/nvim_source/src/man/nvim.1 /usr/local/share/man/man1
@@ -475,48 +401,56 @@ runuser -l root -c 'echo 1 | select-editor'
 # Put the LazyVim files in place.
 NVIM_CONFIG_DIR="$USER_CONFIG_DIR/nvim"
 mkdir -p "$NVIM_CONFIG_DIR/lua/config"
-cp $LOCAL_DIR/nvim_init.lua "$NVIM_CONFIG_DIR/init.lua"
-cp $LOCAL_DIR/nvim_lazy_lock.json "$NVIM_CONFIG_DIR/lazy-lock.json"
+cp $INSTALLER_DIR/nvim_init.lua "$NVIM_CONFIG_DIR/init.lua"
+cp $INSTALLER_DIR/nvim_lazy_lock.json "$NVIM_CONFIG_DIR/lazy-lock.json"
 cp \
-  $LOCAL_DIR/nvim_config_autocmds.lua \
+  $INSTALLER_DIR/nvim_config_autocmds.lua \
   "$NVIM_CONFIG_DIR/lua/config/autocmds.lua"
-cp $LOCAL_DIR/nvim_config_keymaps.lua "$NVIM_CONFIG_DIR/lua/config/keymaps.lua"
-cp $LOCAL_DIR/nvim_config_lazy.lua "$NVIM_CONFIG_DIR/lua/config/lazy.lua"
-cp $LOCAL_DIR/nvim_config_options.lua "$NVIM_CONFIG_DIR/lua/config/options.lua"
+cp \
+  $INSTALLER_DIR/nvim_config_keymaps.lua \
+  "$NVIM_CONFIG_DIR/lua/config/keymaps.lua"
+cp \
+  $INSTALLER_DIR/nvim_config_lazy.lua \
+  "$NVIM_CONFIG_DIR/lua/config/lazy.lua"
+cp \
+  $INSTALLER_DIR/nvim_config_options.lua \
+  "$NVIM_CONFIG_DIR/lua/config/options.lua"
 mkdir "$NVIM_CONFIG_DIR/lua/plugins"
 cp \
-  $LOCAL_DIR/nvim_plugins_colourscheme.lua \
+  $INSTALLER_DIR/nvim_plugins_colourscheme.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/colourscheme.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_conform.lua \
+  $INSTALLER_DIR/nvim_plugins_conform.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/conform.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_lualine.lua \
+  $INSTALLER_DIR/nvim_plugins_lualine.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/lualine.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_luasnip.lua \
+  $INSTALLER_DIR/nvim_plugins_luasnip.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/luasnip.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_neotree.lua \
+  $INSTALLER_DIR/nvim_plugins_neotree.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/neotree.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_nvim_cmp.lua \
+  $INSTALLER_DIR/nvim_plugins_nvim_cmp.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/nvim_cmp.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_nvim_lint.lua \
+  $INSTALLER_DIR/nvim_plugins_nvim_lint.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/nvim_lint.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_nvim_lspconfig.lua \
+  $INSTALLER_DIR/nvim_plugins_nvim_lspconfig.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/nvim_lspconfig.lua"
-cp $LOCAL_DIR/nvim_plugins_ranger.lua "$NVIM_CONFIG_DIR/lua/plugins/ranger.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_telescope.lua \
+  $INSTALLER_DIR/nvim_plugins_ranger.lua \
+  "$NVIM_CONFIG_DIR/lua/plugins/ranger.lua"
+cp \
+  $INSTALLER_DIR/nvim_plugins_telescope.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/telescope.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_treesitter.lua \
+  $INSTALLER_DIR/nvim_plugins_treesitter.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/treesitter.lua"
 cp \
-  $LOCAL_DIR/nvim_plugins_which_key.lua \
+  $INSTALLER_DIR/nvim_plugins_which_key.lua \
   "$NVIM_CONFIG_DIR/lua/plugins/which_key.lua"
 chown --recursive "$USERNAME":"$USERNAME" "$NVIM_CONFIG_DIR"
 find "$NVIM_CONFIG_DIR" -type f -exec chmod 644 {} \;
@@ -542,7 +476,7 @@ apt install --yes rfkill
 # Add a yt-dlp configuration file.
 YT_DLP_DIR="$USER_CONFIG_DIR/yt-dlp"
 mkdir "$YT_DLP_DIR"
-cp $LOCAL_DIR/yt_dlp_config "$YT_DLP_DIR"/config
+cp $INSTALLER_DIR/yt_dlp_config "$YT_DLP_DIR"/config
 chown --recursive "$USERNAME":"$USERNAME" "$YT_DLP_DIR"
 chmod 644 "$YT_DLP_DIR"/config
 
@@ -550,7 +484,7 @@ chmod 644 "$YT_DLP_DIR"/config
 apt install --yes atool
 
 # Install bandwhich.
-tar --extract --file $LOCAL_DIR/bandwhich.tar.gz --directory /usr/local/bin
+tar --extract --file $INSTALLER_DIR/bandwhich.tar.gz --directory /usr/local/bin
 extract_tar bandwhich_source.tar.gz /tmp/bandwhich_source
 cp /tmp/bandwhich_source/docs/bandwhich.1 /usr/local/share/man/man1
 mandb
@@ -565,7 +499,7 @@ apt install --yes whois
 # Add ranger colourscheme.
 RANGER_COLOURSCHEME_DIR="$RANGER_DIR/colorschemes"
 mkdir "$RANGER_COLOURSCHEME_DIR"
-cp $LOCAL_DIR/ranger_colourscheme.py "$RANGER_COLOURSCHEME_DIR"/box.py
+cp $INSTALLER_DIR/ranger_colourscheme.py "$RANGER_COLOURSCHEME_DIR"/box.py
 chown --recursive "$USERNAME":"$USERNAME" "$RANGER_COLOURSCHEME_DIR"
 chmod 644 "$RANGER_COLOURSCHEME_DIR"/box.py
 
@@ -579,13 +513,13 @@ apt install --yes python-is-python3
 apt install --yes zathura
 ZATHURA_DIR="$USER_CONFIG_DIR/zathura"
 mkdir "$ZATHURA_DIR"
-cp $LOCAL_DIR/zathurarc "$ZATHURA_DIR"
+cp $INSTALLER_DIR/zathurarc "$ZATHURA_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$ZATHURA_DIR"
 chmod 644 "$ZATHURA_DIR"/zathurarc
 
 # Add ranger rifle.conf and scope.sh files.
-cp $LOCAL_DIR/ranger_rifle.conf "$RANGER_DIR/rifle.conf"
-cp $LOCAL_DIR/ranger_scope.sh "$RANGER_DIR/scope.sh"
+cp $INSTALLER_DIR/ranger_rifle.conf "$RANGER_DIR/rifle.conf"
+cp $INSTALLER_DIR/ranger_scope.sh "$RANGER_DIR/scope.sh"
 chmod 644 "$RANGER_DIR"/rifle.conf
 chmod 755 "$RANGER_DIR"/scope.sh
 
@@ -597,7 +531,7 @@ SOURCES_DIR='/etc/apt/sources.list.d'
 wget \
   --output-document /usr/share/keyrings/syncthing-archive-keyring.gpg \
   https://syncthing.net/release-key.gpg
-cp $LOCAL_DIR/sources_syncthing.list $SOURCES_DIR/syncthing.list
+cp $INSTALLER_DIR/sources_syncthing.list $SOURCES_DIR/syncthing.list
 chmod 644 $SOURCES_DIR/syncthing.list
 apt update
 apt install --yes syncthing
@@ -605,25 +539,25 @@ apt install --yes syncthing
 # firewall rule. This is required for the "box sync" command to work properly
 # when the terminal it is executed in is closed before Syncthing is closed.
 SUDOERS_DIR='/etc/sudoers.d'
-cp $LOCAL_DIR/sudoers_ufw $SUDOERS_DIR/ufw
+cp $INSTALLER_DIR/sudoers_ufw $SUDOERS_DIR/ufw
 chmod 440 $SUDOERS_DIR/ufw
 
 # Add ipython_config.py file.
 IPYTHON_DIR="$USER_DIR/.ipython"
 IPYTHON_PROFILE_DIR="$IPYTHON_DIR/profile_default"
 mkdir -p "$IPYTHON_PROFILE_DIR"
-cp $LOCAL_DIR/ipython_config.py "$IPYTHON_PROFILE_DIR"
+cp $INSTALLER_DIR/ipython_config.py "$IPYTHON_PROFILE_DIR"
 chown --recursive "$USERNAME":"$USERNAME" "$IPYTHON_DIR"
 chmod 644 "$IPYTHON_PROFILE_DIR"/ipython_config.py
 
 # Allow passwordless sudo for the apt update and apt upgrade commands.
-cp $LOCAL_DIR/sudoers_apt $SUDOERS_DIR/apt
+cp $INSTALLER_DIR/sudoers_apt $SUDOERS_DIR/apt
 chmod 440 $SUDOERS_DIR/apt
 
 # Install Lynis.
 apt install --yes lynis
 # Allow passwordless sudo for the "lynis audit system" command.
-cp $LOCAL_DIR/sudoers_lynis $SUDOERS_DIR/lynis
+cp $INSTALLER_DIR/sudoers_lynis $SUDOERS_DIR/lynis
 chmod 440 $SUDOERS_DIR/lynis
 
 # Install ClamAV.
@@ -632,7 +566,7 @@ apt install --yes clamav
 # Install Rootkit Hunter.
 apt install --yes rkhunter
 # Allow passwordless sudo for the "rkhunter" command.
-cp $LOCAL_DIR/sudoers_rkhunter $SUDOERS_DIR/rkhunter
+cp $INSTALLER_DIR/sudoers_rkhunter $SUDOERS_DIR/rkhunter
 chmod 440 $SUDOERS_DIR/rkhunter
 
 # Install pyenv.
@@ -665,7 +599,10 @@ apt install --yes \
   zlib1g-dev
 
 # Install geckodriver.
-tar --extract --file $LOCAL_DIR/geckodriver.tar.gz --directory /usr/local/bin
+tar \
+  --extract --file \
+  $INSTALLER_DIR/geckodriver.tar.gz \
+  --directory /usr/local/bin
 
 # Install JupyterLab.
 install_with_pipx jupyterlab
@@ -675,30 +612,30 @@ JUPYTERLAB_APPUTILS_EXTENSION_DIR="$JUPYTER_DIR/lab/user-settings/\
 @jupyterlab/apputils-extension"
 mkdir -p "$JUPYTERLAB_APPUTILS_EXTENSION_DIR"
 cp \
-  $LOCAL_DIR/jupyterlab_apputils_settings \
+  $INSTALLER_DIR/jupyterlab_apputils_settings \
   "$JUPYTERLAB_APPUTILS_EXTENSION_DIR/themes.jupyterlab-settings"
 JUPYTERLAB_CODEMIROR_EXTENSION_DIR="$JUPYTER_DIR/lab/user-settings/\
 @jupyterlab/codemirror-extension"
 mkdir "$JUPYTERLAB_CODEMIROR_EXTENSION_DIR"
 cp \
-  $LOCAL_DIR/jupyterlab_codemirror_settings \
+  $INSTALLER_DIR/jupyterlab_codemirror_settings \
   "$JUPYTERLAB_CODEMIROR_EXTENSION_DIR/commands.jupyterlab-settings"
 chown --recursive "$USERNAME":"$USERNAME" "$JUPYTER_DIR"
 chmod 644 "$JUPYTERLAB_APPUTILS_EXTENSION_DIR/themes.jupyterlab-settings"
 chmod 644 "$JUPYTERLAB_CODEMIROR_EXTENSION_DIR/commands.jupyterlab-settings"
 
 # Allow passwordless sudo for the "powertop" command.
-cp $LOCAL_DIR/sudoers_powertop $SUDOERS_DIR/powertop
+cp $INSTALLER_DIR/sudoers_powertop $SUDOERS_DIR/powertop
 chmod 440 $SUDOERS_DIR/powertop
 
 # Install TLP.
 apt install --yes tlp
 # Allow passwordless sudo for the "tlp" and "tlp-stat" commands.
-cp $LOCAL_DIR/sudoers_tlp $SUDOERS_DIR/tlp
+cp $INSTALLER_DIR/sudoers_tlp $SUDOERS_DIR/tlp
 chmod 440 $SUDOERS_DIR/tlp
 # Configure battery charging thresholds.
 cp \
-  $LOCAL_DIR/tlp_charging_thresholds.conf \
+  $INSTALLER_DIR/tlp_charging_thresholds.conf \
   /etc/tlp.d/10-charging-thresholds.conf
 chmod 644 /etc/tlp.d/10-charging-thresholds.conf
 
@@ -707,13 +644,13 @@ chmod 644 /etc/tlp.d/10-charging-thresholds.conf
 apt install --yes libnotify-bin
 
 # Don't show the lecture message the first time "sudo" is used.
-cp $LOCAL_DIR/sudoers_lecture $SUDOERS_DIR/lecture
+cp $INSTALLER_DIR/sudoers_lecture $SUDOERS_DIR/lecture
 chmod 440 $SUDOERS_DIR/lecture
 
 # Allow passwordless sudo for the "cryptsetup isLuks" command.
 # This is so that the first_login.sh script doesn't need to ask for a password
 # when looking for additional encrypted disks.
-cp $LOCAL_DIR/sudoers_cryptsetup $SUDOERS_DIR/cryptsetup
+cp $INSTALLER_DIR/sudoers_cryptsetup $SUDOERS_DIR/cryptsetup
 chmod 440 $SUDOERS_DIR/cryptsetup
 
 # Install Thunderbird.
@@ -721,7 +658,7 @@ apt install --yes thunderbird
 
 # Make the "git_wrapper" command available everywhere.
 GIT_WRAPPER_SCRIPT_PATH="$USER_BIN_DIR/git_wrapper"
-cp $LOCAL_DIR/git_wrapper.sh "$GIT_WRAPPER_SCRIPT_PATH"
+cp $INSTALLER_DIR/git_wrapper.sh "$GIT_WRAPPER_SCRIPT_PATH"
 chown "$USERNAME":"$USERNAME" "$GIT_WRAPPER_SCRIPT_PATH"
 chmod 755 "$GIT_WRAPPER_SCRIPT_PATH"
 
@@ -738,5 +675,5 @@ gsettings_set 'desktop.wm.preferences visual-bell-type "frame-flash"'
 
 # Configure Firefox.
 FIREFOX_POLICIES_PATH='/usr/share/firefox-esr/distribution/policies.json'
-cp $LOCAL_DIR/firefox_policies.json $FIREFOX_POLICIES_PATH
+cp $INSTALLER_DIR/firefox_policies.json $FIREFOX_POLICIES_PATH
 chmod 644 $FIREFOX_POLICIES_PATH

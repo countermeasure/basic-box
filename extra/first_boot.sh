@@ -19,3 +19,5 @@ rkhunter --cronjob --report-warnings-only --summary || true
 # Remove the first_boot infrastructure now that its work is done.
 systemctl disable first_boot.service
 rm /etc/systemd/system/first_boot.service
+user=$(ls /home)
+rm /home/"${user}"/.local/bin/first_boot

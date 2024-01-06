@@ -1,5 +1,5 @@
 [Desktop Entry]
 Name=First login
 Type=Application
-Exec=gnome-terminal -- /usr/local/simple-cdd/first_login.sh
+Exec=sh -c "gnome-terminal -- \$HOME/.local/bin/first_login"
 Comment=Perform interactive configuration on first login.

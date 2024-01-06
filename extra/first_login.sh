@@ -210,6 +210,6 @@ echo
 
 read -n 1 -p 'Press any key to close this terminal...' -r -s
 
-# This script should only run at the first login, so remove the desktop entry
-# which calls it now that it has done its work.
+# Remove the first_login infrastructure now that its work is done.
 rm "$HOME"/.config/autostart/first_login.desktop
+rm "$HOME"/.local/bin/first_login
