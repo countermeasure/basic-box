@@ -15,8 +15,8 @@ export EDITOR='vim'
 sudo ufw delete allow syncthing
 
 # Enable pyenv.
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+export PYENV_ROOT="${HOME}/.pyenv"
+command -v pyenv >/dev/null || export PATH="${PYENV_ROOT}/bin:${PATH}"
 eval "$(pyenv init -)"
 
 # Ensure that when the Mullvad VPN app is present and the system boots, network

@@ -84,16 +84,16 @@ elif [[ ${non_boot_encrypted_disks_count} = 1 ]]; then
   disk_uuid=$(sudo cryptsetup luksUUID "${disk}")
   crypttab_entry="${device_name} UUID=${disk_uuid} ${keyfile} luks"
   entry_label='# Additional encrypted disk.'
-  echo "$entry_label" | sudo tee --append /etc/crypttab >/dev/null
-  echo "$crypttab_entry" | sudo tee --append /etc/crypttab >/dev/null
+  echo "${entry_label}" | sudo tee --append /etc/crypttab >/dev/null
+  echo "${crypttab_entry}" | sudo tee --append /etc/crypttab >/dev/null
   mount_point="/mnt/${device_name}"
   sudo mkdir "${mount_point}"
   home_data_directory="${HOME}/Data"
   ln --symbolic "${mount_point}" "${home_data_directory}"
   device_path="/dev/mapper/${device_name}"
   fstab_entry="${device_path} ${mount_point} ext4 defaults 0 2"
-  echo "$entry_label" | sudo tee --append /etc/fstab >/dev/null
-  echo "$fstab_entry" | sudo tee --append /etc/fstab >/dev/null
+  echo "${entry_label}" | sudo tee --append /etc/fstab >/dev/null
+  echo "${fstab_entry}" | sudo tee --append /etc/fstab >/dev/null
   sudo cryptsetup open --key-file="${keyfile}" "${disk}" "${device_name}"
   sudo mount "${device_path}" "${mount_point}"
   # The chown operation must come after the mount operation, because if it
@@ -119,16 +119,16 @@ echo
 echo 'Step 2 of 3: Enable the Mullvad VPN'
 echo '-----------------------------------'
 echo
-EXIT_CODE=''
-while [[ $EXIT_CODE != 0 ]]; do
+exit_code=''
+while [[ ${exit_code} != 0 ]]; do
   printf 'Enter your Mullvad account number to enable the VPN: '
-  read -r ACCOUNT_NUMBER
+  read -r account_number
   echo
-  echo "$ACCOUNT_NUMBER" | mullvad account login
+  echo "${account_number}" | mullvad account login
   echo
-  mullvad account get && EXIT_CODE=$? || EXIT_CODE=$?
+  mullvad account get && exit_code=$? || exit_code=$?
   echo
-  if [[ $EXIT_CODE != 0 ]]; then
+  if [[ ${exit_code} != 0 ]]; then
     echo "That account number didn't work."
     echo 'Try again.'
     echo
@@ -211,5 +211,5 @@ echo
 read -n 1 -p 'Press any key to close this terminal...' -r -s
 
 # Remove the first_login infrastructure now that its work is done.
-rm "$HOME"/.config/autostart/first_login.desktop
-rm "$HOME"/.local/bin/first_login
+rm "${HOME}"/.config/autostart/first_login.desktop
+rm "${HOME}"/.local/bin/first_login

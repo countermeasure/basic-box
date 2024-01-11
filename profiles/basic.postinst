@@ -3,47 +3,53 @@
 # Set intuitive error behaviour.
 set -o errexit -o nounset -o pipefail
 
-INSTALLER_DIR='/media/cdrom/simple-cdd'
+installer_dir=/media/cdrom/simple-cdd
 
-USERNAME=$(ls /home)
-USER_DIR="/home/$USERNAME"
-USER_BIN_DIR="$USER_DIR/.local/bin"
-USER_CONFIG_DIR="$USER_DIR/.config"
-AUTOSTART_DIR="$USER_CONFIG_DIR/autostart"
+username=$(ls /home)
+user_dir=/home/${username}
+user_bin_dir=${user_dir}/.local/bin
+user_completion_dir=${user_dir}/.local/share/bash-completion/completions
+user_config_dir=${user_dir}/.config
+
+sudoers_dir=/etc/sudoers.d
 
 extract_tar() {
   # Make a directory and extract the contents of a tarfile into it.
   mkdir "$2"
-  tar --extract --file $INSTALLER_DIR/"$1" --directory "$2" --strip-component 1
+  tar \
+    --extract \
+    --file ${installer_dir}/"$1" \
+    --directory "$2" \
+    --strip-component 1
 }
 
 get_version() {
   # Get the version of a package.
   # Remove anything within square brackets from the string supplied to get the
   # package name as it appears in versions.json.
-  PACKAGE_NAME=${1//\[*\]/}
-  jq ".[\"$PACKAGE_NAME\"]" ${INSTALLER_DIR}/versions.json | tr --delete '"'
+  package_name=${1//\[*\]/}
+  jq ".[\"${package_name}\"]" ${installer_dir}/versions.json | tr --delete '"'
 }
 
 git_global_config_set() {
   # Add a setting to the Git global configuration. It's necessary to wrap the
   # second argument in double quotes to set the configuration values
   # correctly.
-  runuser --login "$USERNAME" --command "git config --global $1 \"$2\""
+  runuser --login "${username}" --command "git config --global $1 \"$2\""
 }
 
 gsettings_set() {
   # Change a dconf setting. It's necessary to use dbus-launch ahead of
   # gsettings when invoking this as the root user.
   runuser \
-    --login "$USERNAME" \
+    --login "${username}" \
     --command "dbus-launch gsettings set org.gnome.$1"
 }
 
 install_with_pipx() {
   # Install a Python package with pipx.
-  PACKAGE_VERSION=$(get_version "$1")
-  runuser --login "$USERNAME" --command "pipx install $1==${PACKAGE_VERSION}"
+  package_version=$(get_version "$1")
+  runuser --login "${username}" --command "pipx install $1==${package_version}"
 }
 
 place_as_root_user_with_mode_440() {
@@ -67,13 +73,13 @@ place_as_root_user_with_mode_755() {
 place_as_unprivileged_user_with_mode_644() {
   # Place a file with mode 644 and owned by the unprivileged user, making any
   # subdirectories necessary.
-  runuser --login "$USERNAME" --command "install -D --mode=644 $1 $2"
+  runuser --login "${username}" --command "install -D --mode=644 $1 $2"
 }
 
 place_as_unprivileged_user_with_mode_755() {
   # Place a file with mode 755 and owned by the unprivileged user, making any
   # subdirectories necessary.
-  runuser --login "$USERNAME" --command "install -D --mode=755 $1 $2"
+  runuser --login "${username}" --command "install -D --mode=755 $1 $2"
 }
 
 # Install jq.
@@ -81,9 +87,9 @@ apt install --yes jq
 
 # Copy first_boot systemd unit file into place.
 place_as_unprivileged_user_with_mode_755 \
-  $INSTALLER_DIR/first_boot.sh "$USER_BIN_DIR"/first_boot
+  ${installer_dir}/first_boot.sh "${user_bin_dir}"/first_boot
 place_as_root_user_with_mode_644 \
-  $INSTALLER_DIR/first_boot.service /etc/systemd/system/first_boot.service
+  ${installer_dir}/first_boot.service /etc/systemd/system/first_boot.service
 
 # Enable the first_boot systemd service. This performs configuration tasks
 # which can't be done in this postinst script, and is then removed.
@@ -93,21 +99,22 @@ systemctl enable first_boot.service
 apt install ufw
 
 # Install the Mullvad VPN app.
-apt install --yes $INSTALLER_DIR/mullvad.deb
+apt install --yes ${installer_dir}/mullvad.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
 place_as_unprivileged_user_with_mode_755 \
-  $INSTALLER_DIR/first_login.sh "$USER_BIN_DIR"/first_login
+  ${installer_dir}/first_login.sh "${user_bin_dir}"/first_login
+autostart_dir=${user_config_dir}/autostart
 runuser \
   --login \
-  "$USERNAME" \
+  "${username}" \
   --command \
-  "desktop-file-install --dir=$AUTOSTART_DIR $INSTALLER_DIR/first_login.desktop"
+  "desktop-file-install --dir=${autostart_dir} ${installer_dir}/first_login.desktop"
 
 # Enable Backports to be able to install Tor Browser Launcher.
 place_as_root_user_with_mode_644 \
-  $INSTALLER_DIR/backports.list /etc/apt/sources.list.d/backports.list
+  ${installer_dir}/backports.list /etc/apt/sources.list.d/backports.list
 apt update
 
 # Install Tor Browser Launcher. Only the Backports package works for Bullseye
@@ -116,26 +123,27 @@ apt install --target-release bullseye-backports --yes torbrowser-launcher
 
 # Install pipx.
 apt install --yes python3-pip python3-venv
-PIPX_VERSION=$(get_version 'pipx')
-runuser --login "$USERNAME" --command "pip3 install pipx==${PIPX_VERSION}"
+pipx_version=$(get_version pipx)
+runuser --login "${username}" --command "pip3 install pipx==${pipx_version}"
 
 # Copy .bashrc extensions into place and enable them.
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/dot_bashrc_aliases "$USER_DIR"/.bashrc_aliases
+  ${installer_dir}/dot_bashrc_aliases "${user_dir}"/.bashrc_aliases
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/dot_bashrc_functions "$USER_DIR"/.bashrc_functions
+  ${installer_dir}/dot_bashrc_functions "${user_dir}"/.bashrc_functions
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/dot_bashrc_modifications "$USER_DIR"/.bashrc_modifications
-printf '\n# Enable .bashrc extensions.\n' >>"$USER_DIR"/.bashrc
+  ${installer_dir}/dot_bashrc_modifications "${user_dir}"/.bashrc_modifications
+printf '\n# Enable .bashrc extensions.\n' >>"${user_dir}"/.bashrc
 # shellcheck disable=SC2016
-echo 'for file in ~/.bashrc_*; do . "$file"; done' >>"$USER_DIR"/.bashrc
+echo 'for file in ~/.bashrc_*; do . "${file}"; done' >>"${user_dir}"/.bashrc
 
 # Copy .profile extension into place and enable it.
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/dot_profile_modifications "$USER_DIR"/.profile_modifications
-printf '\n# Enable .profile modifications.\n' >>"$USER_DIR"/.profile
+  ${installer_dir}/dot_profile_modifications \
+  "${user_dir}"/.profile_modifications
+printf '\n# Enable .profile modifications.\n' >>"${user_dir}"/.profile
 # shellcheck disable=SC2016
-echo '. "$HOME/.profile_modifications"' >>"$USER_DIR"/.profile
+echo '. "${HOME}/.profile_modifications"' >>"${user_dir}"/.profile
 
 # Install yt-dlp.
 install_with_pipx 'yt-dlp'
@@ -179,17 +187,17 @@ sed -i \
   's/.*AutomaticLoginEnable =.*/AutomaticLoginEnable = true/' \
   /etc/gdm3/daemon.conf
 sed -i \
-  "s/.*AutomaticLogin =.*/AutomaticLogin = $USERNAME/" \
+  "s/.*AutomaticLogin =.*/AutomaticLogin = ${username}/" \
   /etc/gdm3/daemon.conf
 
 # Install fd.
-dpkg -i $INSTALLER_DIR/fd.deb
+dpkg -i ${installer_dir}/fd.deb
 
 # Install ripgrep.
-dpkg -i $INSTALLER_DIR/ripgrep.deb
+dpkg -i ${installer_dir}/ripgrep.deb
 
 # Install exa.
-unzip -d /tmp/exa $INSTALLER_DIR/exa.zip
+unzip -d /tmp/exa ${installer_dir}/exa.zip
 place_as_root_user_with_mode_755 /tmp/exa/bin/exa /usr/local/bin/exa
 place_as_root_user_with_mode_644 \
   /tmp/exa/completions/exa.bash /usr/share/bash-completion/completions/exa.bash
@@ -200,10 +208,10 @@ place_as_root_user_with_mode_644 \
 mandb
 
 # Install bat.
-dpkg -i $INSTALLER_DIR/bat.deb
+dpkg -i ${installer_dir}/bat.deb
 
 # Install fzf.
-tar --extract --file $INSTALLER_DIR/fzf.tar.gz --directory /usr/local/bin
+tar --extract --file ${installer_dir}/fzf.tar.gz --directory /usr/local/bin
 extract_tar fzf_source.tar.gz /tmp/fzf_source
 place_as_root_user_with_mode_644 \
   /tmp/fzf_source/man/man1/fzf.1 /usr/local/share/man/man1/fzf.1
@@ -215,12 +223,12 @@ place_as_root_user_with_mode_644 \
 mandb
 
 # Install zoxide.
-apt install --yes $INSTALLER_DIR/zoxide.deb
+apt install --yes ${installer_dir}/zoxide.deb
 
 # Install htop.
 apt install --yes htop
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/htoprc "$USER_CONFIG_DIR"/htop/htoprc
+  ${installer_dir}/htoprc "${user_config_dir}"/htop/htoprc
 
 # Make the F10 key available in the GNOME Terminal by stopping it from opening
 # the GNOME Terminal menu's File item. Without doing this, changes made
@@ -248,9 +256,9 @@ git_global_config_set 'user.email' 'basic@basic.box'
 git_global_config_set 'branch.sort' '-committerdate'
 # Add Git global config settings for "git log" formatting.
 git_global_config_set 'log.date' 'format:%b %d %Y'
-GIT_COMMIT_FORMAT="%C(yellow)%h %C(white)%<(31)%s %C(dim white)Commit by \
+git_commit_format="%C(yellow)%h %C(white)%<(31)%s %C(dim white)Commit by \
 %Creset%C(magenta)%an %C(cyan)%ar %C(dim white)on %ad %C(auto)%d"
-git_global_config_set 'format.pretty' "${GIT_COMMIT_FORMAT}"
+git_global_config_set 'format.pretty' "${git_commit_format}"
 # Add Git global config setting for "git pull" behaviour.
 git_global_config_set 'pull.rebase' 'true'
 # Add Git global config setting for "git push" behaviour when no refspec is
@@ -273,7 +281,7 @@ git_global_config_set 'init.defaultBranch' 'main'
 # Install gitk
 apt install --yes gitk
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/gitk "$USER_CONFIG_DIR"/git/gitk
+  ${installer_dir}/gitk "${user_config_dir}"/git/gitk
 
 # Install and configure keyd.
 apt install --yes libudev-dev
@@ -282,18 +290,18 @@ make --directory=/tmp/keyd_source
 make --directory=/tmp/keyd_source install
 # keyd requires the configuration file to be available in /etc/keyd, but prefer
 # to keep it within the user's home directory.
-KEYD_DIR="$USER_CONFIG_DIR/keyd"
+keyd_dir="${user_config_dir}"/keyd
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/keyd_default.conf "$KEYD_DIR"/default.conf
-ln --symbolic "$KEYD_DIR"/default.conf /etc/keyd/default.conf
+  ${installer_dir}/keyd_default.conf "${keyd_dir}"/default.conf
+ln --symbolic "${keyd_dir}"/default.conf /etc/keyd/default.conf
 
 # Make the "box" command available everywhere.
 place_as_unprivileged_user_with_mode_755 \
-  $INSTALLER_DIR/box.sh "$USER_BIN_DIR"/box
+  ${installer_dir}/box.sh "${user_bin_dir}"/box
 
 # Install direnv.
 place_as_root_user_with_mode_755 \
-  $INSTALLER_DIR/direnv.linux /usr/local/bin/direnv
+  ${installer_dir}/direnv.linux /usr/local/bin/direnv
 extract_tar direnv_source.tar.gz /tmp/direnv_source
 place_as_root_user_with_mode_644 \
   /tmp/direnv_source/man/direnv-fetchurl.1 \
@@ -309,29 +317,31 @@ mandb
 
 # Install Fira Code Nerd Font.
 place_as_root_user_with_mode_644 \
-  $INSTALLER_DIR/fira_code.ttf /usr/local/share/fonts/fira_code.ttf
+  ${installer_dir}/fira_code.ttf /usr/local/share/fonts/fira_code.ttf
 # Make Fira Code the system-wide monospace font.
 gsettings_set 'desktop.interface monospace-font-name "FiraCode Nerd Font 11"'
 
 # Install Starship.
-tar --extract --file $INSTALLER_DIR/starship.tar.gz --directory /usr/local/bin
+tar \
+  --extract \
+  --file ${installer_dir}/starship.tar.gz \
+  --directory /usr/local/bin
 # The Starship binary is called with its full path here as calling it just with
 # starship doesn't work.
 /usr/local/bin/starship completions bash > \
   /usr/share/bash-completion/completions/starship.bash
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/starship.toml "$USER_CONFIG_DIR"/starship.toml
+  ${installer_dir}/starship.toml "${user_config_dir}"/starship.toml
 
 # Install HTTPie.
 install_with_pipx httpie
-USER_COMPLETION_DIR="$USER_DIR/.local/share/bash-completion/completions"
 # The completion files needs to be named with of the commands which it relates
 # to to work, so rather than naming it httpie.bash, it is named https.bash.
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/httpie-completion.bash "$USER_COMPLETION_DIR"/http.bash
+  ${installer_dir}/httpie-completion.bash "${user_completion_dir}"/http.bash
 ln --symbolic \
-  "$USER_COMPLETION_DIR"/http.bash \
-  "$USER_COMPLETION_DIR"/https.bash
+  "${user_completion_dir}"/http.bash \
+  "${user_completion_dir}"/https.bash
 
 # Install Nmap.
 apt install --yes nmap
@@ -339,11 +349,11 @@ apt install --yes nmap
 # Install KeePassXC.
 apt install --yes keepassxc
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/keepassxc.ini "$USER_CONFIG_DIR"/keepassxc/keepassxc.ini
+  ${installer_dir}/keepassxc.ini "${user_config_dir}"/keepassxc/keepassxc.ini
 
 # Add post-installation setup instructions.
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/setup.rst "$USER_DIR"/setup.rst
+  ${installer_dir}/setup.rst "${user_dir}"/setup.rst
 
 # Install IPython.
 install_with_pipx ipython
@@ -361,16 +371,16 @@ apt install --yes tree
 install_with_pipx tldr
 # tldr is called with its full path here as calling it just with tldr doesn't
 # work.
-"$USER_BIN_DIR"/tldr --print-completion bash >/tmp/tldr.bash
+"${user_bin_dir}"/tldr --print-completion bash >/tmp/tldr.bash
 place_as_unprivileged_user_with_mode_644 \
-  /tmp/tldr.bash "$USER_COMPLETION_DIR"/tldr.bash
+  /tmp/tldr.bash "${user_completion_dir}"/tldr.bash
 
 # Install OfflineIMAP.
 apt install --yes offlineimap
 
 # Add a global Git ignore file.
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/git_global_ignore "$USER_CONFIG_DIR"/git/ignore
+  ${installer_dir}/git_global_ignore "${user_config_dir}"/git/ignore
 
 # Install trash-cli.
 install_with_pipx trash-cli
@@ -396,26 +406,26 @@ mandb
 
 # Add a Ranger rc.conf file.
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/ranger_rc.conf "$USER_CONFIG_DIR"/ranger/rc.conf
+  ${installer_dir}/ranger_rc.conf "${user_config_dir}"/ranger/rc.conf
 
 # Install Neovim.
 # The default Vim package is no longer required, so remove it first.
 apt purge --yes vim-tiny
-NVIM_PATH=/usr/local/bin/nvim
-place_as_root_user_with_mode_755 $INSTALLER_DIR/nvim.appimage $NVIM_PATH
+nvim_path=/usr/local/bin/nvim
+place_as_root_user_with_mode_755 ${installer_dir}/nvim.appimage ${nvim_path}
 extract_tar nvim_source.tar.gz /tmp/nvim_source
 place_as_root_user_with_mode_644 \
   /tmp/nvim_source/src/man/nvim.1 /usr/local/share/man/man1/nvim.1
 # Set Neovim as the alternative for the editor, ex, rview, rvim, vi, view, vim
 # and vimdiff commands.
-update-alternatives --install /usr/bin/editor editor $NVIM_PATH 50
-update-alternatives --install /usr/bin/ex ex $NVIM_PATH 50
-update-alternatives --install /usr/bin/rview rview $NVIM_PATH 50
-update-alternatives --install /usr/bin/rvim rvim $NVIM_PATH 50
-update-alternatives --install /usr/bin/vi vi $NVIM_PATH 50
-update-alternatives --install /usr/bin/view view $NVIM_PATH 50
-update-alternatives --install /usr/bin/vim vim $NVIM_PATH 50
-update-alternatives --install /usr/bin/vimdiff vimdiff $NVIM_PATH 50
+update-alternatives --install /usr/bin/editor editor ${nvim_path} 50
+update-alternatives --install /usr/bin/ex ex ${nvim_path} 50
+update-alternatives --install /usr/bin/rview rview ${nvim_path} 50
+update-alternatives --install /usr/bin/rvim rvim ${nvim_path} 50
+update-alternatives --install /usr/bin/vi vi ${nvim_path} 50
+update-alternatives --install /usr/bin/view view ${nvim_path} 50
+update-alternatives --install /usr/bin/vim vim ${nvim_path} 50
+update-alternatives --install /usr/bin/vimdiff vimdiff ${nvim_path} 50
 # Set Neovim as the sensible-editor for the root user so that ranger doesn't
 # ask which editor to use the first time it goes to open a file for the root
 # user.
@@ -426,73 +436,73 @@ runuser -l root -c 'echo 1 | select-editor'
 
 # Configure Neovim.
 # Put the LazyVim files in place.
-NVIM_CONFIG_DIR="$USER_CONFIG_DIR/nvim"
+nvim_config_dir=${user_config_dir}/nvim
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_init.lua \
-  "$NVIM_CONFIG_DIR"/init.lua
+  ${installer_dir}/nvim_init.lua \
+  "${nvim_config_dir}"/init.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_lazy_lock.json \
-  "$NVIM_CONFIG_DIR"/lazy-lock.json
+  ${installer_dir}/nvim_lazy_lock.json \
+  "${nvim_config_dir}"/lazy-lock.json
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_config_autocmds.lua \
-  "$NVIM_CONFIG_DIR"/lua/config/autocmds.lua
+  ${installer_dir}/nvim_config_autocmds.lua \
+  "${nvim_config_dir}"/lua/config/autocmds.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_config_keymaps.lua \
-  "$NVIM_CONFIG_DIR"/lua/config/keymaps.lua
+  ${installer_dir}/nvim_config_keymaps.lua \
+  "${nvim_config_dir}"/lua/config/keymaps.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_config_lazy.lua \
-  "$NVIM_CONFIG_DIR"/lua/config/lazy.lua
+  ${installer_dir}/nvim_config_lazy.lua \
+  "${nvim_config_dir}"/lua/config/lazy.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_config_options.lua \
-  "$NVIM_CONFIG_DIR"/lua/config/options.lua
+  ${installer_dir}/nvim_config_options.lua \
+  "${nvim_config_dir}"/lua/config/options.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_colourscheme.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/colourscheme.lua
+  ${installer_dir}/nvim_plugins_colourscheme.lua \
+  "${nvim_config_dir}"/lua/plugins/colourscheme.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_conform.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/conform.lua
+  ${installer_dir}/nvim_plugins_conform.lua \
+  "${nvim_config_dir}"/lua/plugins/conform.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_lualine.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/lualine.lua
+  ${installer_dir}/nvim_plugins_lualine.lua \
+  "${nvim_config_dir}"/lua/plugins/lualine.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_luasnip.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/luasnip.lua
+  ${installer_dir}/nvim_plugins_luasnip.lua \
+  "${nvim_config_dir}"/lua/plugins/luasnip.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_neotree.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/neotree.lua
+  ${installer_dir}/nvim_plugins_neotree.lua \
+  "${nvim_config_dir}"/lua/plugins/neotree.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_nvim_cmp.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/nvim_cmp.lua
+  ${installer_dir}/nvim_plugins_nvim_cmp.lua \
+  "${nvim_config_dir}"/lua/plugins/nvim_cmp.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_nvim_lint.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/nvim_lint.lua
+  ${installer_dir}/nvim_plugins_nvim_lint.lua \
+  "${nvim_config_dir}"/lua/plugins/nvim_lint.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_nvim_lspconfig.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/nvim_lspconfig.lua
+  ${installer_dir}/nvim_plugins_nvim_lspconfig.lua \
+  "${nvim_config_dir}"/lua/plugins/nvim_lspconfig.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_ranger.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/ranger.lua
+  ${installer_dir}/nvim_plugins_ranger.lua \
+  "${nvim_config_dir}"/lua/plugins/ranger.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_telescope.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/telescope.lua
+  ${installer_dir}/nvim_plugins_telescope.lua \
+  "${nvim_config_dir}"/lua/plugins/telescope.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_treesitter.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/treesitter.lua
+  ${installer_dir}/nvim_plugins_treesitter.lua \
+  "${nvim_config_dir}"/lua/plugins/treesitter.lua
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/nvim_plugins_which_key.lua \
-  "$NVIM_CONFIG_DIR"/lua/plugins/which_key.lua
+  ${installer_dir}/nvim_plugins_which_key.lua \
+  "${nvim_config_dir}"/lua/plugins/which_key.lua
 # Install Python LSP Server and its third-party plugins.
 install_with_pipx python-lsp-server[flake8]
-PYLS_ISORT_VERSION=$(get_version 'pyls-isort')
+pyls_isort_version=$(get_version pyls-isort)
 runuser \
-  -l "$USERNAME" \
-  -c "pipx inject python-lsp-server pyls-isort==${PYLS_ISORT_VERSION}"
-PYTHON_LSP_BLACK_VERSION=$(get_version 'python-lsp-black')
+  -l "${username}" \
+  -c "pipx inject python-lsp-server pyls-isort==${pyls_isort_version}"
+python_lsp_black_version=$(get_version python-lsp-black)
 runuser \
-  -l "$USERNAME" \
-  -c "pipx inject python-lsp-server python-lsp-black==${PYTHON_LSP_BLACK_VERSION}"
+  -l "${username}" \
+  -c "pipx inject python-lsp-server python-lsp-black==${python_lsp_black_version}"
 # Set up LazyVim.
-runuser -l "$USERNAME" -c 'nvim --headless "+Lazy! restore" +qa'
+runuser -l "${username}" -c 'nvim --headless "+Lazy! restore" +qa'
 
 # Install curl.
 apt install --yes curl
@@ -502,14 +512,17 @@ apt install --yes rfkill
 
 # Add a yt-dlp configuration file.
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/yt_dlp_config \
-  "$USER_CONFIG_DIR"/yt-dlp/config
+  ${installer_dir}/yt_dlp_config \
+  "${user_config_dir}"/yt-dlp/config
 
 # Install atool.
 apt install --yes atool
 
 # Install bandwhich.
-tar --extract --file $INSTALLER_DIR/bandwhich.tar.gz --directory /usr/local/bin
+tar \
+  --extract \
+  --file ${installer_dir}/bandwhich.tar.gz \
+  --directory /usr/local/bin
 extract_tar bandwhich_source.tar.gz /tmp/bandwhich_source
 place_as_root_user_with_mode_644 \
   /tmp/bandwhich_source/docs/bandwhich.1 /usr/local/share/man/man1/bandwhich.1
@@ -524,8 +537,8 @@ apt install --yes whois
 
 # Add ranger colourscheme.
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/ranger_colourscheme.py \
-  "$USER_CONFIG_DIR"/ranger/colorschemes/box.py
+  ${installer_dir}/ranger_colourscheme.py \
+  "${user_config_dir}"/ranger/colorschemes/box.py
 
 # Install smartmontools.
 apt install --yes smartmontools
@@ -536,15 +549,15 @@ apt install --yes python-is-python3
 # Install zathura.
 apt install --yes zathura
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/zathurarc "$USER_CONFIG_DIR"/zathura/zathurarc
+  ${installer_dir}/zathurarc "${user_config_dir}"/zathura/zathurarc
 
 # Add ranger rifle.conf and scope.sh files.
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/ranger_rifle.conf \
-  "$USER_CONFIG_DIR"/ranger/rifle.conf
+  ${installer_dir}/ranger_rifle.conf \
+  "${user_config_dir}"/ranger/rifle.conf
 place_as_unprivileged_user_with_mode_755 \
-  $INSTALLER_DIR/ranger_scope.sh \
-  "$USER_CONFIG_DIR"/ranger/scope.sh
+  ${installer_dir}/ranger_scope.sh \
+  "${user_config_dir}"/ranger/scope.sh
 
 # Install acpi.
 apt install --yes acpi
@@ -554,28 +567,30 @@ wget \
   --output-document /usr/share/keyrings/syncthing-archive-keyring.gpg \
   https://syncthing.net/release-key.gpg
 place_as_root_user_with_mode_644 \
-  $INSTALLER_DIR/sources_syncthing.list /etc/apt/sources.list.d/syncthing.list
+  ${installer_dir}/sources_syncthing.list \
+  /etc/apt/sources.list.d/syncthing.list
 apt update
 apt install --yes syncthing
 # Allow passwordless sudo for the ufw command which deletes the Syncthing
 # firewall rule. This is required for the "box sync" command to work properly
 # when the terminal it is executed in is closed before Syncthing is closed.
-SUDOERS_DIR='/etc/sudoers.d'
-place_as_root_user_with_mode_440 $INSTALLER_DIR/sudoers_ufw $SUDOERS_DIR/ufw
+place_as_root_user_with_mode_440 \
+  ${installer_dir}/sudoers_ufw ${sudoers_dir}/ufw
 
 # Add ipython_config.py file.
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/ipython_config.py \
-  "$USER_DIR"/.ipython/profile_default/ipython_config.py
+  ${installer_dir}/ipython_config.py \
+  "${user_dir}"/.ipython/profile_default/ipython_config.py
 
 # Allow passwordless sudo for the apt update and apt upgrade commands.
-place_as_root_user_with_mode_440 $INSTALLER_DIR/sudoers_apt $SUDOERS_DIR/apt
+place_as_root_user_with_mode_440 \
+  ${installer_dir}/sudoers_apt ${sudoers_dir}/apt
 
 # Install Lynis.
 apt install --yes lynis
 # Allow passwordless sudo for the "lynis audit system" command.
 place_as_root_user_with_mode_440 \
-  $INSTALLER_DIR/sudoers_lynis $SUDOERS_DIR/lynis
+  ${installer_dir}/sudoers_lynis ${sudoers_dir}/lynis
 
 # Install ClamAV.
 apt install --yes clamav
@@ -584,14 +599,14 @@ apt install --yes clamav
 apt install --yes rkhunter
 # Allow passwordless sudo for the "rkhunter" command.
 place_as_root_user_with_mode_440 \
-  $INSTALLER_DIR/sudoers_rkhunter $SUDOERS_DIR/rkhunter
+  ${installer_dir}/sudoers_rkhunter ${sudoers_dir}/rkhunter
 
 # Install pyenv.
-PYENV_DIR="$USER_DIR/.pyenv"
+pyenv_dir="${user_dir}"/.pyenv
 extract_tar pyenv_source.tar.gz /tmp/pyenv_source
-mkdir -p "$PYENV_DIR"
-cp --recursive /tmp/pyenv_source/* "$PYENV_DIR"
-chown --recursive "$USERNAME":"$USERNAME" "$PYENV_DIR"
+mkdir -p "${pyenv_dir}"
+cp --recursive /tmp/pyenv_source/* "${pyenv_dir}"
+chown --recursive "${username}":"${username}" "${pyenv_dir}"
 # Install Python build dependencies. This is the complete list taken from
 # https://github.com/pyenv/pyenv/wiki#suggested-build-environment. Even though
 # some of these packages are already installed, the list is used here without
@@ -617,35 +632,36 @@ apt install --yes \
 
 # Install geckodriver.
 tar \
-  --extract --file \
-  $INSTALLER_DIR/geckodriver.tar.gz \
+  --extract \
+  --file ${installer_dir}/geckodriver.tar.gz \
   --directory /usr/local/bin
 
 # Install JupyterLab.
 install_with_pipx jupyterlab
 # Share JupyterLab user settings across all JupyterLab environments.
-JUPYTERLAB_APPUTILS_EXTENSION_DIR="$USER_DIR/.jupyter/lab/user-settings/\
+jupyterlab_apputils_extension_dir="${user_dir}/.jupyter/lab/user-settings/\
 @jupyterlab/apputils-extension"
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/jupyterlab_apputils_settings \
-  "$JUPYTERLAB_APPUTILS_EXTENSION_DIR"/themes.jupyterlab-settings
-JUPYTERLAB_CODEMIROR_EXTENSION_DIR="$USER_DIR/.jupyter/lab/user-settings/\
+  ${installer_dir}/jupyterlab_apputils_settings \
+  "${jupyterlab_apputils_extension_dir}"/themes.jupyterlab-settings
+jupyterlab_codemiror_extension_dir="${user_dir}/.jupyter/lab/user-settings/\
 @jupyterlab/codemirror-extension"
 place_as_unprivileged_user_with_mode_644 \
-  $INSTALLER_DIR/jupyterlab_codemirror_settings \
-  "$JUPYTERLAB_CODEMIROR_EXTENSION_DIR"/commands.jupyterlab-settings
+  ${installer_dir}/jupyterlab_codemirror_settings \
+  "${jupyterlab_codemiror_extension_dir}"/commands.jupyterlab-settings
 
 # Allow passwordless sudo for the "powertop" command.
 place_as_root_user_with_mode_440 \
-  $INSTALLER_DIR/sudoers_powertop $SUDOERS_DIR/powertop
+  ${installer_dir}/sudoers_powertop ${sudoers_dir}/powertop
 
 # Install TLP.
 apt install --yes tlp
 # Allow passwordless sudo for the "tlp" and "tlp-stat" commands.
-place_as_root_user_with_mode_440 $INSTALLER_DIR/sudoers_tlp $SUDOERS_DIR/tlp
+place_as_root_user_with_mode_440 \
+  ${installer_dir}/sudoers_tlp ${sudoers_dir}/tlp
 # Configure battery charging thresholds.
 place_as_root_user_with_mode_644 \
-  $INSTALLER_DIR/tlp_charging_thresholds.conf \
+  ${installer_dir}/tlp_charging_thresholds.conf \
   /etc/tlp.d/10-charging-thresholds.conf
 
 # Install Libnotify.
@@ -654,20 +670,20 @@ apt install --yes libnotify-bin
 
 # Don't show the lecture message the first time "sudo" is used.
 place_as_root_user_with_mode_440 \
-  $INSTALLER_DIR/sudoers_lecture $SUDOERS_DIR/lecture
+  ${installer_dir}/sudoers_lecture ${sudoers_dir}/lecture
 
 # Allow passwordless sudo for the "cryptsetup isLuks" command.
 # This is so that the first_login.sh script doesn't need to ask for a password
 # when looking for additional encrypted disks.
 place_as_root_user_with_mode_440 \
-  $INSTALLER_DIR/sudoers_cryptsetup $SUDOERS_DIR/cryptsetup
+  ${installer_dir}/sudoers_cryptsetup ${sudoers_dir}/cryptsetup
 
 # Install Thunderbird.
 apt install --yes thunderbird
 
 # Make the "git_wrapper" command available everywhere.
 place_as_unprivileged_user_with_mode_755 \
-  $INSTALLER_DIR/git_wrapper.sh "$USER_BIN_DIR"/git_wrapper
+  ${installer_dir}/git_wrapper.sh "${user_bin_dir}"/git_wrapper
 
 # Install wl-clipboard.
 apt install --yes wl-clipboard
@@ -682,5 +698,5 @@ gsettings_set 'desktop.wm.preferences visual-bell-type "frame-flash"'
 
 # Configure Firefox.
 place_as_root_user_with_mode_644 \
-  $INSTALLER_DIR/firefox_policies.json \
+  ${installer_dir}/firefox_policies.json \
   /usr/share/firefox-esr/distribution/policies.json

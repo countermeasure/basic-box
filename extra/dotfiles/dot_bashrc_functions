@@ -22,7 +22,7 @@ go_to_parent_directory() {
     for _ in $(seq "$1"); do
       path+='../'
     done
-    cd $path || return 1
+    cd ${path} || return 1
     return 0
   fi
 }
@@ -37,7 +37,7 @@ go_to_parent_directory() {
 #
 ###############################################################################
 only_allow_pip_in_virtualenvs() {
-  if [ -n "$VIRTUAL_ENV" ]; then
+  if [ -n "${VIRTUAL_ENV}" ]; then
     \pip "$@"
   else
     echo "Prefer pipx to pip when not in a virtualenv."
@@ -54,7 +54,7 @@ only_allow_pip_in_virtualenvs() {
 #
 ###############################################################################
 only_allow_pip3_in_virtualenvs() {
-  if [ -n "$VIRTUAL_ENV" ]; then
+  if [ -n "${VIRTUAL_ENV}" ]; then
     \pip3 "$@"
   else
     echo "Prefer pipx to pip3 when not in a virtualenv."

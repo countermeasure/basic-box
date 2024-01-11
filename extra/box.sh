@@ -38,7 +38,7 @@ _wipe() {
   echo
   echo 'This will PERMANENTLY DESTROY ALL DATA on this machine.'
   echo
-  sudo cryptsetup --verbose erase $target_device
+  sudo cryptsetup --verbose erase ${target_device}
   echo
   echo 'Done.'
   sleep 1

@@ -4,12 +4,12 @@
 set -o errexit -o nounset -o pipefail
 
 # Declare constants.
-readonly ANSI_CLEAR='\033[0m'
-readonly ANSI_GREEN='\033[1;32m'
-readonly ANSI_GREY='\033[1;90m'
-readonly ANSI_MAGENTA='\033[1;35m'
-readonly ANSI_RED='\033[1;31m'
-readonly GIT_BRANCH_FORMAT="\
+readonly ansi_clear='\033[0m'
+readonly ansi_green='\033[1;32m'
+readonly ansi_grey='\033[1;90m'
+readonly ansi_magenta='\033[1;35m'
+readonly ansi_red='\033[1;31m'
+readonly git_branch_format="\
 %(if)%(HEAD)%(then)%(color:green)\
 %(else)\
 %(if:equals=refs/remotes)%(refname:rstrip=-2)%(then)%(color:red)\
@@ -1198,9 +1198,9 @@ _branches() {
   # function is piped to fzf.
   if [[ ${1} != 'local' ]]; then
     option="--${1}"
-    git branch --color=always --format="${GIT_BRANCH_FORMAT}" "${option}"
+    git branch --color=always --format="${git_branch_format}" "${option}"
   else
-    git branch --color=always --format="${GIT_BRANCH_FORMAT}"
+    git branch --color=always --format="${git_branch_format}"
   fi
 
 }
@@ -1352,7 +1352,7 @@ _print_changes() {
 #
 ###############################################################################
 _print_failure_message() {
-  echo -e "${ANSI_RED}✗ ${1}${ANSI_CLEAR}"
+  echo -e "${ansi_red}✗ ${1}${ansi_clear}"
 }
 
 ###############################################################################
@@ -1364,7 +1364,7 @@ _print_failure_message() {
 #
 ###############################################################################
 _print_grey() {
-  echo -e "${ANSI_GREY}${1}${ANSI_CLEAR}"
+  echo -e "${ansi_grey}${1}${ansi_clear}"
 }
 
 ###############################################################################
@@ -1391,7 +1391,7 @@ _print_latest_commit() {
 #
 ###############################################################################
 _print_magenta() {
-  echo -e "${ANSI_MAGENTA}${1}${ANSI_CLEAR}"
+  echo -e "${ansi_magenta}${1}${ansi_clear}"
 }
 
 ###############################################################################
@@ -1422,7 +1422,7 @@ _print_recent_commits() {
 #
 ###############################################################################
 _print_success_message() {
-  echo -e "${ANSI_GREEN}🗸 ${1}${ANSI_CLEAR}"
+  echo -e "${ansi_green}🗸 ${1}${ansi_clear}"
 }
 
 ###############################################################################
@@ -1460,7 +1460,7 @@ _select_branch_to_switch_to() {
   remote_branches_to_exclude=$(git branch | xargs printf "${remote}/%s\n")
   fzf_header="Select the branch to switch to from '${current_branch}'"
 
-  git branch --all --color=always --format="${GIT_BRANCH_FORMAT}" \
+  git branch --all --color=always --format="${git_branch_format}" \
     | grep --fixed-strings --invert-match "${remote_branches_to_exclude}" \
     | grep --invert-match "\[31m${remote}/HEAD\s" \
     | grep --invert-match "\[32m${current_branch}\*" \
