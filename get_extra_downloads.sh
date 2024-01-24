@@ -32,8 +32,8 @@ link "fd_${fd_version}_amd64.deb" 'fd.deb'
 # Ensure the ripgrep package is present.
 ripgrep_version=$(get_version ripgrep)
 wget --timestamping "https://github.com/BurntSushi/ripgrep/releases/download/\
-${ripgrep_version}/ripgrep_${ripgrep_version}_amd64.deb"
-link "ripgrep_${ripgrep_version}_amd64.deb" 'ripgrep.deb'
+${ripgrep_version}/ripgrep_${ripgrep_version}-1_amd64.deb"
+link "ripgrep_${ripgrep_version}-1_amd64.deb" 'ripgrep.deb'
 
 # Ensure the exa package is present.
 exa_version=$(get_version exa)
