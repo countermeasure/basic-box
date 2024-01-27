@@ -105,6 +105,7 @@ The **Basic Box** installer creates a Debian 11 system with:
 - Podman installed
 - fish installed and set as the interactive shell
 - MAC address randomised
+- a systemd service which warns when no VPN is managing traffic
 
 
 Set up

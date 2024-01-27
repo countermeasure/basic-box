@@ -1,0 +1,10 @@
+[Unit]
+Description=Warn when no VPN is managing traffic.
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=sh -c '/home/$(ls /home)/.local/bin/check_vpn'
+
+[Install]
+WantedBy=graphical-session.target

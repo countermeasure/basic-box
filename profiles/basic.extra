@@ -1,6 +1,8 @@
 versions.json
 
 extra/box.sh
+extra/check_vpn.service
+extra/check_vpn.sh
 extra/first_boot.service
 extra/first_boot.sh
 extra/first_login.desktop
