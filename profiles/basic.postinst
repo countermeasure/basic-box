@@ -761,6 +761,20 @@ place_as_root_user_with_mode_644 \
   ${installer_dir}/nm_mac_randomisation.conf \
   /etc/NetworkManager/conf.d/mac_randomisation.conf
 
+# Copy check_vpn systemd unit file and the script it controls into place.
+place_as_unprivileged_user_with_mode_755 \
+  ${installer_dir}/check_vpn.sh "${user_bin_dir}"/check_vpn
+place_as_unprivileged_user_with_mode_644 \
+  ${installer_dir}/check_vpn.service \
+  "${user_config_dir}"/systemd/user/check_vpn.service
+
+# Enable the check_vpn systemd service.
+runuser \
+  --login \
+  "${username}" \
+  --command \
+  'XDG_RUNTIME_DIR=/run/user/1000 dbus-launch systemctl --user enable check_vpn.service'
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
