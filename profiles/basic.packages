@@ -3,9 +3,3 @@
 # master branch, so it will presumably be fixed in the next version of
 # simple-cdd.
 cryptsetup-initramfs
-firmware-iwlwifi
-firmware-linux-free
-firmware-misc-nonfree
-# The intel-microcode package isn't needed to do the installation, but it is
-# recommended. See: https://wiki.debian.org/Microcode
-intel-microcode

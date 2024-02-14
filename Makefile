@@ -1,5 +1,3 @@
-firmware_iwlwifi_deb = 'firmware-iwlwifi_20210315-3_all.deb'
-
 target_device != lsblk --output tran,path | awk '$$1 == "usb" { print $$2 }'
 
 target_device_description != \
@@ -27,17 +25,20 @@ check:
 	@echo
 
 image:
-	@./get_extra_downloads.sh
+	@./get_firmware_and_extra_packages.sh
 	@build-simple-cdd --conf basic.conf --verbose
-	# On Debian 11, simple-cdd 0.6.8 fails to add a symlink to the first
-	# firmware package (by alphabetical order), so add this symlink to the iso
-	# after simple-cdd has built it.
+	# Add firmware to the installer image which has just been built. There
+	# doesn't seem to be a good way to do this with simple-cdd directly.
+	@mkdir -p tmp/firmware
+	@tar \
+		--extract \
+		--file firmware/firmware.tar.gz \
+		--directory tmp/firmware
 	@xorriso \
 		-boot_image isolinux patch \
 		-dev images/debian-11-amd64-CD-1.iso \
-		-lns \
-			../pool/non-free/f/firmware-nonfree/$(firmware_iwlwifi_deb) \
-			firmware/$(firmware_iwlwifi_deb)
+		-map tmp/firmware firmware
+	@rm -rf tmp/firmware
 
 sudo:
 	@sudo -v

@@ -13,9 +13,17 @@ link() {
   ln --force --symbolic "$1" "$2"
 }
 
-# Ensure the extra downloads directory exists and switch into it.
-mkdir -p extra/downloads
-cd extra/downloads || exit 1
+# Ensure the firmware directory exists and switch into it.
+mkdir -p firmware
+cd firmware || exit 1
+
+# Ensure the firmware is present.
+wget --timestamping "https://cdimage.debian.org/cdimage/unofficial/non-free/\
+firmware/bullseye/current/firmware.tar.gz"
+
+# Ensure the extra packages directory exists and switch into it.
+mkdir -p ../extra/packages
+cd ../extra/packages || exit 1
 
 # Ensure the Mullvad VPN app package is present.
 mullvad_version=$(get_version mullvad)

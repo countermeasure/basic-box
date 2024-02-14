@@ -3,7 +3,7 @@ Basic Box
 
 Builds a basic Debian 11 (Bullseye) installer which asks very few questions.
 
-Includes firmware for Thinkpad P1 and T-series laptops.
+Includes non-free firmware.
 
 When more than one drive is present, the installer targets the smallest drive.
 
