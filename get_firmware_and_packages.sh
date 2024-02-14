@@ -13,9 +13,17 @@ link() {
   ln --force --symbolic "$1" "$2"
 }
 
-# Ensure the extra downloads directory exists and switch into it.
-mkdir -p extra/downloads
-cd extra/downloads || exit 1
+# Ensure the firmware directory exists and switch into it.
+mkdir -p firmware
+cd firmware || exit 1
+
+# Ensure the firmware is present.
+wget --timestamping "https://cdimage.debian.org/cdimage/unofficial/non-free/\
+firmware/bookworm/current/firmware.tar.gz"
+
+# Ensure the extra packages directory exists and switch into it.
+mkdir -p ../extra/packages
+cd ../extra/packages || exit 1
 
 # Ensure the Mullvad VPN app package is present.
 mullvad_version=$(get_version mullvad)
@@ -155,5 +163,5 @@ link "geckodriver-v${geckodriver_version}-linux64.tar.gz" 'geckodriver.tar.gz'
 # Ensure the fish package is present.
 fish_version=$(get_version fish)
 wget --timestamping "https://download.opensuse.org/repositories/shells:/fish:/\
-release:/3/Debian_11/amd64/fish_${fish_version}-1_amd64.deb"
+release:/3/Debian_12/amd64/fish_${fish_version}-1_amd64.deb"
 link "fish_${fish_version}-1_amd64.deb" "fish.deb"

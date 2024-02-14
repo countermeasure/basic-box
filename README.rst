@@ -1,19 +1,17 @@
 Basic Box
 =========
 
-Builds a basic Debian 11 (Bullseye) installer which asks very few questions.
-
-Includes firmware for Thinkpad P1 and T-series laptops.
+Builds a basic Debian 12 (Bookworm) installer which asks very few questions.
 
 When more than one drive is present, the installer targets the smallest drive.
 
-Runs on Debian 11.
+Runs on Debian 12.
 
 
 What it does
 ------------
 
-The **Basic Box** installer creates a Debian 11 system with:
+The **Basic Box** installer creates a Debian 12 system with:
 
 - full disk encryption (FDE)
 - no ``root`` user
@@ -100,12 +98,13 @@ The **Basic Box** installer creates a Debian 11 system with:
   and stop charging at 80% capacity
 - Libnotify installed
 - Thunderbird installed
-- jq installed
 - wl-clipboard installed
 - Podman installed
 - fish installed and set as the interactive shell
 - MAC address randomised
 - a systemd service which warns when no VPN is managing traffic
+- build-essential installed
+- dbus-x11 installed
 
 
 Set up
@@ -113,7 +112,7 @@ Set up
 
 Install the dependencies::
 
-  $ sudo apt install jq make simple-cdd wget
+  $ sudo apt install jq libnotify-bin make simple-cdd wget
 
 
 Usage

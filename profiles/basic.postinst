@@ -84,8 +84,14 @@ place_as_unprivileged_user_with_mode_755() {
   runuser --login "${username}" --command "install -D --mode=755 $1 $2"
 }
 
-# Install jq.
-apt install --yes jq
+# Install build-essential to provide packages like make and gcc for use in this
+# file to build and install keyd, and for general use including installing
+# Python versions with pyenv.
+apt install --yes build-essential
+
+# Install dbus-x11 to provide dbus-launch for use in this file and in the
+# first_boot.sh script.
+apt install --yes dbus-x11
 
 # Copy first_boot systemd unit file into place.
 place_as_unprivileged_user_with_mode_755 \
@@ -119,10 +125,12 @@ runuser \
   --command "install --directory ${fish_config_dir}/conf.d"
 
 # Install the UFW firewall.
-apt install ufw
+apt install --yes ufw
 
-# Install the Mullvad VPN app.
-apt install --yes ${installer_dir}/mullvad.deb
+# Copy the mullvad.deb file into place so that it is available to first_boot.sh
+# which will install the Mullvad VPN app.
+place_as_root_user_with_mode_644 \
+  ${installer_dir}/mullvad.deb /usr/local/simple-cdd/mullvad.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
@@ -135,19 +143,12 @@ runuser \
   --command \
   "desktop-file-install --dir=${autostart_dir} ${installer_dir}/first_login.desktop"
 
-# Enable Backports to be able to install Tor Browser Launcher.
-place_as_root_user_with_mode_644 \
-  ${installer_dir}/backports.list /etc/apt/sources.list.d/backports.list
-apt update
+# Install Tor Browser Launcher.
+apt install --yes torbrowser-launcher
 
-# Install Tor Browser Launcher. Only the Backports package works for Bullseye
-# now.
-apt install --target-release bullseye-backports --yes torbrowser-launcher
-
-# Install pipx.
-apt install --yes python3-pip python3-venv
-pipx_version=$(get_version pipx)
-runuser --login "${username}" --command "pip3 install pipx==${pipx_version}"
+# Install pipx and python3-pip.
+apt install --yes pipx
+apt install --yes python3-pip
 # Add pipx completions for fish.
 runuser \
   --login \
@@ -195,6 +196,7 @@ apt install --yes ffmpeg
 apt install --yes ranger
 
 # Set dark theme globally.
+gsettings_set 'desktop.interface color-scheme "prefer-dark"'
 gsettings_set 'desktop.interface gtk-theme "Adwaita-dark"'
 
 # Display date and battery percentage in top bar.
@@ -326,7 +328,6 @@ place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/gitk "${user_config_dir}"/git/gitk
 
 # Install and configure keyd.
-apt install --yes libudev-dev
 extract_tar keyd_source.tar.gz /tmp/keyd_source
 make --directory=/tmp/keyd_source
 make --directory=/tmp/keyd_source install
@@ -481,13 +482,6 @@ update-alternatives --install /usr/bin/vi vi ${nvim_path} 50
 update-alternatives --install /usr/bin/view view ${nvim_path} 50
 update-alternatives --install /usr/bin/vim vim ${nvim_path} 50
 update-alternatives --install /usr/bin/vimdiff vimdiff ${nvim_path} 50
-# Set Neovim as the sensible-editor for the root user so that ranger doesn't
-# ask which editor to use the first time it goes to open a file for the root
-# user.
-# Invoking select-editor for the root user must be done using runuser or the
-# .selected_editor file is created in the / directory rather than the /root
-# directory.
-runuser -l root -c 'echo 1 | select-editor'
 
 # Configure Neovim.
 # Put the LazyVim files in place.
@@ -771,12 +765,10 @@ place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/check_vpn.service \
   "${user_config_dir}"/systemd/user/check_vpn.service
 
-# Enable the check_vpn systemd service.
-runuser \
-  --login \
-  "${username}" \
-  --command \
-  'XDG_RUNTIME_DIR=/run/user/1000 dbus-launch systemctl --user enable check_vpn.service'
+# Don't show the GNOME Initial Setup workflow.
+place_as_unprivileged_user_with_mode_644 \
+  ${installer_dir}/gnome_initial_setup_done \
+  "${user_config_dir}"/gnome-initial-setup-done
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
