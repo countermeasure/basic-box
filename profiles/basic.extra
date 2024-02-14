@@ -39,6 +39,7 @@ extra/dotfiles/nvim_plugins_colourscheme.lua
 extra/dotfiles/nvim_plugins_conform.lua
 extra/dotfiles/nvim_plugins_lualine.lua
 extra/dotfiles/nvim_plugins_luasnip.lua
+extra/dotfiles/nvim_plugins_mason.lua
 extra/dotfiles/nvim_plugins_neotree.lua
 extra/dotfiles/nvim_plugins_nvim_cmp.lua
 extra/dotfiles/nvim_plugins_nvim_lint.lua

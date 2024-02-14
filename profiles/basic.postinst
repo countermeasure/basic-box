@@ -523,6 +523,9 @@ place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_luasnip.lua \
   "${nvim_config_dir}"/lua/plugins/luasnip.lua
 place_as_unprivileged_user_with_mode_644 \
+  ${installer_dir}/nvim_plugins_mason.lua \
+  "${nvim_config_dir}"/lua/plugins/mason.lua
+place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_neotree.lua \
   "${nvim_config_dir}"/lua/plugins/neotree.lua
 place_as_unprivileged_user_with_mode_644 \
