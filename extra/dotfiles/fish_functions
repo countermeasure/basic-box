@@ -26,40 +26,6 @@ end
 
 ###############################################################################
 #
-#  Allow pip to run if inside a virtualenv. If not inside a virtualenv, show a
-#  message to prefer pipx.
-#
-#  Arguments:
-#    Strings. The arguments to pass to the pip executable.
-#
-###############################################################################
-function only_allow_pip_in_virtualenvs
-    if test -n "$VIRTUAL_ENV"
-        command pip $argv
-    else
-        echo "Prefer pipx to pip when not in a virtualenv."
-    end
-end
-
-###############################################################################
-#
-#  Allow pip3 to run if inside a virtualenv. If not inside a virtualenv, show a
-#  message to prefer pipx.
-#
-#  Arguments:
-#    Strings. The arguments to pass to the pip3 executable.
-#
-###############################################################################
-function only_allow_pip3_in_virtualenvs
-    if test -n "$VIRTUAL_ENV"
-        command pip3 $argv
-    else
-        echo "Prefer pipx to pip3 when not in a virtualenv."
-    end
-end
-
-###############################################################################
-#
 #  Set the window title to the truncated current working directory.
 #
 ###############################################################################

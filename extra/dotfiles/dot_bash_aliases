@@ -112,8 +112,8 @@ alias ncdu='ncdu --color dark -r --si'
 
 alias p='ipython'
 alias ping='ping -c 5 -i 0.2'
-alias pip='only_allow_pip_in_virtualenvs'
-alias pip3='only_allow_pip3_in_virtualenvs'
+alias pip='printf "\npip is not installed. Use direnv or pipx instead.\n\n"'
+alias pip3='printf "\npip3 is not installed. Use direnv or pipx instead.\n\n"'
 alias ptop='sudo powertop --time=5'
 
 alias r='reset'

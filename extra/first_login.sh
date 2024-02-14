@@ -79,7 +79,7 @@ elif [[ ${non_boot_encrypted_disks_count} = 1 ]]; then
   echo
   echo 'Adding a new keyfile to keyslot 31...'
   echo
-  sudo cryptsetup luksAddKey --key-slot 31 "${disk}" "${keyfile}"
+  sudo cryptsetup luksAddKey --new-key-slot 31 "${disk}" "${keyfile}"
   device_name='data'
   disk_uuid=$(sudo cryptsetup luksUUID "${disk}")
   crypttab_entry="${device_name} UUID=${disk_uuid} ${keyfile} luks"
@@ -94,6 +94,9 @@ elif [[ ${non_boot_encrypted_disks_count} = 1 ]]; then
   fstab_entry="${device_path} ${mount_point} ext4 defaults 0 2"
   echo "${entry_label}" | sudo tee --append /etc/fstab >/dev/null
   echo "${fstab_entry}" | sudo tee --append /etc/fstab >/dev/null
+  # Reload the systemd manager configuration after fstab is modified to stop a
+  # warning being shown when the mount operation is run.
+  sudo systemctl daemon-reload
   sudo cryptsetup open --key-file="${keyfile}" "${disk}" "${device_name}"
   sudo mount "${device_path}" "${mount_point}"
   # The chown operation must come after the mount operation, because if it
@@ -135,16 +138,6 @@ while [[ ${exit_code} != 0 ]]; do
   fi
 done
 mullvad connect
-mullvad auto-connect set on
-echo
-mullvad lockdown-mode set on
-echo
-mullvad dns set default \
-  --block-ads \
-  --block-adult-content \
-  --block-gambling \
-  --block-malware \
-  --block-trackers
 echo
 read -n 1 -p 'Press any key to continue...' -r -s
 
