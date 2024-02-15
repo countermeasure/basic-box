@@ -36,7 +36,7 @@ image:
 		--directory tmp/firmware
 	@xorriso \
 		-boot_image isolinux patch \
-		-dev images/debian-11-amd64-CD-1.iso \
+		-dev images/debian-12-amd64-CD-1.iso \
 		-map tmp/firmware firmware
 	@rm -rf tmp/firmware
 
@@ -46,7 +46,7 @@ sudo:
 usb: check sudo image
 	@echo "Writing the image to the $(target_device_description)..."
 	@# If sync is not called, eject will run before the copy completes.
-	@sudo cp images/debian-11-amd64-CD-1.iso $(target_device); sync
+	@sudo cp images/debian-12-amd64-CD-1.iso $(target_device); sync
 	@sudo eject $(target_device)
 	@notify-send \
 		'Installer created' \

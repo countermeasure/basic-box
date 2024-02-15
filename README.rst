@@ -1,19 +1,19 @@
 Basic Box
 =========
 
-Builds a basic Debian 11 (Bullseye) installer which asks very few questions.
+Builds a basic Debian 12 (Bookworm) installer which asks very few questions.
 
 Includes non-free firmware.
 
 When more than one drive is present, the installer targets the smallest drive.
 
-Runs on Debian 11.
+Runs on Debian 12.
 
 
 What it does
 ------------
 
-The **Basic Box** installer creates a Debian 11 system with:
+The **Basic Box** installer creates a Debian 12 system with:
 
 - full disk encryption (FDE)
 - no ``root`` user

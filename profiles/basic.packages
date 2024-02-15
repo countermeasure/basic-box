@@ -2,4 +2,4 @@
 # which the machine will fail to boot. A patch for this is on the simple-cdd
 # master branch, so it will presumably be fixed in the next version of
 # simple-cdd.
-cryptsetup-initramfs
+# cryptsetup-initramfs
