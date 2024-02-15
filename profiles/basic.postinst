@@ -135,14 +135,8 @@ runuser \
   --command \
   "desktop-file-install --dir=${autostart_dir} ${installer_dir}/first_login.desktop"
 
-# Enable Backports to be able to install Tor Browser Launcher.
-place_as_root_user_with_mode_644 \
-  ${installer_dir}/backports.list /etc/apt/sources.list.d/backports.list
-apt update
-
-# Install Tor Browser Launcher. Only the Backports package works for Bullseye
-# now.
-apt install --target-release bullseye-backports --yes torbrowser-launcher
+# Install Tor Browser Launcher.
+apt install --yes torbrowser-launcher
 
 # Install pipx.
 apt install --yes python3-pip python3-venv

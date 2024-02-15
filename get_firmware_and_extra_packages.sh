@@ -19,7 +19,7 @@ cd firmware || exit 1
 
 # Ensure the firmware is present.
 wget --timestamping "https://cdimage.debian.org/cdimage/unofficial/non-free/\
-firmware/bullseye/current/firmware.tar.gz"
+firmware/bookworm/current/firmware.tar.gz"
 
 # Ensure the extra packages directory exists and switch into it.
 mkdir -p ../extra/packages

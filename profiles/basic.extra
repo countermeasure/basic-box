@@ -10,7 +10,6 @@ extra/first_login.sh
 extra/git_wrapper.sh
 extra/setup.rst
 
-extra/dotfiles/backports.list
 extra/dotfiles/config.fish
 extra/dotfiles/dot_bash_aliases
 extra/dotfiles/dot_bash_functions
