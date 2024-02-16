@@ -84,6 +84,17 @@ place_as_unprivileged_user_with_mode_755() {
   runuser --login "${username}" --command "install -D --mode=755 $1 $2"
 }
 
+# Get wifi working.
+# Get the wifi network name and password from /etc/network/interfaces.
+wifi_name=$(awk '$1 == "wpa-ssid" { print $2 }' /etc/network/interfaces)
+wifi_password=$(awk '$1 == "wpa-psk" { print $2 }' /etc/network/interfaces)
+# Remove the wifi interface stanza from /etc/network/interfaces so that NetworkManager is not
+# prevented from managing wifi connections.
+sed -i '/# The primary network interface/,$d' /etc/network/interfaces
+# Restart NetworkManager and connect to the network.
+systemctl restart NetworkManager
+nmcli device wifi connect "${wifi_name}" password "${wifi_password}"
+
 # Copy first_boot systemd unit file into place.
 place_as_unprivileged_user_with_mode_755 \
   ${installer_dir}/first_boot.sh "${user_bin_dir}"/first_boot

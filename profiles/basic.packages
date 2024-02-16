@@ -1,10 +1,13 @@
-# On Debian 12, simple-cdd 0.6.8 fails to include zstd, without which the
+# On Debian 12, simple-cdd 0.6.9 fails to include zstd, without which the
 # machine will fail to boot.
 zstd
 
-firmware-iwlwifi
-firmware-linux-free
-firmware-misc-nonfree
+# TODO: Check that these packages wind up installed, and for any which don't,
+# reinstate them here if possible, or apt install them in basic.postinst
+
+# firmware-iwlwifi
+# firmware-linux-free
+# firmware-misc-nonfree
 # The intel-microcode package isn't needed to do the installation, but it is
 # recommended. See: https://wiki.debian.org/Microcode
-intel-microcode
+# intel-microcode
