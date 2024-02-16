@@ -84,9 +84,6 @@ place_as_unprivileged_user_with_mode_755() {
   runuser --login "${username}" --command "install -D --mode=755 $1 $2"
 }
 
-# Install jq.
-apt install --yes jq
-
 # Copy first_boot systemd unit file into place.
 place_as_unprivileged_user_with_mode_755 \
   ${installer_dir}/first_boot.sh "${user_bin_dir}"/first_boot

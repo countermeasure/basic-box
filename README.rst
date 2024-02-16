@@ -100,7 +100,6 @@ The **Basic Box** installer creates a Debian 12 system with:
   and stop charging at 80% capacity
 - Libnotify installed
 - Thunderbird installed
-- jq installed
 - wl-clipboard installed
 - Podman installed
 - fish installed and set as the interactive shell
@@ -113,7 +112,7 @@ Set up
 
 Install the dependencies::
 
-  $ sudo apt install jq make simple-cdd wget
+  $ sudo apt install jq make notify-send simple-cdd wget
 
 
 Usage

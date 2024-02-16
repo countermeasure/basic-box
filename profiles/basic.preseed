@@ -66,7 +66,11 @@ d-i apt-setup/cdrom/set-first boolean false
 popularity-contest popularity-contest/participate boolean false
 
 # Install standard and desktop tasks with tasksel.
-tasksel tasksel/first multiselect standard, desktop
+# TODO: Add gnome here to get firmware???
+# tasksel tasksel/first multiselect standard, gnome-desktop
+tasksel tasksel/first multiselect standard, gnome-desktop
+
+d-i hw-detect/load_firmware boolean true
 
 # Set hostname and domain. This isn't needed to prevent installer questions,
 # but it stops the hostname and domain being set to "unassigned".
