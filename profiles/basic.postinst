@@ -84,17 +84,6 @@ place_as_unprivileged_user_with_mode_755() {
   runuser --login "${username}" --command "install -D --mode=755 $1 $2"
 }
 
-# # Get wifi working.
-# # Get the wifi network name and password from /etc/network/interfaces.
-# wifi_name=$(awk '$1 == "wpa-ssid" { print $2 }' /etc/network/interfaces)
-# wifi_password=$(awk '$1 == "wpa-psk" { print $2 }' /etc/network/interfaces)
-# # Remove the wifi interface stanza from /etc/network/interfaces so that NetworkManager is not
-# # prevented from managing wifi connections.
-# sed -i '/# The primary network interface/,$d' /etc/network/interfaces
-# # Restart NetworkManager and connect to the network.
-# systemctl restart NetworkManager
-# nmcli device wifi connect "${wifi_name}" password "${wifi_password}"
-
 # Copy first_boot systemd unit file into place.
 place_as_unprivileged_user_with_mode_755 \
   ${installer_dir}/first_boot.sh "${user_bin_dir}"/first_boot
@@ -106,7 +95,7 @@ place_as_root_user_with_mode_644 \
 systemctl enable first_boot.service
 
 # Install and configure fish.
-sudo apt install --yes ${installer_dir}/fish.deb
+apt install --yes ${installer_dir}/fish.deb
 fish_config_dir="${user_config_dir}"/fish
 place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/config.fish "${fish_config_dir}"/config.fish
@@ -130,7 +119,9 @@ runuser \
 apt install --yes ufw
 
 # Install the Mullvad VPN app.
-apt install --yes ${installer_dir}/mullvad.deb
+# TODO: Note why dpkg is used and not apt install. If dpkg doesn't work, try
+# sudo apt install via runuser as the user user.
+dpkg -i ${installer_dir}/mullvad.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
