@@ -6,6 +6,10 @@ set -o errexit -o nounset -o pipefail
 # Enable the UFW firewall.
 ufw enable
 
+# Install the Mullvad VPN. This task has to wait until first boot because
+# TODO:...
+apt install --yes /usr/local/simple-cdd/mullvad.deb
+
 # Run Rootkit Hunter to create a baseline for future scans.
 # This task has to wait until the first boot because if it is run any sooner,
 # the systemd-coredump user and group are not yet present, then when Rootkit

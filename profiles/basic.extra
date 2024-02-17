@@ -83,6 +83,7 @@ extra/packages/geckodriver.tar.gz
 extra/packages/httpie-completion.bash
 extra/packages/httpie-completion.fish
 extra/packages/keyd_source.tar.gz
+extra/packages/mullvad.deb
 extra/packages/nvim.appimage
 extra/packages/nvim_source.tar.gz
 extra/packages/pyenv_source.tar.gz

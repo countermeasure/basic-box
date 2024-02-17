@@ -25,6 +25,12 @@ firmware/bookworm/current/firmware.tar.gz"
 mkdir -p ../extra/packages
 cd ../extra/packages || exit 1
 
+# Ensure the Mullvad VPN app package is present.
+mullvad_version=$(get_version mullvad)
+wget --timestamping "https://mullvad.net/media/app/\
+MullvadVPN-${mullvad_version}_amd64.deb"
+link "MullvadVPN-${mullvad_version}_amd64.deb" 'mullvad.deb'
+
 # Ensure the fd package is present.
 fd_version=$(get_version fd)
 wget --timestamping "https://github.com/sharkdp/fd/releases/download/\
