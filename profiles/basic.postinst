@@ -121,7 +121,9 @@ apt install --yes ufw
 # Install the Mullvad VPN app.
 # TODO: Note why dpkg is used and not apt install. If dpkg doesn't work, try
 # sudo apt install via runuser as the user user.
-dpkg -i ${installer_dir}/mullvad.deb
+runuser \
+  --login "${username}" \
+  --command "sudo apt install ${installer_dir}/mullvad.deb"
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
