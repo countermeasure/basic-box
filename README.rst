@@ -112,7 +112,7 @@ Set up
 
 Install the dependencies::
 
-  $ sudo apt install jq make notify-send simple-cdd wget
+  $ sudo apt install jq libnotify-bin make simple-cdd wget
 
 
 Usage
