@@ -4,9 +4,6 @@
 # Source custom functions.
 source ${HOME}/.bash_functions
 
-# Enable pipx autocompletion.
-eval "$(register-python-argcomplete pipx)"
-
 # Colourise man pages by setting bat as the man pager.
 export MANPAGER='sh -c "col -bx | bat -l man -p"'
 

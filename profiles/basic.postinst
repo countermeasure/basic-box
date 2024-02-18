@@ -138,17 +138,9 @@ runuser \
 apt install --yes torbrowser-launcher
 
 # Install pipx.
-apt install --yes python3-pip python3-venv
-pipx_version=$(get_version pipx)
-runuser --login "${username}" --command "pip3 install pipx==${pipx_version}"
-# Add pipx completions for fish.
-runuser \
-  --login \
-  "${username}" \
-  --command \
-  "register-python-argcomplete --shell fish pipx >/tmp/pipx_completions.fish"
-place_as_unprivileged_user_with_mode_644 \
-  /tmp/pipx_completions.fish "${fish_completions_dir}"/pipx.fish
+# TODO: Check for fish and bash completions.
+# TODO: Check for whether pip works inside virtualenvs.
+apt install --yes pipx
 
 # Copy .bashrc extensions into place and enable them.
 place_as_unprivileged_user_with_mode_644 \
