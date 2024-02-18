@@ -141,7 +141,10 @@ runuser \
 apt install --yes torbrowser-launcher
 
 # Install pipx.
-# TODO: Check for fish and bash completions.
+# TODO: Check for fish and bash completions. They seem to be missing. Create
+# them, and consider installing pipx using pip3 which is the old way, but at
+# least it will keep things up-to-date. Also, take the pip/pip3 aliases out of
+# the aliases files.
 # TODO: Check for whether pip works inside virtualenvs.
 apt install --yes pipx
 
@@ -312,6 +315,9 @@ git_global_config_set 'init.defaultBranch' 'main'
 apt install --yes gitk
 place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/gitk "${user_config_dir}"/git/gitk
+
+# TODO: Install make and explain why.
+apt install --yes make
 
 # Install and configure keyd.
 apt install --yes libudev-dev
