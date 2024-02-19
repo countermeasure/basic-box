@@ -22,10 +22,10 @@ rm /usr/local/simple-cdd/mullvad.deb
 # TODO: Explain that this goes here so that it doesn't run before the VPN is
 # installed and annoy the user with a spurious warning right when things start
 # up for the very first time.
-username=$(ls /home)
+user=$(ls /home)
 runuser \
   --login \
-  "${username}" \
+  "${user}" \
   --command \
   'XDG_RUNTIME_DIR=/run/user/1000 dbus-launch systemctl --user enable check_vpn.service'
 
@@ -42,5 +42,4 @@ rkhunter --cronjob --report-warnings-only --summary || true
 # Remove the first_boot infrastructure now that its work is done.
 systemctl disable first_boot.service
 rm /etc/systemd/system/first_boot.service
-user=$(ls /home)
 rm /home/"${user}"/.local/bin/first_boot
