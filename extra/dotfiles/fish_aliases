@@ -179,6 +179,11 @@ alias ncdu='ncdu --color dark -r --si'
 
 alias p='ipython'
 alias ping='ping -c 5 -i 0.2'
+# TODO: Re-add pip and pip3 aliases explaining that pip/pip3 is not installed,
+# and the user should either:
+# 1. use pipx
+# 2. create a direnv environment which will have pip installed if "layout
+#    python/pyenv" is used
 alias ptop='sudo powertop --time=5'
 
 alias r='reset'
