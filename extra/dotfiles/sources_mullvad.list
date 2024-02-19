@@ -1,1 +1,0 @@
-deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=amd64] https://repository.mullvad.net/deb/stable bookworm main

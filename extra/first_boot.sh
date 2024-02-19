@@ -9,6 +9,13 @@ ufw enable
 # Install the Mullvad VPN. This task has to wait until first boot because
 # TODO:...
 apt install --yes /usr/local/simple-cdd/mullvad.deb
+mullvad lockdown-mode set on
+mullvad dns set default \
+  --block-ads \
+  --block-adult-content \
+  --block-gambling \
+  --block-malware \
+  --block-trackers
 rm /usr/local/simple-cdd/mullvad.deb
 
 # Run Rootkit Hunter to create a baseline for future scans.
