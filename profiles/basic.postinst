@@ -316,10 +316,11 @@ apt install --yes gitk
 place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/gitk "${user_config_dir}"/git/gitk
 
-# TODO: Install make and explain why.
-apt install --yes make
-
 # Install and configure keyd.
+# TODO: Explain why build-essential is necessary. To get make and gcc to
+# compile keyd
+apt install --yes build-essential
+# TODO: Can the libudev-dev install be removed now?
 apt install --yes libudev-dev
 extract_tar keyd_source.tar.gz /tmp/keyd_source
 make --directory=/tmp/keyd_source
