@@ -773,6 +773,11 @@ runuser \
   --command \
   'XDG_RUNTIME_DIR=/run/user/1000 dbus-launch systemctl --user enable check_vpn.service'
 
+# Don't show the Initial Setup workflow.
+# TODO: Check that location services are turned off after cancelling this.
+#
+echo 'yes' | "${user_dir}"/.config/gnome-initial-setup-done
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
