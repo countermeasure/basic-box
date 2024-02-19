@@ -18,6 +18,17 @@ mullvad dns set default \
   --block-trackers
 rm /usr/local/simple-cdd/mullvad.deb
 
+# Enable the check_vpn systemd service.
+# TODO: Explain that this goes here so that it doesn't run before the VPN is
+# installed and annoy the user with a spurious warning right when things start
+# up for the very first time.
+username=$(ls /home)
+runuser \
+  --login \
+  "${username}" \
+  --command \
+  'XDG_RUNTIME_DIR=/run/user/1000 dbus-launch systemctl --user enable check_vpn.service'
+
 # Run Rootkit Hunter to create a baseline for future scans.
 # This task has to wait until the first boot because if it is run any sooner,
 # the systemd-coredump user and group are not yet present, then when Rootkit

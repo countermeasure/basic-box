@@ -766,17 +766,10 @@ place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/check_vpn.service \
   "${user_config_dir}"/systemd/user/check_vpn.service
 
-# Enable the check_vpn systemd service.
-runuser \
-  --login \
-  "${username}" \
-  --command \
-  'XDG_RUNTIME_DIR=/run/user/1000 dbus-launch systemctl --user enable check_vpn.service'
-
 # Don't show the Initial Setup workflow.
 # TODO: Check that location services are turned off after cancelling this.
-#
-echo 'yes' | "${user_dir}"/.config/gnome-initial-setup-done
+# TODO: Show this go at the bottom of the [daemon] section?
+sed -i '/\[daemon\]/a InitialSetupEnable = false' /etc/gdm3/daemon.conf
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
