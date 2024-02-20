@@ -59,7 +59,7 @@ d-i mirror/http/hostname string deb.debian.org
 d-i mirror/http/directory string /debian
 d-i mirror/http/proxy string
 
-# TODO: Enable contrib...
+# Enable contrib package installation.
 d-i apt-setup/contrib boolean true
 
 # Don't prompt for additional CDs.

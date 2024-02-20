@@ -134,9 +134,7 @@ while [[ ${exit_code} != 0 ]]; do
     echo
   fi
 done
-# TODO: Next lines to first_boot.sh?
 mullvad connect
-mullvad auto-connect set on
 echo
 read -n 1 -p 'Press any key to continue...' -r -s
 

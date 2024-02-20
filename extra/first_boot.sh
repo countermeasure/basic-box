@@ -6,22 +6,23 @@ set -o errexit -o nounset -o pipefail
 # Enable the UFW firewall.
 ufw enable
 
-# Install the Mullvad VPN. This task has to wait until first boot because
-# TODO:...
+# Install the Mullvad VPN. This task has to wait until the first boot because
+# it installs into the /opt directory, which doesn't seem to be allowed in the
+# postinst script.
 apt install --yes /usr/local/simple-cdd/mullvad.deb
-mullvad lockdown-mode set on
+mullvad auto-connect set on
 mullvad dns set default \
   --block-ads \
   --block-adult-content \
   --block-gambling \
   --block-malware \
   --block-trackers
+mullvad lockdown-mode set on
 rm /usr/local/simple-cdd/mullvad.deb
 
-# Enable the check_vpn systemd service.
-# TODO: Explain that this goes here so that it doesn't run before the VPN is
-# installed and annoy the user with a spurious warning right when things start
-# up for the very first time.
+# Enable the check_vpn systemd service. This task needs to occur after the
+# Mullvad VPN is installed and set up, or the user will see a spurious warning
+# when the machine boots for the very first time.
 user=$(ls /home)
 runuser \
   --login \

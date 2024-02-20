@@ -105,6 +105,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - fish installed and set as the interactive shell
 - MAC address randomised
 - a systemd service which warns when no VPN is managing traffic
+- dbus-x11 installed
 
 
 Set up

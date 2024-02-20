@@ -40,9 +40,6 @@ git_global_config_set() {
   runuser --login "${username}" --command "git config --global $1 \"$2\""
 }
 
-# TODO: Explain why dbus-x11 is necessary. To get dbus-launch.
-apt install --yes dbus-x11
-
 gsettings_set() {
   # Change a dconf setting. It's necessary to use dbus-launch ahead of
   # gsettings when invoking this as the root user.
@@ -87,6 +84,9 @@ place_as_unprivileged_user_with_mode_755() {
   runuser --login "${username}" --command "install -D --mode=755 $1 $2"
 }
 
+# Install dbus-x11 to provide dbus-launch for use in this file.
+apt install --yes dbus-x11
+
 # Copy first_boot systemd unit file into place.
 place_as_unprivileged_user_with_mode_755 \
   ${installer_dir}/first_boot.sh "${user_bin_dir}"/first_boot
@@ -121,8 +121,8 @@ runuser \
 # Install the UFW firewall.
 apt install --yes ufw
 
-# Install the Mullvad VPN app.
-# TODO: Note why we are switching over to installing Mullvad VPN this way.
+# Copy the mullvad.deb file into place so that it is available to first_boot.sh
+# which will install the Mullvad VPN app.
 place_as_root_user_with_mode_644 \
   ${installer_dir}/mullvad.deb /usr/local/simple-cdd/mullvad.deb
 
@@ -145,7 +145,6 @@ apt install --yes torbrowser-launcher
 # them, and consider installing pipx using pip3 which is the old way, but at
 # least it will keep things up-to-date. Also, take the pip/pip3 aliases out of
 # the aliases files.
-# TODO: Check for whether pip works inside virtualenvs.
 apt install --yes pipx
 
 # Copy .bashrc extensions into place and enable them.
