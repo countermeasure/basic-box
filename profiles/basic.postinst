@@ -768,7 +768,10 @@ place_as_unprivileged_user_with_mode_644 \
 # Don't show the Initial Setup workflow.
 # TODO: Check that location services are turned off after cancelling this.
 # TODO: Show this go at the bottom of the [daemon] section?
-sed -i '/\[daemon\]/a InitialSetupEnable = false' /etc/gdm3/daemon.conf
+# sed -i '/\[daemon\]/a InitialSetupEnable = false' /etc/gdm3/daemon.conf
+place_as_unprivileged_user_with_mode_644 \
+  ${installer_dir}/gnome_initial_setup_done \
+  "${user_config_dir}"/gnome-initial-setup-done
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
