@@ -146,6 +146,14 @@ apt install --yes torbrowser-launcher
 # least it will keep things up-to-date. Also, take the pip/pip3 aliases out of
 # the aliases files.
 apt install --yes pipx
+# Add pipx completions for fish.
+runuser \
+  --login \
+  "${username}" \
+  --command \
+  "register-python-argcomplete --shell fish pipx >/tmp/pipx_completions.fish"
+place_as_unprivileged_user_with_mode_644 \
+  /tmp/pipx_completions.fish "${fish_completions_dir}"/pipx.fish
 
 # Copy .bashrc extensions into place and enable them.
 place_as_unprivileged_user_with_mode_644 \
@@ -320,7 +328,7 @@ place_as_unprivileged_user_with_mode_644 \
 # compile keyd
 apt install --yes build-essential
 # TODO: Can the libudev-dev install be removed now?
-apt install --yes libudev-dev
+#apt install --yes libudev-dev
 extract_tar keyd_source.tar.gz /tmp/keyd_source
 make --directory=/tmp/keyd_source
 make --directory=/tmp/keyd_source install
