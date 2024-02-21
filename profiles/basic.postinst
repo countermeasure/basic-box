@@ -84,7 +84,13 @@ place_as_unprivileged_user_with_mode_755() {
   runuser --login "${username}" --command "install -D --mode=755 $1 $2"
 }
 
-# Install dbus-x11 to provide dbus-launch for use in this file.
+# Install build-essential to provide packages like make and gcc for use in this
+# file to build and install keyd, and for general use including installing
+# Python versions with pyenv.
+apt install --yes build-essential
+
+# Install dbus-x11 to provide dbus-launch for use in this file and in the
+# first_boot.sh script.
 apt install --yes dbus-x11
 
 # Copy first_boot systemd unit file into place.
@@ -141,10 +147,6 @@ runuser \
 apt install --yes torbrowser-launcher
 
 # Install pipx.
-# TODO: Check for fish and bash completions. They seem to be missing. Create
-# them, and consider installing pipx using pip3 which is the old way, but at
-# least it will keep things up-to-date. Also, take the pip/pip3 aliases out of
-# the aliases files.
 apt install --yes pipx
 # Add pipx completions for fish.
 runuser \
@@ -324,11 +326,6 @@ place_as_unprivileged_user_with_mode_644 \
   ${installer_dir}/gitk "${user_config_dir}"/git/gitk
 
 # Install and configure keyd.
-# TODO: Explain why build-essential is necessary. To get make and gcc to
-# compile keyd
-apt install --yes build-essential
-# TODO: Can the libudev-dev install be removed now?
-#apt install --yes libudev-dev
 extract_tar keyd_source.tar.gz /tmp/keyd_source
 make --directory=/tmp/keyd_source
 make --directory=/tmp/keyd_source install
