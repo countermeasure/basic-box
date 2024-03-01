@@ -117,12 +117,15 @@ place_as_unprivileged_user_with_mode_644 \
 runuser \
   --login "${username}" \
   --command 'yes | fish --command "fish_config theme save box"'
-# Create the $HOME/.config/fish/conf.d directory now. This is to avoid it being
-# created the first time a shell is opened and having a notification shown then
-# as a result.
+# Create the $HOME/.config/fish/conf.d and $HOME/.config/fish/functions
+# directories now. This is to avoid them being created the first time a shell
+# is opened and having notifications shown then as a result.
 runuser \
   --login "${username}" \
   --command "install --directory ${fish_config_dir}/conf.d"
+runuser \
+  --login "${username}" \
+  --command "install --directory ${fish_config_dir}/functions"
 
 # Install the UFW firewall.
 apt install --yes ufw
@@ -225,42 +228,22 @@ sed -i \
   "s/.*AutomaticLogin =.*/AutomaticLogin = ${username}/" \
   /etc/gdm3/daemon.conf
 
-# Install fd.
-dpkg -i ${installer_dir}/fd.deb
+# Install fd-find (fd) and symlink fdfind to fd.
+apt install --yes fd-find
+ln -s /usr/bin/fdfind /usr/bin/fd
 
 # Install ripgrep.
-dpkg -i ${installer_dir}/ripgrep.deb
+apt install --yes ripgrep
 
 # Install exa.
-unzip -d /tmp/exa ${installer_dir}/exa.zip
-place_as_root_user_with_mode_755 /tmp/exa/bin/exa /usr/local/bin/exa
-place_as_root_user_with_mode_644 \
-  /tmp/exa/completions/exa.bash /usr/share/bash-completion/completions/exa.bash
-place_as_unprivileged_user_with_mode_644 \
-  /tmp/exa/completions/exa.fish "${fish_completions_dir}"/exa.fish
-place_as_root_user_with_mode_644 \
-  /tmp/exa/man/exa.1 /usr/local/share/man/man1/exa.1
-place_as_root_user_with_mode_644 \
-  /tmp/exa/man/exa_colors.5 /usr/local/share/man/man5/exa_colors.5
-mandb
+apt install --yes exa
 
-# Install bat.
-dpkg -i ${installer_dir}/bat.deb
+# Install bat and symlink batcat to bat.
+apt install --yes bat
+ln -s /usr/bin/batcat /usr/bin/bat
 
 # Install fzf.
-tar --extract --file ${installer_dir}/fzf.tar.gz --directory /usr/local/bin
-extract_tar fzf_source.tar.gz /tmp/fzf_source
-place_as_root_user_with_mode_644 \
-  /tmp/fzf_source/man/man1/fzf.1 /usr/local/share/man/man1/fzf.1
-place_as_root_user_with_mode_644 \
-  /tmp/fzf_source/shell/completion.bash /usr/local/share/fzf/completion.bash
-place_as_root_user_with_mode_644 \
-  /tmp/fzf_source/shell/key-bindings.bash \
-  /usr/local/share/fzf/key-bindings.bash
-place_as_unprivileged_user_with_mode_644 \
-  /tmp/fzf_source/shell/key-bindings.fish \
-  "${fish_config_dir}"/functions/fzf_key_bindings.fish
-mandb
+apt install --yes fzf
 
 # Install zoxide.
 apt install --yes ${installer_dir}/zoxide.deb
@@ -342,20 +325,7 @@ place_as_unprivileged_user_with_mode_755 \
   ${installer_dir}/box.sh "${user_bin_dir}"/box
 
 # Install direnv.
-place_as_root_user_with_mode_755 \
-  ${installer_dir}/direnv.linux /usr/local/bin/direnv
-extract_tar direnv_source.tar.gz /tmp/direnv_source
-place_as_root_user_with_mode_644 \
-  /tmp/direnv_source/man/direnv-fetchurl.1 \
-  /usr/local/share/man/man1/direnv-fetchurl.1
-place_as_root_user_with_mode_644 \
-  /tmp/direnv_source/man/direnv-stdlib.1 \
-  /usr/local/share/man/man1/direnv-stdlib.man1
-place_as_root_user_with_mode_644 \
-  /tmp/direnv_source/man/direnv.1 /usr/local/share/man/man1/direnv.1
-place_as_root_user_with_mode_644 \
-  /tmp/direnv_source/man/direnv.toml.1 /usr/local/share/man/man1/direnv.toml.1
-mandb
+apt install --yes direnv
 
 # Install Fira Code Nerd Font.
 place_as_root_user_with_mode_644 \

@@ -44,7 +44,7 @@ The **Basic Box** installer creates a Debian 12 system with:
   - Speed up trackpad and enable trackpad tap-to-click
 
 - automatic login enabled
-- fd installed
+- fd-find (fd) installed
 - ripgrep installed
 - exa installed
 - bat installed

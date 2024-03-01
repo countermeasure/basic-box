@@ -68,17 +68,10 @@ extra/dotfiles/zathurarc
 
 extra/packages/bandwhich.tar.gz
 extra/packages/bandwhich_source.tar.gz
-extra/packages/bat.deb
 extra/packages/delta.tar.gz
 extra/packages/delta_source.tar.gz
-extra/packages/direnv.linux
-extra/packages/direnv_source.tar.gz
-extra/packages/exa.zip
-extra/packages/fd.deb
 extra/packages/fira_code.ttf
 extra/packages/fish.deb
-extra/packages/fzf.tar.gz
-extra/packages/fzf_source.tar.gz
 extra/packages/geckodriver.tar.gz
 extra/packages/httpie-completion.bash
 extra/packages/httpie-completion.fish
@@ -87,7 +80,6 @@ extra/packages/mullvad.deb
 extra/packages/nvim.appimage
 extra/packages/nvim_source.tar.gz
 extra/packages/pyenv_source.tar.gz
-extra/packages/ripgrep.deb
 extra/packages/starship.tar.gz
 extra/packages/trash_cli_source.tar.gz
 extra/packages/yt_dlp.tar.gz
