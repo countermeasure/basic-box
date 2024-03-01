@@ -10,9 +10,9 @@ eval "$(register-python-argcomplete pipx)"
 # Colourise man pages by setting bat as the man pager.
 export MANPAGER='sh -c "col -bx | bat -l man -p"'
 
-# Enable fzf auto-completion and keybindings.
-source /usr/local/share/fzf/completion.bash
-source /usr/local/share/fzf/key-bindings.bash
+# Enable fzf keybindings. In the Debian package of fzf, auto-completion is
+# enabled by dafault. See /usr/share/doc/fzf/README.Debian.
+source /usr/share/doc/fzf/examples/key-bindings.bash
 
 # Sort fzf lists from the top down.
 export FZF_DEFAULT_OPTS='--reverse'
