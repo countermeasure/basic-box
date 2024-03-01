@@ -34,8 +34,8 @@ link "MullvadVPN-${mullvad_version}_amd64.deb" 'mullvad.deb'
 # Ensure the zoxide package is present.
 zoxide_version=$(get_version zoxide)
 wget --timestamping "https://github.com/ajeetdsouza/zoxide/releases/download/\
-v${zoxide_version}/zoxide_${zoxide_version}_amd64.deb"
-link "zoxide_${zoxide_version}_amd64.deb" 'zoxide.deb'
+v${zoxide_version}/zoxide_${zoxide_version}-1_amd64.deb"
+link "zoxide_${zoxide_version}-1_amd64.deb" 'zoxide.deb'
 
 # Ensure the delta package is present.
 # The delta .deb package doesn't contain completions as of version 0.11.3, so

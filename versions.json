@@ -5,13 +5,13 @@
   "fish": "3.7.0",
   "geckodriver": "0.34.0",
   "httpie": "3.2.2",
-  "ipython": "8.18.1",
-  "jupyterlab": "4.0.11",
+  "ipython": "8.22.1",
+  "jupyterlab": "4.1.2",
   "keyd": "2.4.3",
   "mullvad": "2023.6",
   "neovim": "0.9.5",
   "nerd-fonts": "3.1.1",
-  "pyenv": "2.3.35",
+  "pyenv": "2.3.36",
   "pyls-isort": "0.2.2",
   "python-lsp-black": "2.0.0",
   "python-lsp-server": "1.10.0",
@@ -19,5 +19,5 @@
   "tldr": "3.2.0",
   "trash-cli": "0.23.11.10",
   "yt-dlp": "2023.12.30",
-  "zoxide": "0.9.2"
+  "zoxide": "0.9.4"
 }
