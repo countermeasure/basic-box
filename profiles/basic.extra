@@ -19,8 +19,8 @@ extra/dotfiles/firefox_policies.json
 extra/dotfiles/fish.theme
 extra/dotfiles/fish_aliases
 extra/dotfiles/fish_functions
-extra/dotfiles/gitk
 extra/dotfiles/git_global_ignore
+extra/dotfiles/gitk
 extra/dotfiles/gnome_initial_setup_done
 extra/dotfiles/htoprc
 extra/dotfiles/ipython_config.py

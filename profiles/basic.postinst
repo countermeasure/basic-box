@@ -15,11 +15,16 @@ user_config_dir=${user_dir}/.config
 
 sudoers_dir=/etc/sudoers.d
 
+create_directory_as_ordinary_user() {
+  # Create a directory owned by the ordinary user, making any subdirectories
+  # necessary.
+  run_as_ordinary_user "install --directory $1"
+}
+
 extract_tar() {
   # Make a directory and extract the contents of a tarfile into it.
   mkdir "$2"
-  tar \
-    --extract \
+  tar --extract \
     --file ${installer_dir}/"$1" \
     --directory "$2" \
     --strip-component 1
@@ -37,51 +42,54 @@ git_global_config_set() {
   # Add a setting to the Git global configuration. It's necessary to wrap the
   # second argument in double quotes to set the configuration values
   # correctly.
-  runuser --login "${username}" --command "git config --global $1 \"$2\""
+  run_as_ordinary_user "git config --global $1 \"$2\""
 }
 
 gsettings_set() {
   # Change a dconf setting. It's necessary to use dbus-launch ahead of
   # gsettings when invoking this as the root user.
-  runuser \
-    --login "${username}" \
-    --command "dbus-launch gsettings set org.gnome.$1"
+  run_as_ordinary_user "dbus-launch gsettings set org.gnome.$1"
 }
 
 install_with_pipx() {
   # Install a Python package with pipx.
   package_version=$(get_version "$1")
-  runuser --login "${username}" --command "pipx install $1==${package_version}"
+  run_as_ordinary_user "pipx install $1==${package_version}"
 }
 
 place_as_root_user_with_mode_440() {
   # Place a file with mode 440 and owned by the root user, making any
   # subdirectories necessary.
-  install -D --mode=440 "$1" "$2"
+  install -D --mode 440 "$1" "$2"
 }
 
 place_as_root_user_with_mode_644() {
   # Place a file with mode 644 and owned by the root user, making any
   # subdirectories necessary.
-  install -D --mode=644 "$1" "$2"
+  install -D --mode 644 "$1" "$2"
 }
 
 place_as_root_user_with_mode_755() {
   # Place a file with mode 755 and owned by the root user, making any
   # subdirectories necessary.
-  install -D --mode=755 "$1" "$2"
+  install -D --mode 755 "$1" "$2"
 }
 
-place_as_unprivileged_user_with_mode_644() {
-  # Place a file with mode 644 and owned by the unprivileged user, making any
+place_as_ordinary_user_with_mode_644() {
+  # Place a file with mode 644 and owned by the ordinary user, making any
   # subdirectories necessary.
-  runuser --login "${username}" --command "install -D --mode=644 $1 $2"
+  run_as_ordinary_user "install -D --mode 644 $1 $2"
 }
 
-place_as_unprivileged_user_with_mode_755() {
-  # Place a file with mode 755 and owned by the unprivileged user, making any
+place_as_ordinary_user_with_mode_755() {
+  # Place a file with mode 755 and owned by the ordinary user, making any
   # subdirectories necessary.
-  runuser --login "${username}" --command "install -D --mode=755 $1 $2"
+  run_as_ordinary_user "install -D --mode 755 $1 $2"
+}
+
+run_as_ordinary_user() {
+  # Run a command as the ordinary user.
+  runuser --login "${username}" --command "$1"
 }
 
 # Install build-essential to provide packages like make and gcc for use in this
@@ -94,7 +102,7 @@ apt install --yes build-essential
 apt install --yes dbus-x11
 
 # Copy first_boot systemd unit file into place.
-place_as_unprivileged_user_with_mode_755 \
+place_as_ordinary_user_with_mode_755 \
   ${installer_dir}/first_boot.sh "${user_bin_dir}"/first_boot
 place_as_root_user_with_mode_644 \
   ${installer_dir}/first_boot.service /etc/systemd/system/first_boot.service
@@ -106,26 +114,20 @@ systemctl enable first_boot.service
 # Install and configure fish.
 apt install --yes ${installer_dir}/fish.deb
 fish_config_dir="${user_config_dir}"/fish
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/config.fish "${fish_config_dir}"/config.fish
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/fish_aliases "${fish_config_dir}"/fish_aliases
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/fish.theme "${fish_config_dir}"/themes/box.theme
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/fish_functions "${fish_config_dir}"/fish_functions
-runuser \
-  --login "${username}" \
-  --command 'yes | fish --command "fish_config theme save box"'
+run_as_ordinary_user 'yes | fish --command "fish_config theme save box"'
 # Create the $HOME/.config/fish/conf.d and $HOME/.config/fish/functions
 # directories now. This is to avoid them being created the first time a shell
 # is opened and having notifications shown then as a result.
-runuser \
-  --login "${username}" \
-  --command "install --directory ${fish_config_dir}/conf.d"
-runuser \
-  --login "${username}" \
-  --command "install --directory ${fish_config_dir}/functions"
+create_directory_as_ordinary_user "${fish_config_dir}/conf.d"
+create_directory_as_ordinary_user "${fish_config_dir}/functions"
 
 # Install the UFW firewall.
 apt install --yes ufw
@@ -137,14 +139,11 @@ place_as_root_user_with_mode_644 \
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
-place_as_unprivileged_user_with_mode_755 \
+place_as_ordinary_user_with_mode_755 \
   ${installer_dir}/first_login.sh "${user_bin_dir}"/first_login
 autostart_dir=${user_config_dir}/autostart
-runuser \
-  --login \
-  "${username}" \
-  --command \
-  "desktop-file-install --dir=${autostart_dir} ${installer_dir}/first_login.desktop"
+run_as_ordinary_user \
+  "desktop-file-install --dir ${autostart_dir} ${installer_dir}/first_login.desktop"
 
 # Install Tor Browser Launcher.
 apt install --yes torbrowser-launcher
@@ -152,27 +151,24 @@ apt install --yes torbrowser-launcher
 # Install pipx.
 apt install --yes pipx
 # Add pipx completions for fish.
-runuser \
-  --login \
-  "${username}" \
-  --command \
+run_as_ordinary_user \
   "register-python-argcomplete --shell fish pipx >/tmp/pipx_completions.fish"
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   /tmp/pipx_completions.fish "${fish_completions_dir}"/pipx.fish
 
 # Copy .bashrc extensions into place and enable them.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/dot_bash_aliases "${user_dir}"/.bash_aliases
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/dot_bash_functions "${user_dir}"/.bash_functions
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/dot_bashrc_modifications "${user_dir}"/.bashrc_modifications
 printf '\n# Enable .bashrc modifications.\n' >>"${user_dir}"/.bashrc
 # shellcheck disable=SC2016
 echo '. "${HOME}/.bashrc_modifications"' >>"${user_dir}"/.bashrc
 
 # Copy .profile extension into place and enable it.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/dot_profile_modifications \
   "${user_dir}"/.profile_modifications
 printf '\n# Enable .profile modifications.\n' >>"${user_dir}"/.profile
@@ -180,18 +176,17 @@ printf '\n# Enable .profile modifications.\n' >>"${user_dir}"/.profile
 echo '. "${HOME}/.profile_modifications"' >>"${user_dir}"/.profile
 
 # Install yt-dlp.
-install_with_pipx 'yt-dlp'
+install_with_pipx yt-dlp
 extract_tar yt_dlp.tar.gz /tmp/yt_dlp
 place_as_root_user_with_mode_644 \
   /tmp/yt_dlp/yt-dlp.1 /usr/local/share/man/man1/yt-dlp.1
 place_as_root_user_with_mode_644 \
   /tmp/yt_dlp/completions/bash/yt-dlp \
   /usr/share/bash-completion/completions/yt-dlp
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   /tmp/yt_dlp/completions/fish/yt-dlp.fish \
   "${fish_completions_dir}"/yt-dlp.fish
-mandb
-
+# yt-dlp requires ffmpeg.
 apt install --yes ffmpeg
 
 # Install ranger.
@@ -221,16 +216,16 @@ gsettings_set 'desktop.peripherals.touchpad speed 0.25'
 gsettings_set 'desktop.peripherals.touchpad tap-to-click true'
 
 # Enable automatic login.
-sed -i \
+sed --in-place \
   's/.*AutomaticLoginEnable =.*/AutomaticLoginEnable = true/' \
   /etc/gdm3/daemon.conf
-sed -i \
+sed --in-place \
   "s/.*AutomaticLogin =.*/AutomaticLogin = ${username}/" \
   /etc/gdm3/daemon.conf
 
 # Install fd-find (fd) and symlink fdfind to fd.
 apt install --yes fd-find
-ln -s /usr/bin/fdfind /usr/bin/fd
+ln --symbolic /usr/bin/fdfind /usr/bin/fd
 
 # Install ripgrep.
 apt install --yes ripgrep
@@ -240,7 +235,7 @@ apt install --yes exa
 
 # Install bat and symlink batcat to bat.
 apt install --yes bat
-ln -s /usr/bin/batcat /usr/bin/bat
+ln --symbolic /usr/bin/batcat /usr/bin/bat
 
 # Install fzf.
 apt install --yes fzf
@@ -250,7 +245,7 @@ apt install --yes ${installer_dir}/zoxide.deb
 
 # Install htop.
 apt install --yes htop
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/htoprc "${user_config_dir}"/htop/htoprc
 
 # Make the F10 key available in the GNOME Terminal by stopping it from opening
@@ -268,7 +263,7 @@ extract_tar delta_source.tar.gz /tmp/delta_source
 place_as_root_user_with_mode_644 \
   tmp/delta_source/etc/completion/completion.bash \
   /usr/share/bash-completion/completions/delta.bash
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   /tmp/delta_source/etc/completion/completion.fish \
   "${fish_completions_dir}"/delta.fish
 
@@ -306,22 +301,22 @@ git_global_config_set 'init.defaultBranch' 'main'
 
 # Install gitk
 apt install --yes gitk
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/gitk "${user_config_dir}"/git/gitk
 
 # Install and configure keyd.
 extract_tar keyd_source.tar.gz /tmp/keyd_source
-make --directory=/tmp/keyd_source
-make --directory=/tmp/keyd_source install
+make --directory /tmp/keyd_source
+make --directory /tmp/keyd_source install
 # keyd requires the configuration file to be available in /etc/keyd, but prefer
 # to keep it within the user's home directory.
 keyd_dir="${user_config_dir}"/keyd
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/keyd_default.conf "${keyd_dir}"/default.conf
 ln --symbolic "${keyd_dir}"/default.conf /etc/keyd/default.conf
 
 # Make the "box" command available everywhere.
-place_as_unprivileged_user_with_mode_755 \
+place_as_ordinary_user_with_mode_755 \
   ${installer_dir}/box.sh "${user_bin_dir}"/box
 
 # Install direnv.
@@ -334,8 +329,7 @@ place_as_root_user_with_mode_644 \
 gsettings_set 'desktop.interface monospace-font-name "FiraCode Nerd Font 11"'
 
 # Install Starship.
-tar \
-  --extract \
+tar --extract \
   --file ${installer_dir}/starship.tar.gz \
   --directory /usr/local/bin
 # The Starship binary is called with its full path here as calling it just with
@@ -343,28 +337,27 @@ tar \
 /usr/local/bin/starship completions bash > \
   /usr/share/bash-completion/completions/starship.bash
 /usr/local/bin/starship completions fish >/tmp/starship.fish
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   /tmp/starship.fish "${fish_completions_dir}"/starship.fish
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/starship.toml "${user_config_dir}"/starship.toml
 
 # Install HTTPie.
 install_with_pipx httpie
 # The completion files need to be named with the commands which they relate to
 # to work, so rather than naming them httpie.*, they are named http[s].*.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/httpie-completion.bash "${bash_completions_dir}"/http.bash
 ln --symbolic \
   "${bash_completions_dir}"/http.bash \
   "${bash_completions_dir}"/https.bash
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/httpie-completion.fish "${fish_completions_dir}"/http.fish
 # HTTPie doesn't provide a fish completion file for https, so the fish
 # completion file for http is used with modifications.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/httpie-completion.fish "${fish_completions_dir}"/https.fish
-sed \
-  --in-place \
+sed --in-place \
   's/^complete -c http/complete -c https/g' \
   "${fish_completions_dir}"/https.fish
 
@@ -373,11 +366,11 @@ apt install --yes nmap
 
 # Install KeePassXC.
 apt install --yes keepassxc
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/keepassxc.ini "${user_config_dir}"/keepassxc/keepassxc.ini
 
 # Add post-installation setup instructions.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/setup.rst "${user_dir}"/setup.rst
 
 # Install IPython.
@@ -397,14 +390,14 @@ install_with_pipx tldr
 # tldr is called with its full path here as calling it just with tldr doesn't
 # work.
 "${user_bin_dir}"/tldr --print-completion bash >/tmp/tldr.bash
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   /tmp/tldr.bash "${bash_completions_dir}"/tldr.bash
 
 # Install OfflineIMAP.
 apt install --yes offlineimap
 
 # Add a global Git ignore file.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/git_global_ignore "${user_config_dir}"/git/ignore
 
 # Install trash-cli.
@@ -427,10 +420,9 @@ place_as_root_user_with_mode_644 \
 place_as_root_user_with_mode_644 \
   /tmp/trash_cli_source/man/man1/trash-rm.1 \
   /usr/local/share/man/man1/trash-rm.1
-mandb
 
 # Add a Ranger rc.conf file.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/ranger_rc.conf "${user_config_dir}"/ranger/rc.conf
 
 # Install Neovim.
@@ -457,80 +449,78 @@ update-alternatives --install /usr/bin/vimdiff vimdiff ${nvim_path} 50
 # Invoking select-editor for the root user must be done using runuser or the
 # .selected_editor file is created in the / directory rather than the /root
 # directory.
-runuser -l root -c 'echo 1 | select-editor'
+runuser --login root --command 'echo 1 | select-editor'
 
 # Configure Neovim.
 # Put the LazyVim files in place.
 nvim_config_dir=${user_config_dir}/nvim
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_init.lua \
   "${nvim_config_dir}"/init.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_lazy_lock.json \
   "${nvim_config_dir}"/lazy-lock.json
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_config_autocmds.lua \
   "${nvim_config_dir}"/lua/config/autocmds.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_config_keymaps.lua \
   "${nvim_config_dir}"/lua/config/keymaps.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_config_lazy.lua \
   "${nvim_config_dir}"/lua/config/lazy.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_config_options.lua \
   "${nvim_config_dir}"/lua/config/options.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_colourscheme.lua \
   "${nvim_config_dir}"/lua/plugins/colourscheme.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_conform.lua \
   "${nvim_config_dir}"/lua/plugins/conform.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_lualine.lua \
   "${nvim_config_dir}"/lua/plugins/lualine.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_luasnip.lua \
   "${nvim_config_dir}"/lua/plugins/luasnip.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_mason.lua \
   "${nvim_config_dir}"/lua/plugins/mason.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_neotree.lua \
   "${nvim_config_dir}"/lua/plugins/neotree.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_nvim_cmp.lua \
   "${nvim_config_dir}"/lua/plugins/nvim_cmp.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_nvim_lint.lua \
   "${nvim_config_dir}"/lua/plugins/nvim_lint.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_nvim_lspconfig.lua \
   "${nvim_config_dir}"/lua/plugins/nvim_lspconfig.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_ranger.lua \
   "${nvim_config_dir}"/lua/plugins/ranger.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_telescope.lua \
   "${nvim_config_dir}"/lua/plugins/telescope.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_treesitter.lua \
   "${nvim_config_dir}"/lua/plugins/treesitter.lua
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_which_key.lua \
   "${nvim_config_dir}"/lua/plugins/which_key.lua
 # Install Python LSP Server and its third-party plugins.
 install_with_pipx python-lsp-server[flake8]
 pyls_isort_version=$(get_version pyls-isort)
-runuser \
-  -l "${username}" \
-  -c "pipx inject python-lsp-server pyls-isort==${pyls_isort_version}"
+run_as_ordinary_user \
+  "pipx inject python-lsp-server pyls-isort==${pyls_isort_version}"
 python_lsp_black_version=$(get_version python-lsp-black)
-runuser \
-  -l "${username}" \
-  -c "pipx inject python-lsp-server python-lsp-black==${python_lsp_black_version}"
+run_as_ordinary_user \
+  "pipx inject python-lsp-server python-lsp-black==${python_lsp_black_version}"
 # Set up LazyVim.
-runuser -l "${username}" -c 'nvim --headless "+Lazy! restore" +qa'
+run_as_ordinary_user 'nvim --headless "+Lazy! restore" +qa'
 
 # Install curl.
 apt install --yes curl
@@ -539,7 +529,7 @@ apt install --yes curl
 apt install --yes rfkill
 
 # Add a yt-dlp configuration file.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/yt_dlp_config \
   "${user_config_dir}"/yt-dlp/config
 
@@ -547,14 +537,12 @@ place_as_unprivileged_user_with_mode_644 \
 apt install --yes atool
 
 # Install bandwhich.
-tar \
-  --extract \
+tar --extract \
   --file ${installer_dir}/bandwhich.tar.gz \
   --directory /usr/local/bin
 extract_tar bandwhich_source.tar.gz /tmp/bandwhich_source
 place_as_root_user_with_mode_644 \
   /tmp/bandwhich_source/docs/bandwhich.1 /usr/local/share/man/man1/bandwhich.1
-mandb
 # Allow bandwhich to run without being called with sudo.
 setcap \
   cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep \
@@ -564,7 +552,7 @@ setcap \
 apt install --yes whois
 
 # Add ranger colourscheme.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/ranger_colourscheme.py \
   "${user_config_dir}"/ranger/colorschemes/box.py
 
@@ -576,14 +564,14 @@ apt install --yes python-is-python3
 
 # Install zathura.
 apt install --yes zathura
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/zathurarc "${user_config_dir}"/zathura/zathurarc
 
 # Add ranger rifle.conf and scope.sh files.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/ranger_rifle.conf \
   "${user_config_dir}"/ranger/rifle.conf
-place_as_unprivileged_user_with_mode_755 \
+place_as_ordinary_user_with_mode_755 \
   ${installer_dir}/ranger_scope.sh \
   "${user_config_dir}"/ranger/scope.sh
 
@@ -606,7 +594,7 @@ place_as_root_user_with_mode_440 \
   ${installer_dir}/sudoers_ufw ${sudoers_dir}/ufw
 
 # Add ipython_config.py file.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/ipython_config.py \
   "${user_dir}"/.ipython/profile_default/ipython_config.py
 
@@ -659,8 +647,7 @@ apt install --yes \
   zlib1g-dev
 
 # Install geckodriver.
-tar \
-  --extract \
+tar --extract \
   --file ${installer_dir}/geckodriver.tar.gz \
   --directory /usr/local/bin
 
@@ -669,12 +656,12 @@ install_with_pipx jupyterlab
 # Share JupyterLab user settings across all JupyterLab environments.
 jupyterlab_apputils_extension_dir="${user_dir}/.jupyter/lab/user-settings/\
 @jupyterlab/apputils-extension"
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/jupyterlab_apputils_settings \
   "${jupyterlab_apputils_extension_dir}"/themes.jupyterlab-settings
 jupyterlab_codemiror_extension_dir="${user_dir}/.jupyter/lab/user-settings/\
 @jupyterlab/codemirror-extension"
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/jupyterlab_codemirror_settings \
   "${jupyterlab_codemiror_extension_dir}"/commands.jupyterlab-settings
 
@@ -692,8 +679,7 @@ place_as_root_user_with_mode_644 \
   ${installer_dir}/tlp_charging_thresholds.conf \
   /etc/tlp.d/10-charging-thresholds.conf
 
-# Install Libnotify.
-# This provides the notify-send command.
+# Install Libnotify. This provides the notify-send command.
 apt install --yes libnotify-bin
 
 # Don't show the lecture message the first time "sudo" is used.
@@ -710,7 +696,7 @@ place_as_root_user_with_mode_440 \
 apt install --yes thunderbird
 
 # Make the "git_wrapper" command available everywhere.
-place_as_unprivileged_user_with_mode_755 \
+place_as_ordinary_user_with_mode_755 \
   ${installer_dir}/git_wrapper.sh "${user_bin_dir}"/git_wrapper
 
 # Install wl-clipboard.
@@ -735,20 +721,23 @@ place_as_root_user_with_mode_644 \
   /etc/NetworkManager/conf.d/mac_randomisation.conf
 
 # Copy check_vpn systemd unit file and the script it controls into place.
-place_as_unprivileged_user_with_mode_755 \
+place_as_ordinary_user_with_mode_755 \
   ${installer_dir}/check_vpn.sh "${user_bin_dir}"/check_vpn
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/check_vpn.service \
   "${user_config_dir}"/systemd/user/check_vpn.service
 
 # Don't show the GNOME Initial Setup workflow.
-place_as_unprivileged_user_with_mode_644 \
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/gnome_initial_setup_done \
   "${user_config_dir}"/gnome-initial-setup-done
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
-runuser \
-  --login "${username}" \
-  --command 'fish --command fish_update_completions'
+run_as_ordinary_user 'fish --command fish_update_completions'
+
+# Create or update the manual page index caches.
+# This should stay at the end on the basic.postinst file so that it does the
+# creates/updates after all packages have been installed.
+mandb
