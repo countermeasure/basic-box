@@ -122,4 +122,4 @@ link "geckodriver-v${geckodriver_version}-linux64.tar.gz" 'geckodriver.tar.gz'
 fish_version=$(get_version fish)
 wget --timestamping "https://download.opensuse.org/repositories/shells:/fish:/\
 release:/3/Debian_12/amd64/fish_${fish_version}-1_amd64.deb"
-link "fish_${fish_version}-1_amd64.deb" "fish.deb"
+link "fish_${fish_version}-1_amd64.deb" 'fish.deb'
