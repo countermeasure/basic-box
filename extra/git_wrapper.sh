@@ -213,7 +213,6 @@ git_branch_delete() {
   # Confirm that the branches should be deleted.
   echo
   _print_magenta 'Branches to be deleted'
-  # shellcheck disable=2001
   echo "${branches}"
   echo
   read -p 'Delete? (y/n): ' -r response
@@ -352,7 +351,7 @@ git_branch_set_upstream() {
   git branch --set-upstream-to="${remote}/${branch}" "${branch}"
 
   # Show information.
-  _print_success_message "Done"
+  _print_success_message 'Done'
 }
 
 ###############################################################################
@@ -743,7 +742,7 @@ git_pull() {
     commits_pulled_count=$((final_commit_count - initial_commit_count))
     git log --max-count="${commits_pulled_count}"
   else
-    _print_success_message "No changes to pull"
+    _print_success_message 'No changes to pull'
   fi
 }
 
@@ -894,7 +893,7 @@ git_rebase_continue() {
 git_rebase_interactive() {
   # Unstaged changes will cause the rebase to fail, so exit if there are any.
   if [[ -n $(git diff) ]]; then
-    _print_failure_message "There are unstaged changes"
+    _print_failure_message 'There are unstaged changes'
     exit 1
   fi
 
@@ -947,7 +946,7 @@ git_rebase_interactive() {
 git_rebase_interactive_with_autosquash() {
   # Unstaged changes will cause the rebase to fail, so exit if there are any.
   if [[ -n $(git diff) ]]; then
-    _print_failure_message "There are unstaged changes"
+    _print_failure_message 'There are unstaged changes'
     exit 1
   fi
 
@@ -1008,7 +1007,7 @@ git_reset_head() {
   git reset --quiet HEAD~"${1}"
 
   # Show information.
-  _print_success_message "Done"
+  _print_success_message 'Done'
   _print_changes
   _print_recent_commits
 }

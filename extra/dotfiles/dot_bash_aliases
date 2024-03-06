@@ -1,5 +1,6 @@
 # vim: filetype=sh
 # shellcheck shell=bash
+# shellcheck disable=SC1091
 
 alias b='bandwhich'
 

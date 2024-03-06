@@ -1,8 +1,9 @@
 # vim: filetype=sh
 # shellcheck shell=bash
+# shellcheck disable=SC1091
 
 # Source custom functions.
-source ${HOME}/.bash_functions
+source "${HOME}"/.bash_functions
 
 # Enable pipx autocompletion.
 eval "$(register-python-argcomplete pipx)"
@@ -51,8 +52,9 @@ export JUPYTERLAB_SETTINGS_DIR="${HOME}/.jupyter/lab/user-settings"
 export DIRENV_LOG_FORMAT=
 
 # Set the window title to the truncated current working directory.
+# shellcheck disable=SC2034
 starship_precmd_user_func='set_window_title'
-#
+
 # If the parent process is not fish, launch the fish shell.
 if [[ $(ps --no-header --pid=$PPID --format=comm) != 'fish' ]]; then
   exec fish

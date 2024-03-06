@@ -38,7 +38,7 @@ _wipe() {
   echo
   echo 'This will PERMANENTLY DESTROY ALL DATA on this machine.'
   echo
-  sudo cryptsetup --verbose erase ${target_device}
+  sudo cryptsetup --verbose erase "${target_device}"
   echo
   echo 'Done.'
   sleep 1
@@ -47,7 +47,7 @@ _wipe() {
 # Command functions.
 
 audit() {
-  echo "Auditing the system with Lynis..."
+  echo 'Auditing the system with Lynis...'
   sudo lynis audit system
 }
 
@@ -57,9 +57,9 @@ battery() {
     battery_power_file="/sys/class/power_supply/BAT${battery}/power_now"
     if [[ -f ${battery_power_file} ]]; then
       battery_status_file="/sys/class/power_supply/BAT${battery}/status"
-      battery_status=$(<${battery_status_file})
+      battery_status=$(<"${battery_status_file}")
       if [[ ${battery_status} = 'Discharging' ]]; then
-        discharging_power_in_microwatts=$(<${battery_power_file})
+        discharging_power_in_microwatts=$(<"${battery_power_file}")
         discharging_power=$(
           echo "scale=1; ${discharging_power_in_microwatts} / 10^6" \
             | bc
@@ -70,7 +70,7 @@ battery() {
     fi
   done
   if [[ ${discharging_power} = 0 ]]; then
-    echo "Currently on mains power."
+    echo 'Currently on mains power.'
   fi
   echo
   acpi
@@ -78,8 +78,8 @@ battery() {
   for battery in {0..1}; do
     directory="/sys/class/power_supply/BAT${battery}"
     if [[ -d ${directory} ]]; then
-      start_threshold=$(<${directory}/charge_start_threshold)
-      stop_threshold=$(<${directory}/charge_stop_threshold)
+      start_threshold=$(<"${directory}"/charge_start_threshold)
+      stop_threshold=$(<"${directory}"/charge_stop_threshold)
       charging_output="Battery ${battery}: "
       charging_output+="Charging starts below ${start_threshold}%, "
       charging_output+="stops at ${stop_threshold}%"
@@ -305,7 +305,7 @@ scan() {
       esac
       ;;
     rootkits)
-      echo "Scanning the system with Rootkit Hunter..."
+      echo 'Scanning the system with Rootkit Hunter...'
       echo
       sudo rkhunter \
         --check \
@@ -378,7 +378,7 @@ sync() {
 }
 
 upgrade() {
-  echo "Upgrading Debian packages..."
+  echo 'Upgrading Debian packages...'
   echo
   sudo apt --quiet --quiet update
   echo

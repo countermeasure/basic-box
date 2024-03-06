@@ -14,7 +14,7 @@ go_to_parent_directory() {
   if [ -z "$1" ]; then
     cd ..
   elif [[ $1 != [1-9]?([0-9]) ]]; then
-    echo "Argument must be an integer between 1 and 99."
+    echo 'Argument must be an integer between 1 and 99'
     return 1
   else
     path=''
@@ -38,7 +38,8 @@ only_allow_pip_in_virtualenvs() {
   if [ -n "${VIRTUAL_ENV}" ]; then
     \pip "$@"
   else
-    echo "Prefer pipx to pip when not in a virtualenv."
+    echo 'Prefer pipx to pip when not in a virtualenv'
+    return 1
   fi
 }
 
@@ -55,7 +56,8 @@ only_allow_pip3_in_virtualenvs() {
   if [ -n "${VIRTUAL_ENV}" ]; then
     \pip3 "$@"
   else
-    echo "Prefer pipx to pip3 when not in a virtualenv."
+    echo 'Prefer pipx to pip3 when not in a virtualenv'
+    return 1
   fi
 }
 
@@ -69,7 +71,7 @@ set_window_title() {
   separators_in_condensed_pwd="${condensed_pwd//[!\/]/}"
   non_home_directory_count="${#separators_in_condensed_pwd}"
   non_home_directories_to_show=2
-  if [ ${non_home_directory_count} -gt ${non_home_directories_to_show} ]; then
+  if [ "${non_home_directory_count}" -gt ${non_home_directories_to_show} ]; then
     base_title=$(
       echo "${condensed_pwd}" \
         | rev \

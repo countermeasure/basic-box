@@ -13,7 +13,7 @@ function go_to_parent_directory
     if test -z $argv[1]
         cd ..
     else if not contains $argv[1] (seq 1 99)
-        echo "Argument must be an integer between 1 and 99"
+        echo 'Argument must be an integer between 1 and 99'
         return 1
     else
         set path ''
@@ -37,7 +37,8 @@ function only_allow_pip_in_virtualenvs
     if test -n "$VIRTUAL_ENV"
         command pip $argv
     else
-        echo "Prefer pipx to pip when not in a virtualenv."
+        echo 'Prefer pipx to pip when not in a virtualenv'
+        return 1
     end
 end
 
@@ -54,7 +55,8 @@ function only_allow_pip3_in_virtualenvs
     if test -n "$VIRTUAL_ENV"
         command pip3 $argv
     else
-        echo "Prefer pipx to pip3 when not in a virtualenv."
+        echo 'Prefer pipx to pip3 when not in a virtualenv'
+        return 1
     end
 end
 
