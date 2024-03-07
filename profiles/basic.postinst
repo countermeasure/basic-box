@@ -710,10 +710,29 @@ gsettings_set 'desktop.wm.preferences audible-bell false'
 gsettings_set 'desktop.wm.preferences visual-bell true'
 gsettings_set 'desktop.wm.preferences visual-bell-type "frame-flash"'
 
+# Install the latest Firefox.
+# The firefox-esr package is no longer required, so remove it first.
+apt purge --yes firefox-esr
+wget \
+  --output-document /etc/apt/keyrings/packages.mozilla.org.asc \
+  https://packages.mozilla.org/apt/repo-signing-key.gpg
+place_as_root_user_with_mode_644 \
+  ${installer_dir}/sources_mozilla.list \
+  /etc/apt/sources.list.d/mozilla.list
+apt update
+apt install --yes firefox
+firefox_path=/usr/bin/firefox
+update-alternatives --install \
+  /usr/bin/gnome-www-browser gnome-www-browser ${firefox_path} 70
+update-alternatives --install \
+  /usr/bin/x-www-browser x-www-browser ${firefox_path} 70
+
 # Configure Firefox.
+# TODO: Work out how to set the list of search engines and the default search
+# engine.
 place_as_root_user_with_mode_644 \
   ${installer_dir}/firefox_policies.json \
-  /usr/share/firefox-esr/distribution/policies.json
+  /usr/lib/firefox/distribution/policies.json
 
 # Randomise MAC address.
 place_as_root_user_with_mode_644 \

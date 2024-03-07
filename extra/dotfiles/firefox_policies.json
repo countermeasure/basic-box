@@ -58,16 +58,6 @@
       "Sessions": true,
       "SiteSettings": false,
       "Locked": true
-    },
-    "SearchEngines": {
-      "Default": "DuckDuckGo",
-      "Remove": [
-        "Amazon.com",
-        "Amazon.se",
-        "Bing",
-        "eBay",
-        "Google"
-      ]
     }
   }
 }
