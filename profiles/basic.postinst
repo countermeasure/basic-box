@@ -694,6 +694,8 @@ place_as_root_user_with_mode_440 \
 
 # Install Thunderbird.
 apt install --yes thunderbird
+apt install --yes thunderbird-l10n-en-gb
+apt install --yes hunspell-en-au
 
 # Make the "git_wrapper" command available everywhere.
 place_as_ordinary_user_with_mode_755 \
@@ -710,10 +712,14 @@ gsettings_set 'desktop.wm.preferences audible-bell false'
 gsettings_set 'desktop.wm.preferences visual-bell true'
 gsettings_set 'desktop.wm.preferences visual-bell-type "frame-flash"'
 
-# Configure Firefox.
+# Configure Firefox using policies.
 place_as_root_user_with_mode_644 \
   ${installer_dir}/firefox_policies.json \
   /usr/share/firefox-esr/distribution/policies.json
+
+# Add Australian English for Firefox, Thunderbird and
+apt install --yes firefox-esr-l10n-en-gb
+apt install --yes hunspell-en-au
 
 # Randomise MAC address.
 place_as_root_user_with_mode_644 \
