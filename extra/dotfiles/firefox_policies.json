@@ -48,6 +48,7 @@
         "Value": true
       }
     },
+    "RequestedLocales": "en-GB",
     "SanitizeOnShutdown": {
       "Cache": true,
       "Cookies": true,
