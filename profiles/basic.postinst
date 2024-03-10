@@ -148,8 +148,9 @@ run_as_ordinary_user \
 # Install Tor Browser Launcher.
 apt install --yes torbrowser-launcher
 
-# Install pipx.
+# Install pipx and python3-pip.
 apt install --yes pipx
+apt install --yes python3-pip
 # Add pipx completions for fish.
 run_as_ordinary_user \
   "register-python-argcomplete --shell fish pipx >/tmp/pipx_completions.fish"
