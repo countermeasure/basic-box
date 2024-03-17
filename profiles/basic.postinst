@@ -153,7 +153,7 @@ apt install --yes pipx
 apt install --yes python3-pip
 # Add pipx completions for fish.
 run_as_ordinary_user \
-  "register-python-argcomplete --shell fish pipx >/tmp/pipx_completions.fish"
+  'register-python-argcomplete --shell fish pipx >/tmp/pipx_completions.fish'
 place_as_ordinary_user_with_mode_644 \
   /tmp/pipx_completions.fish "${fish_completions_dir}"/pipx.fish
 
