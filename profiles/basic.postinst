@@ -48,7 +48,7 @@ git_global_config_set() {
 gsettings_set() {
   # Change a dconf setting. It's necessary to use dbus-launch ahead of
   # gsettings when invoking this as the root user.
-  run_as_ordinary_user "dbus-launch gsettings set org.gnome.$1"
+  run_as_ordinary_user "dbus-launch gsettings set org.$1"
 }
 
 install_with_pipx() {
@@ -194,27 +194,28 @@ apt install --yes ffmpeg
 apt install --yes ranger
 
 # Set dark theme globally.
-gsettings_set 'desktop.interface color-scheme "prefer-dark"'
-gsettings_set 'desktop.interface gtk-theme "Adwaita-dark"'
+gsettings_set 'gnome.desktop.interface color-scheme "prefer-dark"'
+gsettings_set 'gnome.desktop.interface gtk-theme "Adwaita-dark"'
 
 # Display date and battery percentage in top bar.
-gsettings_set 'desktop.interface clock-show-weekday true'
-gsettings_set 'desktop.interface show-battery-percentage true'
+gsettings_set 'gnome.desktop.interface clock-show-weekday true'
+gsettings_set 'gnome.desktop.interface show-battery-percentage true'
 
 # Never blank screen, dim screen or suspend when inactive.
-gsettings_set 'desktop.session idle-delay 0'
-gsettings_set 'settings-daemon.plugins.power idle-dim false'
-gsettings_set 'settings-daemon.plugins.power sleep-inactive-ac-type "nothing"'
+gsettings_set 'gnome.desktop.session idle-delay 0'
+gsettings_set 'gnome.settings-daemon.plugins.power idle-dim false'
+gsettings_set \
+  'gnome.settings-daemon.plugins.power sleep-inactive-ac-type "nothing"'
 
 # Make display colour warmer at night.
-gsettings_set 'settings-daemon.plugins.color night-light-enabled true'
+gsettings_set 'gnome.settings-daemon.plugins.color night-light-enabled true'
 
 # Enable natural scrolling for mouse.
-gsettings_set 'desktop.peripherals.mouse natural-scroll true'
+gsettings_set 'gnome.desktop.peripherals.mouse natural-scroll true'
 
 # Speed up trackpad and enable trackpad tap-to-click.
-gsettings_set 'desktop.peripherals.touchpad speed 0.25'
-gsettings_set 'desktop.peripherals.touchpad tap-to-click true'
+gsettings_set 'gnome.desktop.peripherals.touchpad speed 0.25'
+gsettings_set 'gnome.desktop.peripherals.touchpad tap-to-click true'
 
 # Enable automatic login.
 sed --in-place \
@@ -252,7 +253,7 @@ place_as_ordinary_user_with_mode_644 \
 # Make the F10 key available in the GNOME Terminal by stopping it from opening
 # the GNOME Terminal menu's File item. Without doing this, changes made
 # interactively to htop's settings can't be applied.
-gsettings_set 'Terminal.Legacy.Settings menu-accelerator-enabled false'
+gsettings_set 'gnome.Terminal.Legacy.Settings menu-accelerator-enabled false'
 
 # Install ncdu.
 apt install --yes ncdu
@@ -327,7 +328,8 @@ apt install --yes direnv
 place_as_root_user_with_mode_644 \
   ${installer_dir}/fira_code.ttf /usr/local/share/fonts/fira_code.ttf
 # Make Fira Code the system-wide monospace font.
-gsettings_set 'desktop.interface monospace-font-name "FiraCode Nerd Font 11"'
+gsettings_set \
+  'gnome.desktop.interface monospace-font-name "FiraCode Nerd Font 11"'
 
 # Install Starship.
 tar --extract \
@@ -701,9 +703,9 @@ apt install --yes wl-clipboard
 apt install --yes podman
 
 # Set the terminal bell to visual rather than audible.
-gsettings_set 'desktop.wm.preferences audible-bell false'
-gsettings_set 'desktop.wm.preferences visual-bell true'
-gsettings_set 'desktop.wm.preferences visual-bell-type "frame-flash"'
+gsettings_set 'gnome.desktop.wm.preferences audible-bell false'
+gsettings_set 'gnome.desktop.wm.preferences visual-bell true'
+gsettings_set 'gnome.desktop.wm.preferences visual-bell-type "frame-flash"'
 
 # Configure Firefox.
 place_as_root_user_with_mode_644 \
@@ -726,6 +728,11 @@ place_as_ordinary_user_with_mode_644 \
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/gnome_initial_setup_done \
   "${user_config_dir}"/gnome-initial-setup-done
+
+# Set the Nautilus file manager to show items in a list with directories first.
+gsettings_set 'gnome.nautilus.preferences default-folder-viewer "list-view"'
+gsettings_set 'gtk.gtk4.Settings.FileChooser sort-directories-first true'
+gsettings_set 'gtk.Settings.FileChooser sort-directories-first true'
 
 # Install Signal.
 wget \
