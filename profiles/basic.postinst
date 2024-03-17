@@ -444,13 +444,6 @@ update-alternatives --install /usr/bin/vi vi ${nvim_path} 50
 update-alternatives --install /usr/bin/view view ${nvim_path} 50
 update-alternatives --install /usr/bin/vim vim ${nvim_path} 50
 update-alternatives --install /usr/bin/vimdiff vimdiff ${nvim_path} 50
-# Set Neovim as the sensible-editor for the root user so that ranger doesn't
-# ask which editor to use the first time it goes to open a file for the root
-# user.
-# Invoking select-editor for the root user must be done using runuser or the
-# .selected_editor file is created in the / directory rather than the /root
-# directory.
-runuser --login root --command 'echo 1 | select-editor'
 
 # Configure Neovim.
 # Put the LazyVim files in place.
