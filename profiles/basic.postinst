@@ -727,6 +727,16 @@ place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/gnome_initial_setup_done \
   "${user_config_dir}"/gnome-initial-setup-done
 
+# Install Signal.
+wget \
+  --output-document - https://updates.signal.org/desktop/apt/keys.asc \
+  | gpg --dearmor \
+    >/usr/share/keyrings/signal-desktop-keyring.gpg
+place_as_root_user_with_mode_644 \
+  ${installer_dir}/sources_signal.list /etc/apt/sources.list.d/signal.list
+apt update
+apt install --yes signal-desktop
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
