@@ -105,6 +105,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - a systemd service which warns when no VPN is managing traffic
 - build-essential installed
 - dbus-x11 installed
+- Signal installed
 
 
 Set up
