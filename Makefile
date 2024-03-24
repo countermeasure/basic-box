@@ -43,6 +43,9 @@ image:
 sudo:
 	@sudo -v
 
+symlinks:
+	@./create_symlinks.sh
+
 usb: check sudo image
 	@echo "Writing the image to the $(target_device_description)..."
 	@# If sync is not called, eject will run before the copy completes.
@@ -54,4 +57,4 @@ usb: check sudo image
 		--icon \
 		/usr/share/icons/Adwaita/scalable/devices/media-removable-symbolic.svg
 
-.PHONY: check image sudo usb
+.PHONY: check image sudo symlinks usb
