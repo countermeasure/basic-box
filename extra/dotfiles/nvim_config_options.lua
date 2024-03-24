@@ -26,6 +26,9 @@ vim.opt.listchars:append("tab: ")
 -- Show trailing whitespace as the "•" character.
 vim.opt.listchars:append("trail:•")
 
+-- TODO: This flags "color", but not "optimize"
+vim.opt.spelllang = "en_gb"
+
 -- The maximum width of text is 79 characters unless otherwise specified.
 vim.opt.textwidth = 79
 
