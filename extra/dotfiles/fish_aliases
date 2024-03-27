@@ -6,7 +6,7 @@ alias c='clear -x'
 alias cp='cp --archive --interactive --verbose'
 
 alias delta='delta --line-numbers --navigate'
-alias df='df --si --total'
+alias df='prefer duf df'
 alias diff='prefer delta diff'
 
 alias f='ranger' # "f" for "file manager".
