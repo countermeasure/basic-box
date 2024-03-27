@@ -106,6 +106,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - build-essential installed
 - dbus-x11 installed
 - Signal installed
+- duf installed
 
 
 Set up
