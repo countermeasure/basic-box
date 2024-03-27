@@ -7,11 +7,11 @@ alias cp='cp --archive --interactive --verbose'
 
 alias delta='delta --line-numbers --navigate'
 alias df='df --si --total'
-alias diff='printf "\nPrefer delta to diff.\n\n"'
+alias diff='prefer delta diff'
 
 alias f='ranger' # "f" for "file manager".
 alias fd='fd --exclude .git --follow --hidden'
-alias find='printf "\nPrefer fd to find.\n\n"'
+alias find='prefer fd find'
 
 alias g='git'
 # alias ga='git_wrapper add'
@@ -169,7 +169,7 @@ alias l='exa --colour-scale --group-directories-first --long'
 alias la='exa --all --colour-scale --group-directories-first --long'
 alias less='less --HILITE-UNREAD --ignore-case --LONG-PROMPT --QUIET'
 alias ln='ln --interactive --verbose'
-alias ls='printf "\nPrefer l to ls.\n\n"'
+alias ls='prefer l ls'
 alias lsblk='lsblk --output name,size,type,tran,mountpoint,path'
 
 alias mkdir='mkdir --parents --verbose'
@@ -185,7 +185,7 @@ alias ptop='sudo powertop --time=5'
 
 alias r='reset'
 alias rg="rg --glob '!.git' --hidden --smart-case"
-alias rm='printf "\nPrefer t to rm.\n\n"'
+alias rm='protect t rm'
 alias rmdir='rmdir --verbose'
 
 alias t='trash'
