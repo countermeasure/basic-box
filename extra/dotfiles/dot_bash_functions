@@ -63,6 +63,48 @@ only_allow_pip3_in_virtualenvs() {
 
 ###############################################################################
 #
+#  Show a message saying that one command is preferred to another, but run the
+#  less preferred command anyway.
+#
+#  For use in aliases.
+#
+#  Arguments:
+#    Strings. The more preferred command, then the less preferred command.
+#
+###############################################################################
+prefer() {
+  # If the alias is not being passed to a pipe, show the prefer message.
+  if [ -t 1 ]; then
+    ansi_clear='\033[0m'
+    ansi_yellow='\033[1;33m'
+    echo
+    echo -e "${ansi_yellow}💡 Prefer $1 to $2${ansi_clear}"
+    echo
+  fi
+  command "${@:2}"
+}
+
+###############################################################################
+#
+#  Show a message saying that one command should be used instead of another,
+#  and don't run the less preferred command.
+#
+#  For use in aliases.
+#
+#  Arguments:
+#    Strings. The more preferred command, then the less preferred command.
+#
+###############################################################################
+protect() {
+  ansi_clear='\033[0m'
+  ansi_yellow='\033[1;33m'
+  echo
+  echo -e "${ansi_yellow}✋ Use $1 instead of $2${ansi_clear}"
+  return 1
+}
+
+###############################################################################
+#
 #  Set the window title to the truncated current working directory.
 #
 ###############################################################################
