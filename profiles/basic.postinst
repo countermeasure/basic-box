@@ -21,6 +21,11 @@ create_directory_as_ordinary_user() {
   run_as_ordinary_user "install --directory $1"
 }
 
+enable_gnome_extension() {
+  # Enable a GNOME Shell extension.
+  run_as_ordinary_user "dbus-launch gnome-extensions enable $1"
+}
+
 extract_tar() {
   # Make a directory and extract the contents of a tarfile into it.
   mkdir "$2"
@@ -51,6 +56,11 @@ gsettings_set() {
   run_as_ordinary_user "dbus-launch gsettings set org.$1"
 }
 
+gsettings_set_with_schemadir() {
+  # Change a dconf setting when a schemadir is required. It's necessary to use
+  # dbus-launch ahead of gsettings when invoking this as the root user.
+  run_as_ordinary_user "dbus-launch gsettings --schemadir $1 set org.$2"
+}
 install_with_pipx() {
   # Install a Python package with pipx.
   package_version=$(get_version "$1")
@@ -831,6 +841,50 @@ ${custom_keybindings_key_path}/custom3/"
 gsettings_set "${custom_keybinding_3} binding '<Super>v'"
 gsettings_set "${custom_keybinding_3} command '/opt/Mullvad\ VPN/mullvad-vpn'"
 gsettings_set "${custom_keybinding_3} name 'VPN'"
+
+# Set up GNOME Shell extensions.
+# Install, enable and configure the Bluetooth Quick Connect extension.
+apt install --yes gnome-shell-extension-bluetooth-quick-connect
+enable_gnome_extension bluetooth-quick-connect@bjarosze.gmail.com
+bluetooth_quick_connect_schemadir="/usr/share/gnome-shell/extensions/\
+bluetooth-quick-connect@bjarosze.gmail.com/schemas"
+gsettings_set_with_schemadir \
+  ${bluetooth_quick_connect_schemadir} \
+  'gnome.shell.extensions.bluetooth-quick-connect bluetooth-auto-power-off true'
+gsettings_set_with_schemadir \
+  ${bluetooth_quick_connect_schemadir} \
+  'gnome.shell.extensions.bluetooth-quick-connect bluetooth-auto-power-on true'
+# Install, enable and configure the Dash to Dock extension.
+apt install --yes gnome-shell-extension-dashtodock
+enable_gnome_extension dash-to-dock@micxgx.gmail.com
+gsettings_set \
+  'gnome.shell.extensions.dash-to-dock disable-overview-on-startup true'
+gsettings_set 'gnome.shell.extensions.dash-to-dock hot-keys false'
+gsettings_set 'gnome.shell.extensions.dash-to-dock multi-monitor true'
+gsettings_set 'gnome.shell.extensions.dash-to-dock show-trash false'
+# Install and enable the Hide Activities Button extension.
+apt install --yes gnome-shell-extension-hide-activities
+enable_gnome_extension Hide_Activities@shay.shayel.org
+# Install and enable the NoAnnoyance v2 extension.
+apt install --yes gnome-shell-extension-no-annoyance
+enable_gnome_extension noannoyance@daase.net
+# Install and enable the Quick Close in Overview and Disable Workspace Switcher
+# extensions.
+apt install --yes gnome-shell-extensions-extra
+enable_gnome_extension middleclickclose@paolo.tranquilli.gmail.com
+enable_gnome_extension disable-workspace-switcher@jbradaric.me
+# Install, enable and configure the sytem-monitor extension.
+apt install --yes gnome-shell-extension-system-monitor
+enable_gnome_extension system-monitor@paradoxxx.zero.gmail.com
+gsettings_set 'gnome.shell.extensions.system-monitor cpu-style "digit"'
+gsettings_set 'gnome.shell.extensions.system-monitor disk-usage-style "none"'
+gsettings_set 'gnome.shell.extensions.system-monitor icon-display false'
+gsettings_set 'gnome.shell.extensions.system-monitor memory-style "digit"'
+gsettings_set 'gnome.shell.extensions.system-monitor net-style "digit"'
+# Install and enable the Ubuntu AppIndicators extension.
+# This extention shows the Mullvad VPN icon in the top panel.
+apt install --yes gnome-shell-extension-appindicator
+enable_gnome_extension ubuntu-appindicators@ubuntu.com
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates

@@ -44,6 +44,17 @@ The **Basic Box** installer creates a Debian 12 system with:
   - Enable natural scrolling for mouse
   - Speed up trackpad and enable trackpad tap-to-click
 
+- these GNOME extensions installed, enabled and configured:
+
+  - Bluetooth Quick Connect
+  - Dash to Dock
+  - Disable Workspace Switcher
+  - Hide Activities Button
+  - NoAnnoyance v2
+  - Quick Close in Overview
+  - system-monitor
+  - Ubuntu AppIndicator
+
 - automatic login enabled
 - fd-find (fd) installed
 - ripgrep installed

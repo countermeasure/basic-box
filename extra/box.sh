@@ -79,6 +79,14 @@ _test_gsettings() {
   fi
 }
 
+_test_gsettings_with_schemadir() {
+  if [[ $(gsettings --schemadir "$1" get org."$2" "$3") == "$4" ]]; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}GNOME setting org.${2} ${3} is ${4}"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}GNOME setting org.${2} ${3} is not ${4}"
+  fi
+}
+
 _test_line_in_file() {
   if grep --quiet "$1" "$2"; then
     echo -e "${ansi_green}🗸 ${ansi_clear}${2} contains '${1}'"
@@ -859,6 +867,36 @@ ${custom_keybindings_key_path}/custom3/"
   _test_gsettings \
     ${custom_keybinding_3} command "'/opt/Mullvad\\\ VPN/mullvad-vpn'"
   _test_gsettings ${custom_keybinding_3} name "'VPN'"
+  _test_gsettings gnome.shell enabled-extensions "[\
+'bluetooth-quick-connect@bjarosze.gmail.com', \
+'dash-to-dock@micxgx.gmail.com', \
+'Hide_Activities@shay.shayel.org', \
+'noannoyance@daase.net', \
+'middleclickclose@paolo.tranquilli.gmail.com', \
+'disable-workspace-switcher@jbradaric.me', \
+'system-monitor@paradoxxx.zero.gmail.com', \
+'ubuntu-appindicators@ubuntu.com']"
+  bluetooth_quick_connect_schemadir="/usr/share/gnome-shell/extensions/\
+bluetooth-quick-connect@bjarosze.gmail.com/schemas"
+  _test_gsettings_with_schemadir \
+    ${bluetooth_quick_connect_schemadir} \
+    gnome.shell.extensions.bluetooth-quick-connect \
+    bluetooth-auto-power-off true
+  _test_gsettings_with_schemadir \
+    ${bluetooth_quick_connect_schemadir} \
+    gnome.shell.extensions.bluetooth-quick-connect \
+    bluetooth-auto-power-on true
+  _test_gsettings \
+    gnome.shell.extensions.dash-to-dock disable-overview-on-startup true
+  _test_gsettings gnome.shell.extensions.dash-to-dock hot-keys false
+  _test_gsettings gnome.shell.extensions.dash-to-dock multi-monitor true
+  _test_gsettings gnome.shell.extensions.dash-to-dock show-trash false
+  _test_gsettings gnome.shell.extensions.system-monitor cpu-style "'digit'"
+  _test_gsettings \
+    gnome.shell.extensions.system-monitor disk-usage-style "'none'"
+  _test_gsettings gnome.shell.extensions.system-monitor icon-display false
+  _test_gsettings gnome.shell.extensions.system-monitor memory-style "'digit'"
+  _test_gsettings gnome.shell.extensions.system-monitor net-style "'digit'"
   _test_directory_exists "${user_dir}"/.cache/fish/generated_completions
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
