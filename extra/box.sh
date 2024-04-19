@@ -115,9 +115,11 @@ keyboard() {
       sudo systemctl start keyd
       echo
       echo 'Keys are mapped so that:'
+      echo '* holding the Backslash key produces Meta,'
       echo '* holding the CapsLock key produces Control,'
-      echo '* tapping the CapsLock key produces Escape, and'
-      echo '* the Escape key produces CapsLock.'
+      echo '* tapping the CapsLock key produces Escape,'
+      echo '* the Escape key produces CapsLock, and'
+      echo '* holding the Tab key produces Meta.'
       ;;
     default)
       sudo systemctl stop keyd
