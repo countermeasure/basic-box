@@ -60,9 +60,12 @@ The **Basic Box** installer creates a Debian 12 system with:
 - keyd installed
 - key remapping, which can be deactivated, which:
 
+  - modifies the Backslash key to produce Meta when held and Backslash when
+    tapped
   - modifies the CapsLock key to produce Control when held and Escape when
     tapped
   - modifies the Escape key to produce CapsLock
+  - modifies the Tab key to produce Meta when held and Tab when tapped
 
 - direnv installed
 - Fira Code Nerd Font installed and set as the system-wide monospace font
