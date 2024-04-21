@@ -47,6 +47,7 @@ extra/dotfiles/nvim_plugins_nvim_lspconfig.lua
 extra/dotfiles/nvim_plugins_ranger.lua
 extra/dotfiles/nvim_plugins_treesitter.lua
 extra/dotfiles/nvim_plugins_which_key.lua
+extra/dotfiles/paperwm.css
 extra/dotfiles/ranger_colourscheme.py
 extra/dotfiles/ranger_rc.conf
 extra/dotfiles/ranger_rifle.conf
@@ -78,6 +79,7 @@ extra/packages/httpie-completion.fish
 extra/packages/keyd_source.tar.gz
 extra/packages/nvim.appimage
 extra/packages/nvim_source.tar.gz
+extra/packages/paperwm.zip
 extra/packages/pyenv_source.tar.gz
 extra/packages/starship.tar.gz
 extra/packages/trash_cli_source.tar.gz
