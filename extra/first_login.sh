@@ -3,6 +3,28 @@
 # Set intuitive error behaviour.
 set -o errexit -o nounset -o pipefail
 
+# TODO: Explain why extensions have to be enabled here.
+gnome-extensions enable paperwm@paperwm.github.com
+cp \
+  "${HOME}/.local/share/gnome-shell/extensions/paperwm@paperwm.github.com/config/user.js" \
+  "${HOME}/.config/paperwm/user.js"
+paperwm_keybindings_setting='org.gnome.shell.extensions.paperwm.keybindings'
+paperwm_schemadir="${HOME}/.local/share/gnome-shell/extensions/\
+paperwm@paperwm.github.com/schemas"
+# Remove the <Super>Return keybinding from new-window so that it doesn't
+# conflict with the Terminal launch keybinding.
+gsettings --schemadir "${paperwm_schemadir}" set \
+  ${paperwm_keybindings_setting} new-window "['<Super>n']"
+gnome_terminal_winprops="['{\"wm_class\":\"gnome-terminal-server\",\
+\"preferredWidth\":\"50%\",\
+\"title\":\"Terminal\"}']"
+gsettings --schemadir "${paperwm_schemadir}" set \
+  org.gnome.shell.extensions.paperwm winprops "${gnome_terminal_winprops}"
+gsettings --schemadir "${paperwm_schemadir}" set \
+  ${paperwm_keybindings_setting} switch-left "['<Super>Left', '<Super>h']"
+gsettings --schemadir "${paperwm_schemadir}" set \
+  ${paperwm_keybindings_setting} switch-right "['<Super>Right', '<Super>l']"
+
 # Print a welcome.
 echo
 echo 'Welcome to your new Basic Box'

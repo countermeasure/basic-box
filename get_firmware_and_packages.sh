@@ -118,3 +118,9 @@ geckodriver-v${geckodriver_version}-linux64.tar.gz"
 link \
   "geckodriver/geckodriver-v${geckodriver_version}-linux64.tar.gz" \
   'geckodriver.tar.gz'
+
+# Ensure the paperwm package is present.
+paperwm_version=$(get_version paperwm)
+wget_to_directory 'paperwm' "https://github.com/paperwm/PaperWM/archive/refs/\
+tags/v${paperwm_version}.zip"
+link "paperwm/v${paperwm_version}.zip" 'paperwm.zip'
