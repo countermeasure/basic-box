@@ -123,3 +123,9 @@ fish_version=$(get_version fish)
 wget --timestamping "https://download.opensuse.org/repositories/shells:/fish:/\
 release:/3/Debian_12/amd64/fish_${fish_version}-1_amd64.deb"
 link "fish_${fish_version}-1_amd64.deb" 'fish.deb'
+
+# Ensure the paperwm package is present.
+paperwm_version=$(get_version paperwm)
+wget --timestamping "https://github.com/paperwm/PaperWM/archive/refs/tags/\
+v${paperwm_version}.zip"
+link "v${paperwm_version}.zip" 'paperwm.zip'

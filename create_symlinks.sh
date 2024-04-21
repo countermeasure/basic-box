@@ -74,6 +74,7 @@ link dotfiles/nvim_plugins_ranger.lua "${nvim_plugins_dir}"/ranger.lua
 link dotfiles/nvim_plugins_telescope.lua "${nvim_plugins_dir}"/telescope.lua
 link dotfiles/nvim_plugins_treesitter.lua "${nvim_plugins_dir}"/treesitter.lua
 link dotfiles/nvim_plugins_which_key.lua "${nvim_plugins_dir}"/which_key.lua
+link dotfiles/paperwm.css "${HOME}"/.config/paperwm/user.css
 link \
   dotfiles/ranger_colourscheme.py "${HOME}"/.config/ranger/colorschemes/box.py
 link dotfiles/ranger_rc.conf "${HOME}"/.config/ranger/rc.conf

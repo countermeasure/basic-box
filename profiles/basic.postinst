@@ -811,6 +811,13 @@ favorite_apps="[\
 'org.gnome.clocks.desktop']"
 gsettings_set "gnome.shell favorite-apps \"${favorite_apps}\""
 
+# Install, enable and configure PaperWM GNOME Shell extension.
+run_as_ordinary_user \
+  "dbus-launch gnome-extensions install ${installer_dir}/paperwm.zip"
+enable_gnome_extension paperwm@paperwm.github.com
+place_as_ordinary_user_with_mode_644 \
+  ${installer_dir}/paperwm.css "${user_config_dir}"/paperwm/user.css
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
