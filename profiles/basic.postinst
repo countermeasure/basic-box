@@ -111,8 +111,17 @@ place_as_root_user_with_mode_644 \
 # which can't be done in this postinst script, and is then removed.
 systemctl enable first_boot.service
 
-# Install and configure fish.
-apt install --yes ${installer_dir}/fish.deb
+# Install fish.
+fish_release_key_url="https://download.opensuse.org/repositories/shells:fish/\
+Debian_12/Release.key"
+wget \
+  --output-document - ${fish_release_key_url} \
+  | gpg --dearmor \
+    >/etc/apt/trusted.gpg.d/shells_fish.gpg
+place_as_root_user_with_mode_644 \
+  ${installer_dir}/sources_fish.list /etc/apt/sources.list.d/fish.list
+apt update
+apt install --yes fish
 fish_config_dir="${user_config_dir}"/fish
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/config.fish "${fish_config_dir}"/config.fish

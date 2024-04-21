@@ -52,6 +52,7 @@ extra/dotfiles/ranger_colourscheme.py
 extra/dotfiles/ranger_rc.conf
 extra/dotfiles/ranger_rifle.conf
 extra/dotfiles/ranger_scope.sh
+extra/dotfiles/sources_fish.list
 extra/dotfiles/sources_signal.list
 extra/dotfiles/sources_syncthing.list
 extra/dotfiles/starship.toml
@@ -72,7 +73,6 @@ extra/packages/bandwhich_source.tar.gz
 extra/packages/delta.tar.gz
 extra/packages/delta_source.tar.gz
 extra/packages/fira_code.ttf
-extra/packages/fish.deb
 extra/packages/geckodriver.tar.gz
 extra/packages/httpie-completion.bash
 extra/packages/httpie-completion.fish
