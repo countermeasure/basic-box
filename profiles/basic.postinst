@@ -912,6 +912,17 @@ switch-to-workspace-${workspace} \"['<Super>${workspace}']\""
 move-to-workspace-${workspace} \"['<Ctrl><Super>${workspace}']\""
 done
 
+# Install and configure PaperWM GNOME Shell extension.
+paperwm_dir="${user_dir}/.local/share/gnome-shell/extensions/\
+paperwm@paperwm.github.com"
+run_as_ordinary_user "unzip ${installer_dir}/paperwm.zip -d /tmp/paperwm"
+create_directory_as_ordinary_user "${paperwm_dir}"
+paperwm_version=$(get_version paperwm)
+run_as_ordinary_user \
+  "cp --recursive /tmp/paperwm/PaperWM-${paperwm_version}/* ${paperwm_dir}"
+place_as_ordinary_user_with_mode_644 \
+  ${installer_dir}/paperwm.css "${user_config_dir}"/paperwm/user.css
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.

@@ -52,6 +52,7 @@ The **Basic Box** installer creates a Debian 12 system with:
   - Disable Workspace Switcher
   - Hide Activities Button
   - NoAnnoyance v2
+  - PaperWM
   - Quick Close in Overview
   - system-monitor
   - Ubuntu AppIndicator

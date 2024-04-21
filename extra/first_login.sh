@@ -3,6 +3,42 @@
 # Set intuitive error behaviour.
 set -o errexit -o nounset -o pipefail
 
+# Enable extensions here because they can't be enabled earlier.
+extensions_dir="${HOME}/.local/share/gnome-shell/extensions"
+
+# Enable and configure PaperWM extension.
+gnome-extensions enable paperwm@paperwm.github.com
+cp \
+  "${extensions_dir}/paperwm@paperwm.github.com/config/user.js" \
+  "${HOME}/.config/paperwm/user.js"
+paperwm_keybindings_setting='org.gnome.shell.extensions.paperwm.keybindings'
+paperwm_schemadir="${extensions_dir}/paperwm@paperwm.github.com/schemas"
+# Remove the <Super>Return keybinding from new-window so that it doesn't
+# conflict with the Terminal launch keybinding.
+gsettings --schemadir "${paperwm_schemadir}" set \
+  ${paperwm_keybindings_setting} new-window "['<Super>n']"
+gnome_terminal_winprops="['{\
+\"wm_class\":\"gnome-terminal-server\",\
+\"preferredWidth\":\"50%\",\
+\"title\":\"Terminal\"\
+}']"
+gsettings --schemadir "${paperwm_schemadir}" set \
+  org.gnome.shell.extensions.paperwm winprops "${gnome_terminal_winprops}"
+gsettings --schemadir "${paperwm_schemadir}" set \
+  ${paperwm_keybindings_setting} switch-up "['<Super>Up', '<Super>k']"
+gsettings --schemadir "${paperwm_schemadir}" set \
+  ${paperwm_keybindings_setting} switch-down "['<Super>Down', '<Super>j']"
+gsettings --schemadir "${paperwm_schemadir}" set \
+  ${paperwm_keybindings_setting} switch-left "['<Super>Left', '<Super>h']"
+gsettings --schemadir "${paperwm_schemadir}" set \
+  ${paperwm_keybindings_setting} switch-right "['<Super>Right', '<Super>l']"
+gsettings --schemadir "${paperwm_schemadir}" set \
+  org.gnome.shell.extensions.paperwm minimap-scale 0.3
+gsettings --schemadir "${paperwm_schemadir}" set \
+  org.gnome.shell.extensions.paperwm vertical-margin 20
+gsettings --schemadir "${paperwm_schemadir}" set \
+  org.gnome.shell.extensions.paperwm vertical-margin-bottom 20
+
 # Print a welcome.
 echo
 echo 'Welcome to your new Basic Box'
