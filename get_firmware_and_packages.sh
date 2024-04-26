@@ -26,10 +26,10 @@ mkdir -p ../extra/packages
 cd ../extra/packages || exit 1
 
 # Ensure the Mullvad VPN app package is present.
-mullvad_version=$(get_version mullvad)
+mullvad_vpn_version=$(get_version mullvad_vpn)
 wget --timestamping "https://mullvad.net/media/app/\
-MullvadVPN-${mullvad_version}_amd64.deb"
-link "MullvadVPN-${mullvad_version}_amd64.deb" 'mullvad.deb'
+MullvadVPN-${mullvad_vpn_version}_amd64.deb"
+link "MullvadVPN-${mullvad_vpn_version}_amd64.deb" 'mullvad_vpn.deb'
 
 # Ensure the zoxide package is present.
 zoxide_version=$(get_version zoxide)
@@ -123,3 +123,12 @@ paperwm_version=$(get_version paperwm)
 wget --timestamping "https://github.com/paperwm/PaperWM/archive/refs/tags/\
 v${paperwm_version}.zip"
 link "v${paperwm_version}.zip" 'paperwm.zip'
+
+# Ensure the Mullvad VPN app package is present.
+mullvad_browser_version=$(get_version mullvad_browser)
+wget --timestamping "https://cdn.mullvad.net/browser/\
+${mullvad_browser_version}/\
+mullvad-browser-linux-x86_64-${mullvad_browser_version}.tar.xz"
+link \
+  "mullvad-browser-linux-x86_64-${mullvad_browser_version}.tar.xz" \
+  'mullvad_browser.tar.xz'

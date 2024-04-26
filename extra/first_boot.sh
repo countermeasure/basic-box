@@ -6,7 +6,7 @@ set -o errexit -o nounset -o pipefail
 # Install the Mullvad VPN. This task has to wait until the first boot because
 # it installs into the /opt directory, which doesn't seem to be allowed in the
 # postinst script.
-apt install --yes /usr/local/simple-cdd/mullvad.deb
+apt install --yes /usr/local/simple-cdd/mullvad_vpn.deb
 mullvad auto-connect set on
 mullvad dns set default \
   --block-ads \
@@ -48,4 +48,4 @@ rkhunter --cronjob --report-warnings-only --summary || true
 systemctl disable first_boot.service
 rm /etc/systemd/system/first_boot.service
 rm /home/"${user}"/.local/bin/first_boot
-rm /usr/local/simple-cdd/mullvad.deb
+rm /usr/local/simple-cdd/mullvad_vpn.deb

@@ -151,10 +151,10 @@ create_directory_as_ordinary_user "${fish_config_dir}/functions"
 # Install the UFW firewall.
 apt install --yes ufw
 
-# Copy the mullvad.deb file into place so that it is available to first_boot.sh
-# which will install the Mullvad VPN app.
+# Copy the mullvad_vpn.deb file into place so that it is available to
+# first_boot.sh which will install the Mullvad VPN app.
 place_as_root_user_with_mode_644 \
-  ${installer_dir}/mullvad.deb /usr/local/simple-cdd/mullvad.deb
+  ${installer_dir}/mullvad_vpn.deb /usr/local/simple-cdd/mullvad_vpn.deb
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
@@ -826,6 +826,10 @@ run_as_ordinary_user \
 enable_gnome_extension paperwm@paperwm.github.com
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/paperwm.css "${user_config_dir}"/paperwm/user.css
+
+# Install Mullvad Browser.
+extract_tar ${installer_dir}/mullvad_browser.tar.xz /opt/mullvad_browser
+/opt/mullvad_browser/start-tor-browser.desktop --register-app
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
