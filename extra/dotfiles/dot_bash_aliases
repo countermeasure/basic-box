@@ -122,6 +122,7 @@ alias rg="rg --glob '!.git' --hidden --smart-case"
 alias rm='protect t rm'
 alias rmdir='rmdir --verbose'
 
+alias sanitise='exiftool -all= '
 alias t='trash'
 
 alias whois='whois -H'
