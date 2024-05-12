@@ -886,6 +886,13 @@ enable_gnome_extension \
 apt purge --yes gnome-shell-extension-prefs
 apt install --yes gnome-shell-extension-manager
 
+# Set up 9 static workspaces.
+# TODO: If overrides dynamic-workspaces is not set to false before
+# gnome.mutter, it reverts to true.
+gsettings_set 'gnome.shell.overrides dynamic-workspaces false'
+gsettings_set 'gnome.mutter dynamic-workspaces false'
+gsettings_set 'gnome.desktop.wm.preferences num-workspaces 9'
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
