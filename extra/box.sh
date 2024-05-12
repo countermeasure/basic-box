@@ -900,6 +900,56 @@ bluetooth-quick-connect@bjarosze.gmail.com/schemas"
   _test_directory_exists "${user_dir}"/.cache/fish/generated_completions
   _test_package_is_not_installed gnome-shell-extension-prefs
   _test_package_is_installed gnome-shell-extension-manager
+  _test_gsettings gnome.shell.overrides dynamic-workspaces false
+  _test_gsettings gnome.mutter dynamic-workspaces false
+  _test_gsettings gnome.desktop.wm.preferences num-workspaces 9
+  wm_keybindings_setting='gnome.desktop.wm.keybindings'
+  _test_gsettings \
+    ${wm_keybindings_setting} switch-to-workspace-1 "['<Super>1']"
+  _test_gsettings \
+    ${wm_keybindings_setting} switch-to-workspace-2 "['<Super>2']"
+  _test_gsettings \
+    ${wm_keybindings_setting} switch-to-workspace-3 "['<Super>3']"
+  _test_gsettings \
+    ${wm_keybindings_setting} switch-to-workspace-4 "['<Super>4']"
+  _test_gsettings \
+    ${wm_keybindings_setting} switch-to-workspace-5 "['<Super>5']"
+  _test_gsettings \
+    ${wm_keybindings_setting} switch-to-workspace-6 "['<Super>6']"
+  _test_gsettings \
+    ${wm_keybindings_setting} switch-to-workspace-7 "['<Super>7']"
+  _test_gsettings \
+    ${wm_keybindings_setting} switch-to-workspace-8 "['<Super>8']"
+  _test_gsettings \
+    ${wm_keybindings_setting} switch-to-workspace-9 "['<Super>9']"
+  _test_gsettings \
+    ${wm_keybindings_setting} move-to-workspace-1 "['<Ctrl><Super>1']"
+  _test_gsettings \
+    ${wm_keybindings_setting} move-to-workspace-2 "['<Ctrl><Super>2']"
+  _test_gsettings \
+    ${wm_keybindings_setting} move-to-workspace-3 "['<Ctrl><Super>3']"
+  _test_gsettings \
+    ${wm_keybindings_setting} move-to-workspace-4 "['<Ctrl><Super>4']"
+  _test_gsettings \
+    ${wm_keybindings_setting} move-to-workspace-5 "['<Ctrl><Super>5']"
+  _test_gsettings \
+    ${wm_keybindings_setting} move-to-workspace-6 "['<Ctrl><Super>6']"
+  _test_gsettings \
+    ${wm_keybindings_setting} move-to-workspace-7 "['<Ctrl><Super>7']"
+  _test_gsettings \
+    ${wm_keybindings_setting} move-to-workspace-8 "['<Ctrl><Super>8']"
+  _test_gsettings \
+    ${wm_keybindings_setting} move-to-workspace-9 "['<Ctrl><Super>9']"
+  keybindings_setting='gnome.shell.keybindings'
+  _test_gsettings ${keybindings_setting} switch-to-application-1 '@as []'
+  _test_gsettings ${keybindings_setting} switch-to-application-2 '@as []'
+  _test_gsettings ${keybindings_setting} switch-to-application-3 '@as []'
+  _test_gsettings ${keybindings_setting} switch-to-application-4 '@as []'
+  _test_gsettings ${keybindings_setting} switch-to-application-5 '@as []'
+  _test_gsettings ${keybindings_setting} switch-to-application-6 '@as []'
+  _test_gsettings ${keybindings_setting} switch-to-application-7 '@as []'
+  _test_gsettings ${keybindings_setting} switch-to-application-8 '@as []'
+  _test_gsettings ${keybindings_setting} switch-to-application-9 '@as []'
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
   _test_command_output 'mullvad auto-connect get' 'Autoconnect: on'
