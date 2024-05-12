@@ -829,6 +829,7 @@ place_as_ordinary_user_with_mode_644 \
 
 gsettings_set 'gnome.mutter dynamic-workspaces false'
 gsettings_set 'gnome.desktop.wm.preferences num-workspaces 9'
+# TODO: Stop paperwm from showing the workspace in left corner
 
 # Install Mullvad Browser.
 extract_tar ${installer_dir}/mullvad_browser.tar.xz /opt/mullvad_browser
