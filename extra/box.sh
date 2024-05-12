@@ -831,6 +831,34 @@ test() {
 'org.gnome.Maps.desktop', \
 'org.gnome.Nautilus.desktop', \
 'org.gnome.Terminal.desktop']"
+  media_keys_setting='gnome.settings-daemon.plugins.media-keys'
+  custom_keybinding_setting="${media_keys_setting}.custom-keybinding"
+  custom_keybindings_key_path="/org/gnome/settings-daemon/plugins/media-keys/\
+custom-keybindings"
+  _test_gsettings ${media_keys_setting} email "['<Super>m']"
+  _test_gsettings gnome.shell.keybindings toggle-message-tray '@as []'
+  _test_gsettings ${media_keys_setting} www "['<Super>b']"
+  custom_keybinding_0="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom0/"
+  _test_gsettings ${custom_keybinding_0} binding "'<Ctrl><Super>b'"
+  _test_gsettings ${custom_keybinding_0} command "'mullvad-browser'"
+  _test_gsettings ${custom_keybinding_0} name "'Mullvad Browser'"
+  custom_keybinding_1="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom1/"
+  _test_gsettings ${custom_keybinding_1} binding "'<Super>s'"
+  _test_gsettings ${custom_keybinding_1} command "'signal-desktop'"
+  _test_gsettings ${custom_keybinding_1} name "'Signal'"
+  custom_keybinding_2="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom2/"
+  _test_gsettings ${custom_keybinding_2} binding "'<Super>Return'"
+  _test_gsettings ${custom_keybinding_2} command "'gnome-terminal'"
+  _test_gsettings ${custom_keybinding_2} name "'Terminal'"
+  custom_keybinding_3="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom3/"
+  _test_gsettings ${custom_keybinding_3} binding "'<Super>v'"
+  _test_gsettings \
+    ${custom_keybinding_3} command "'/opt/Mullvad\\\ VPN/mullvad-vpn'"
+  _test_gsettings ${custom_keybinding_3} name "'VPN'"
   _test_directory_exists "${user_dir}"/.cache/fish/generated_completions
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'

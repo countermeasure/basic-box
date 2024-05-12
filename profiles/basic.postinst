@@ -789,6 +789,49 @@ favorite_apps="[\
 'org.gnome.Terminal.desktop']"
 gsettings_set "gnome.shell favorite-apps \"${favorite_apps}\""
 
+# Set Super key launch keybindings.
+media_keys_setting='gnome.settings-daemon.plugins.media-keys'
+custom_keybinding_setting="${media_keys_setting}.custom-keybinding"
+custom_keybindings_key_path="/org/gnome/settings-daemon/plugins/media-keys/\
+custom-keybindings"
+custom_keybindings="[\
+'${custom_keybindings_key_path}/custom0/', \
+'${custom_keybindings_key_path}/custom1/', \
+'${custom_keybindings_key_path}/custom2/', \
+'${custom_keybindings_key_path}/custom3/']"
+gsettings_set \
+  "${media_keys_setting} custom-keybindings \"${custom_keybindings}\""
+# Set Super key email keybinding.
+gsettings_set "${media_keys_setting} email \"['<Super>m']\""
+gsettings_set 'gnome.shell.keybindings toggle-message-tray "[]"'
+# Set Super key browser keybinding.
+gsettings_set "${media_keys_setting} www \"['<Super>b']\""
+# Set Super key Mullvad Browser keybinding.
+custom_keybinding_0="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom0/"
+gsettings_set "${custom_keybinding_0} binding '<Ctrl><Super>b'"
+gsettings_set "${custom_keybinding_0} command 'mullvad-browser'"
+gsettings_set "${custom_keybinding_0} name 'Mullvad Browser'"
+# Set Super key Signal Desktop keybinding.
+custom_keybinding_1="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom1/"
+gsettings_set "${custom_keybinding_1} binding '<Super>s'"
+gsettings_set "${custom_keybinding_1} command 'signal-desktop'"
+gsettings_set "${custom_keybinding_1} name 'Signal'"
+gsettings_set 'gnome.shell.keybindings toggle-overview "[]"'
+# Set Super key terminal keybinding.
+custom_keybinding_2="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom2/"
+gsettings_set "${custom_keybinding_2} binding '<Super>Return'"
+gsettings_set "${custom_keybinding_2} command 'gnome-terminal'"
+gsettings_set "${custom_keybinding_2} name 'Terminal'"
+# Set Super key Mullvad VPN keybinding.
+custom_keybinding_3="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom3/"
+gsettings_set "${custom_keybinding_3} binding '<Super>v'"
+gsettings_set "${custom_keybinding_3} command '/opt/Mullvad\ VPN/mullvad-vpn'"
+gsettings_set "${custom_keybinding_3} name 'VPN'"
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
