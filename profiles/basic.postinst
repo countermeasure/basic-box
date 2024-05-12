@@ -891,6 +891,27 @@ enable_gnome_extension ubuntu-appindicators@ubuntu.com
 apt purge --yes gnome-shell-extension-prefs
 apt install --yes gnome-shell-extension-manager
 
+# Set up 9 static workspaces.
+# TODO: If overrides dynamic-workspaces is not set to false before
+# gnome.mutter, it reverts to true.
+gsettings_set 'gnome.shell.overrides dynamic-workspaces false'
+gsettings_set 'gnome.mutter dynamic-workspaces false'
+gsettings_set 'gnome.desktop.wm.preferences num-workspaces 9'
+
+# Set workspace switching keybindings. This includes deactivating switching to
+# applications with the keybindings <Super>1 to <Super>9 because these would
+# conflict with the new workspace switching keybindings.
+keybindings_setting='gnome.shell.keybindings'
+wm_keybindings_setting='gnome.desktop.wm.keybindings'
+for workspace in {1..9}; do
+  gsettings_set \
+    "${keybindings_setting} switch-to-application-${workspace} \"[]\""
+  gsettings_set "${wm_keybindings_setting} \
+switch-to-workspace-${workspace} \"['<Super>${workspace}']\""
+  gsettings_set "${wm_keybindings_setting} \
+move-to-workspace-${workspace} \"['<Ctrl><Super>${workspace}']\""
+done
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.

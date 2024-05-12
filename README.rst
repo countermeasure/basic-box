@@ -43,6 +43,7 @@ The **Basic Box** installer creates a Debian 12 system with:
   - Enable night light (makes display colour warmer at night)
   - Enable natural scrolling for mouse
   - Speed up trackpad and enable trackpad tap-to-click
+  - Enable 9 permanent workspaces
 
 - these GNOME extensions installed, enabled and configured:
 
