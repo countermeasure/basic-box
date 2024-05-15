@@ -826,6 +826,9 @@ run_as_ordinary_user \
 enable_gnome_extension paperwm@paperwm.github.com
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/paperwm.css "${user_config_dir}"/paperwm/user.css
+gnome_terminal_winprops="['{\"wm_class\":\"gnome-terminal-server\",\"preferredWidth\":\"50%\",\"title\":\"Terminal\"}']"
+gsettings_set \
+  "gnome.shell.extensions.paperwm winprops \"${gnome_terminal_winprops}\""
 
 gsettings_set 'gnome.mutter dynamic-workspaces false'
 gsettings_set 'gnome.desktop.wm.preferences num-workspaces 9'
