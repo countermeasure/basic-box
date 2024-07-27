@@ -894,8 +894,11 @@ gsettings_set 'gnome.mutter dynamic-workspaces false'
 gsettings_set 'gnome.desktop.wm.preferences num-workspaces 9'
 
 # Install, enable and configure PaperWM GNOME Shell extension.
+# TODO: Remove the next command?
 run_as_ordinary_user \
-  "dbus-launch gnome-extensions install ${installer_dir}/paperwm.zip"
+  "mkdir -p ${user_dir}/.local/share/gnome-shell/extensions/paperwm@paperwm.github.com"
+run_as_ordinary_user \
+  "unzip ${installer_dir}/paperwm.zip -d ${user_dir}/.local/share/gnome-shell/extensions/paperwm@paperwm.github.com"
 enable_gnome_extension paperwm@paperwm.github.com
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/paperwm.css "${user_config_dir}"/paperwm/user.css
