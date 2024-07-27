@@ -810,6 +810,7 @@ gsettings_set 'gnome.shell.extensions.system-monitor disk-usage-style "none"'
 gsettings_set 'gnome.shell.extensions.system-monitor icon-display false'
 gsettings_set 'gnome.shell.extensions.system-monitor memory-style "digit"'
 gsettings_set 'gnome.shell.extensions.system-monitor net-style "digit"'
+# TODO: Add maps to favourites
 favorite_apps="[\
 'firefox-esr.desktop', \
 'thunderbird.desktop', \
@@ -826,6 +827,7 @@ run_as_ordinary_user \
 enable_gnome_extension paperwm@paperwm.github.com
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/paperwm.css "${user_config_dir}"/paperwm/user.css
+# TODO: Shorten the next line.
 gnome_terminal_winprops="['{\"wm_class\":\"gnome-terminal-server\",\"preferredWidth\":\"50%\",\"title\":\"Terminal\"}']"
 gsettings_set \
   "gnome.shell.extensions.paperwm winprops \"${gnome_terminal_winprops}\""
@@ -841,16 +843,34 @@ extract_tar ${installer_dir}/mullvad_browser.tar.xz /opt/mullvad_browser
 # Install ExifTool.
 apt install --yes exiftool
 
+# Set launcher shortcuts.
 gsettings_set 'gnome.settings-daemon.plugins.media-keys email "['\''<Super>m'\'']"'
 gsettings_set 'gnome.settings-daemon.plugins.media-keys www "['\''<Super>b'\'']"'
+
+# Add custom launcher shortcuts.
+# TODO: Shorten the next lines.
 gsettings_set \
   'gnome.settings-daemon.plugins.media-keys custom-keybindings "['\''/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0'\'']"'
+# TODO: Add
+# gsettings_set \
+#   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 binding "<Super>s"'
+# gsettings_set \
+#   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command "signal-desktop"'
+# gsettings_set \
+#   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 name "Signal"'
 gsettings_set \
   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 binding "<Super>Return"'
 gsettings_set \
   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command "gnome-terminal"'
 gsettings_set \
   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 name "Terminal"'
+# TODO: Add
+# gsettings_set \
+#   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom2 binding "<Super>v"'
+# gsettings_set \
+#   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom2 command "/opt/Mullvad\ VPN/mullvad-vpn"'
+# gsettings_set \
+#   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom2 name "VPN"'
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
