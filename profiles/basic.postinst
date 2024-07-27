@@ -822,8 +822,11 @@ favorite_apps="[\
 gsettings_set "gnome.shell favorite-apps \"${favorite_apps}\""
 
 # Install, enable and configure PaperWM GNOME Shell extension.
+# TODO: Remove the next command?
 run_as_ordinary_user \
-  "unzip ${installer_dir}/paperwm.zip -d ${user_dir}/.local/share/gnome-shell/extensions/bash-completion/completions/paperwm@paperwm.github.com"
+  "mkdir -p ${user_dir}/.local/share/gnome-shell/extensions/paperwm@paperwm.github.com"
+run_as_ordinary_user \
+  "unzip ${installer_dir}/paperwm.zip -d ${user_dir}/.local/share/gnome-shell/extensions/paperwm@paperwm.github.com"
 enable_gnome_extension paperwm@paperwm.github.com
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/paperwm.css "${user_config_dir}"/paperwm/user.css
