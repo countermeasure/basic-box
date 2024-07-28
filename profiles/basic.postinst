@@ -827,14 +827,10 @@ paperwm_dir="${user_dir}/.local/share/gnome-shell/extensions/paperwm@paperwm.git
 run_as_ordinary_user "unzip ${installer_dir}/paperwm.zip -d /tmp/paperwm"
 run_as_ordinary_user "mkdir -p ${paperwm_dir}"
 paperwm_version=$(get_version paperwm)
-run_as_ordinary_user "cp --recursive /tmp/paperwm/PaperWM-${paperwm_version}/* ${paperwm_dir}"
-enable_gnome_extension paperwm@paperwm.github.com
+run_as_ordinary_user \
+  "cp --recursive /tmp/paperwm/PaperWM-${paperwm_version}/* ${paperwm_dir}"
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/paperwm.css "${user_config_dir}"/paperwm/user.css
-# TODO: Shorten the next line.
-gnome_terminal_winprops="['{\"wm_class\":\"gnome-terminal-server\",\"preferredWidth\":\"50%\",\"title\":\"Terminal\"}']"
-gsettings_set \
-  "gnome.shell.extensions.paperwm winprops \"${gnome_terminal_winprops}\""
 
 gsettings_set 'gnome.mutter dynamic-workspaces false'
 gsettings_set 'gnome.desktop.wm.preferences num-workspaces 9'

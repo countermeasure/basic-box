@@ -44,6 +44,21 @@ ufw enable
 # ensure that this script doesn't exit here if that happens.
 rkhunter --cronjob --report-warnings-only --summary || true
 
+# Enable PaperWM. TODO: Explain why that needs to happen here.
+runuser \
+  --login \
+  "${user}" \
+  --command \
+  'XDG_RUNTIME_DIR=/run/user/1000 dbus-launch gnome-extensions enable paperwm@paperwm.github.com'
+
+# TODO: Shorten the next lines.
+gnome_terminal_winprops="['{\"wm_class\":\"gnome-terminal-server\",\"preferredWidth\":\"50%\",\"title\":\"Terminal\"}']"
+runuser \
+  --login \
+  "${user}" \
+  --command \
+  "XDG_RUNTIME_DIR=/run/user/1000 dbus-launch gsettings set org.gnome.shell.extensions.paperwm winprops \"${gnome_terminal_winprops}\""
+
 # Remove the first_boot infrastructure now that its work is done.
 systemctl disable first_boot.service
 rm /etc/systemd/system/first_boot.service
