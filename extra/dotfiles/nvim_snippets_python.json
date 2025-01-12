@@ -1,0 +1,55 @@
+{
+  "function with docstring": {
+    "prefix": "defd",
+    "body": [
+      "def ${1:function_name}($2):",
+      "    \"\"\"${3:Description of the function.}",
+      "",
+      "    Parameters",
+      "    ----------",
+      "    ${4:TODO}",
+      "",
+      "    Returns",
+      "    -------",
+      "    ${5:TODO}",
+      "",
+      "    \"\"\"",
+      "    ${6:# TODO}"
+    ],
+    "description": "TODO: Function definition with numpy-style docstring"
+  },
+  "icecream": {
+    "prefix": "icecream",
+    "body": [
+      "",
+      "#########################################################",
+      "",
+      "# Temporarily add the icecream debugger.",
+      "# https://github.com/gruns/icecream/blob/master/README.md",
+      "",
+      "from icecream import ic",
+      "",
+      "ic.configureOutput(includeContext=True)",
+      "",
+      "#########################################################",
+      "",
+      "ic($1)",
+      ""
+    ],
+    "description": "TODO: Code snippet for icecream"
+  },
+  "pysnooper": {
+    "prefix": "pysnooper",
+    "body": [
+      "",
+      "# Temporarily add the PySnooper debugger.",
+      "# https://github.com/cool-RR/PySnooper/blob/master/README.md",
+      "# https://github.com/cool-RR/PySnooper/blob/master/ADVANCED_USAGE.md",
+      "from pysnooper import snoop  # noqa: E402",
+      "",
+      "",
+      "@snoop()"
+    ],
+    "description": "TODO: Code snippet for PySnooper"
+  }
+}

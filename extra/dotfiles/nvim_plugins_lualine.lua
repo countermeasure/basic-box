@@ -14,6 +14,8 @@ local function word_count()
   end
 end
 
+-- TODO: Update to match this:
+-- https://www.lazyvim.org/plugins/ui#lualinenvim
 return {
   {
     "nvim-lualine/lualine.nvim",
@@ -74,23 +76,17 @@ return {
           lualine_x = {
             {
               function()
-                return require("noice").api.status.command.get()
-              end,
-              cond = function()
-                return package.loaded["noice"]
-                  and require("noice").api.status.command.has()
-              end,
-              color = Util.ui.fg("Statement"),
-            },
-            {
-              function()
                 return require("noice").api.status.mode.get()
               end,
               cond = function()
                 return package.loaded["noice"]
                   and require("noice").api.status.mode.has()
               end,
-              color = Util.ui.fg("Constant"),
+              {
+                color = function()
+                  return { fg = Snacks.util.color("Constant") }
+                end,
+              },
             },
             {
               function()
@@ -99,12 +95,20 @@ return {
               cond = function()
                 return package.loaded["dap"] and require("dap").status() ~= ""
               end,
-              color = Util.ui.fg("Debug"),
+              {
+                color = function()
+                  return { fg = Snacks.util.color("Debug") }
+                end,
+              },
             },
             {
               require("lazy.status").updates,
               cond = require("lazy.status").has_updates,
-              color = Util.ui.fg("Special"),
+              {
+                color = function()
+                  return { fg = Snacks.util.color("Special") }
+                end,
+              },
               padding = 1,
             },
             {

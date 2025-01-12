@@ -645,6 +645,10 @@ git_fetch() {
   # Show information.
   _print_success_message 'Done'
   _print_branches remote 10
+  notify-send \
+    'Git' \
+    'Fetched [TODO: No of branches???]' \
+    --icon /usr/share/icons/Adwaita/scalable/status/media-playlist-shuffle-symbolic.svg
 }
 
 ###############################################################################
@@ -741,6 +745,10 @@ git_pull() {
     _print_magenta 'Commits pulled'
     commits_pulled_count=$((final_commit_count - initial_commit_count))
     git log --max-count="${commits_pulled_count}"
+    notify-send \
+      'Git' \
+      'Pulled [TODO: Add branch name]' \
+      --icon /usr/share/icons/Adwaita/scalable/status/media-playlist-shuffle-symbolic.svg
   else
     _print_success_message 'No changes to pull'
   fi
@@ -786,6 +794,10 @@ git_push() {
     remote_commits_pushed_count=$((\
       final_remote_commit_count - initial_remote_commit_count))
     git log --max-count="${remote_commits_pushed_count}"
+    notify-send \
+      'Git' \
+      "${remote_commits_pushed_count} commits pushed to [TODO: Add branch name] on remote" \
+      --icon /usr/share/icons/Adwaita/scalable/status/media-playlist-shuffle-symbolic.svg
   fi
 }
 
@@ -804,6 +816,10 @@ git_push_force_with_lease() {
   # Show information.
   _print_success_message 'Done'
   _print_changes
+  notify-send \
+    'Git' \
+    'Force pushed to [TODO: Add branch name here] remote' \
+    --icon /usr/share/icons/Adwaita/scalable/status/media-playlist-shuffle-symbolic.svg
 }
 
 ###############################################################################
@@ -1036,7 +1052,7 @@ git_stash() {
   # Stash the changes.
   initial_staged_diff=$(_staged_diff_hash)
   initial_unstaged_diff=$(_unstaged_diff_hash)
-  git stash --quiet
+  git stash --quiet "${@}"
   final_staged_diff=$(_staged_diff_hash)
   final_unstaged_diff=$(_unstaged_diff_hash)
 

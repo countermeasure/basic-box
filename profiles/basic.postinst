@@ -488,6 +488,9 @@ place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_config_options.lua \
   "${nvim_config_dir}"/lua/config/options.lua
 place_as_ordinary_user_with_mode_644 \
+  ${installer_dir}/nvim_plugins_blink_cmp.lua \
+  "${nvim_config_dir}"/lua/plugins/blink_cmp.lua
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_colourscheme.lua \
   "${nvim_config_dir}"/lua/plugins/colourscheme.lua
 place_as_ordinary_user_with_mode_644 \
@@ -505,9 +508,6 @@ place_as_ordinary_user_with_mode_644 \
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_neotree.lua \
   "${nvim_config_dir}"/lua/plugins/neotree.lua
-place_as_ordinary_user_with_mode_644 \
-  ${installer_dir}/nvim_plugins_nvim_cmp.lua \
-  "${nvim_config_dir}"/lua/plugins/nvim_cmp.lua
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_nvim_lint.lua \
   "${nvim_config_dir}"/lua/plugins/nvim_lint.lua
@@ -534,6 +534,10 @@ run_as_ordinary_user \
 python_lsp_black_version=$(get_version python-lsp-black)
 run_as_ordinary_user \
   "pipx inject python-lsp-server python-lsp-black==${python_lsp_black_version}"
+# Put the snippet files in place.
+place_as_ordinary_user_with_mode_644 \
+  ${installer_dir}/nvim_snippets_python.json \
+  "${nvim_config_dir}"/snippets/python.json
 # Set up LazyVim.
 run_as_ordinary_user 'nvim --headless "+Lazy! restore" +qa'
 
@@ -790,6 +794,28 @@ enable_gnome_extension ubuntu-appindicators@ubuntu.com
 enable_gnome_extension \
   workspace-indicator@gnome-shell-extensions.gcampax.github.com
 
+# Are the commented lines below needed?
+
+# From https://github.com/basecamp/omakub/blob/master/install/desktop/set-gnome-hotkeys.sh
+# # Use alt for pinned apps
+# gsettings set org.gnome.shell.keybindings switch-to-application-1 "['<Alt>1']"
+# gsettings set org.gnome.shell.keybindings switch-to-application-2 "['<Alt>2']"
+# gsettings set org.gnome.shell.keybindings switch-to-application-3 "['<Alt>3']"
+# gsettings set org.gnome.shell.keybindings switch-to-application-4 "['<Alt>4']"
+# gsettings set org.gnome.shell.keybindings switch-to-application-5 "['<Alt>5']"
+# gsettings set org.gnome.shell.keybindings switch-to-application-6 "['<Alt>6']"
+# gsettings set org.gnome.shell.keybindings switch-to-application-7 "['<Alt>7']"
+# gsettings set org.gnome.shell.keybindings switch-to-application-8 "['<Alt>8']"
+# gsettings set org.gnome.shell.keybindings switch-to-application-9 "['<Alt>9']"
+#
+# # Use super for workspaces
+# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
+# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
+# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
+# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
+# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 "['<Super>5']"
+# gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-6 "['<Super>6']"
+
 # Configure GNOME Shell extensions.
 bluetooth_quick_connect_schemadir="/usr/share/gnome-shell/extensions/\
 bluetooth-quick-connect@bjarosze.gmail.com/schemas"
@@ -871,6 +897,22 @@ gsettings_set \
 #   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom2 command "/opt/Mullvad\ VPN/mullvad-vpn"'
 # gsettings_set \
 #   'gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom2 name "VPN"'
+
+# Install VLC.
+# TODO: Make it the GNOME default, and maybe removew the GNOME default player.
+apt install --yes vlc
+
+# TODO: Set the cursor to no stop blinking, and maybe a colour.
+gsettings_set 'gnome.desktop.interface cursor-blink-timeout 86400'
+
+# Install OpenSnitch.
+apt install --yes opensnitch
+
+# Install ast-grep.
+install_with_pipx ast-grep
+# TODO: Make completions with "ast-grep completions fish".
+#
+# TODO: Stop supporting bash for aliases, functions, completions, etc???
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates

@@ -35,3 +35,56 @@ direnv hook fish | source
 # $PYENV_ROOT/bin to $PATH are necessary here, because both are already done by
 # bash.
 pyenv init - | source
+
+set last_date $(date +%H:%M)
+function set_last_time --on-event fish_preexec
+    set last_date $(date +%H:%M)
+end
+
+function run_zoxide_when_command_is_unknown --on-event fish_postexec
+    set exit_code $status
+
+    if test $exit_code -eq 0
+        return
+    end
+
+    set ansi_clear '\033[0m'
+    set ansi_green '\033[1;32m'
+    set ansi_yellow '\033[1;33m'
+
+    if test $exit_code -eq 127
+        __zoxide_z $argv
+
+        if test $status -eq 0
+            # TODO: Trunate the PWD output to ../last/three/pathelements
+            echo -e "zoxide: $ansi_green🗸 Switching to $(set_window_title)$ansi_clear"
+            return
+        else
+            set message "$ansi_yellow💥 Exit code $status$ansi_clear"
+        end
+
+    else
+        set message "$ansi_yellow💥 Exit code $exit_code$ansi_clear"
+    end
+
+    echo
+    echo -e $message
+
+    # Ring the terminal bell five times in quick succession. For a visual bell,
+    # this will flash the terminal window.
+    set bell \\a
+    for i in (seq 1 5)
+        sleep 0.1
+        printf $bell
+    end
+
+    # TODO: Get last_time and current_time. Only if different, print started at
+    # last_time
+    echo -e "$ansi_yellow   and started at $last_date$ansi_clear"
+end
+
+# TODO: Explain that this switches on vi mode.
+# https://fishshell.com/docs/current/cmds/fish_vi_key_bindings.html
+# set -g fish_key_bindings fish_vi_key_bindings
+# set fish_cursor_default block blink
+# set -g fish_escape_delay_ms 500

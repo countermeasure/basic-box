@@ -116,6 +116,8 @@ The **Basic Box** installer creates a Debian 12 system with:
 - duf installed
 - Mullvad Browser installed
 - ExifTool installed
+- OpenSnitch installed
+- ast-grep installed
 
 
 Set up

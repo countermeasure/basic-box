@@ -104,6 +104,22 @@ end
 
 ###############################################################################
 #
+#  Search the web.
+#
+#  For use in aliases.
+#
+#  Arguments:
+#    Strings. The phrase to search for.
+#
+###############################################################################
+function search_the_web
+    # TODO: Make an equivalent function/alias for Bash?
+    set query (string join + $argv)
+    firefox --new-tab "https://duckduckgo.com/?q=$query&t=h_&ia=web"
+end
+
+###############################################################################
+#
 #  Set the window title to the truncated current working directory.
 #
 ###############################################################################

@@ -66,10 +66,10 @@ disabled = false
 fish_indicator = ""
 format = "[${indicator}](bold red)"
 
-[status]
-disabled = false
-format = "[${symbol} Exit code ${status}](${style})\n"
-symbol = "💥"
+# [status]
+# disabled = false
+# format = "[${symbol} Exit code ${status}](${style})\n"
+# symbol = "💥"
 
 [sudo]
 disabled = false

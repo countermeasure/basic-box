@@ -59,3 +59,7 @@ starship_precmd_user_func='set_window_title'
 if [[ $(ps --no-header --pid=$PPID --format=comm) != 'fish' ]]; then
   exec fish
 fi
+
+export PROMPT_COMMAND='exit_code=$?; echo $exit_code; if [[ $exit_code != 0 ]]; then printf "\\a"; fi'
+
+export HISTTIMEFORMAT='%d-%b-%Y %H:%M  |  '

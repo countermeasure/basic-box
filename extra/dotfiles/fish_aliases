@@ -8,6 +8,7 @@ alias cp='cp --archive --interactive --verbose'
 alias delta='delta --line-numbers --navigate'
 alias df='prefer duf df'
 alias diff='prefer delta diff'
+alias dmesg='dmesg --human --reltime'
 
 alias f='ranger' # "f" for "file manager".
 alias fd='fd --exclude .git --follow --hidden'
@@ -91,8 +92,9 @@ end
 # This can't be declared as an alias in fish, because doing this will
 # automatically add $argv after the &, and even though the function will run, a
 # warning message will be printed.
-function gk --description 'alias gk=gitk &'
+function gk --description 'alias gk=gitk &; disown'
     gitk &
+    disown
 end
 alias gl='git_wrapper log'
 alias glg='git_wrapper log_graph'
@@ -158,9 +160,12 @@ function gus --wraps "git restore" \
     git_wrapper unstage $argv
 end
 
+alias h='history --show-time="%d-%b-%Y %H:%M  |  "'
+
 # alias j='jupyter-lab &>/dev/null &'
-function j --description 'alias j=jupyter-lab &>/dev/null &'
+function j --description 'alias j=jupyter-lab &>/dev/null &; disown'
     jupyter-lab &>/dev/null &
+    disown
 end
 
 # "l" for "list".
@@ -172,6 +177,7 @@ alias ln='ln --interactive --verbose'
 alias ls='prefer l ls'
 alias lsblk='lsblk --output name,size,type,tran,mountpoint,path'
 
+alias metadata='echo "Don\'t use this for PDFs"; echo; exiftool'
 alias mkdir='mkdir --parents --verbose'
 alias mv='mv --interactive --verbose'
 
@@ -188,6 +194,7 @@ alias rg="rg --glob '!.git' --hidden --smart-case"
 alias rm='protect t rm'
 alias rmdir='rmdir --verbose'
 
+alias s='search_the_web'
 alias sanitise='exiftool -all= '
 
 alias t='trash'
