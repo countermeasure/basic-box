@@ -35,17 +35,16 @@ extra/dotfiles/nvim_config_lazy.lua
 extra/dotfiles/nvim_config_options.lua
 extra/dotfiles/nvim_init.lua
 extra/dotfiles/nvim_lazy_lock.json
+extra/dotfiles/nvim_plugins_blink.lua
 extra/dotfiles/nvim_plugins_colourscheme.lua
 extra/dotfiles/nvim_plugins_conform.lua
+extra/dotfiles/nvim_plugins_fzf_lua.lua
 extra/dotfiles/nvim_plugins_lualine.lua
-extra/dotfiles/nvim_plugins_luasnip.lua
 extra/dotfiles/nvim_plugins_mason.lua
 extra/dotfiles/nvim_plugins_neotree.lua
-extra/dotfiles/nvim_plugins_nvim_cmp.lua
 extra/dotfiles/nvim_plugins_nvim_lint.lua
 extra/dotfiles/nvim_plugins_nvim_lspconfig.lua
 extra/dotfiles/nvim_plugins_ranger.lua
-extra/dotfiles/nvim_plugins_telescope.lua
 extra/dotfiles/nvim_plugins_treesitter.lua
 extra/dotfiles/nvim_plugins_which_key.lua
 extra/dotfiles/ranger_colourscheme.py
@@ -69,7 +68,6 @@ extra/dotfiles/yt_dlp_config
 extra/dotfiles/zathurarc
 
 extra/packages/bandwhich.tar.gz
-extra/packages/bandwhich_source.tar.gz
 extra/packages/delta.tar.gz
 extra/packages/delta_source.tar.gz
 extra/packages/fira_code.ttf

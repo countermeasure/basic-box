@@ -58,20 +58,19 @@ link dotfiles/nvim_config_lazy.lua "${nvim_config_dir}"/lazy.lua
 link dotfiles/nvim_config_options.lua "${nvim_config_dir}"/options.lua
 link dotfiles/nvim_init.lua "${HOME}"/.config/nvim/init.lua
 link dotfiles/nvim_lazy_lock.json "${HOME}"/.config/nvim/lazy-lock.json
+link dotfiles/nvim_plugins_blink.lua "${nvim_plugins_dir}"/blink.lua
 link \
   dotfiles/nvim_plugins_colourscheme.lua "${nvim_plugins_dir}"/colourscheme.lua
 link dotfiles/nvim_plugins_conform.lua "${nvim_plugins_dir}"/conform.lua
+link dotfiles/nvim_plugins_fzf_lua.lua "${nvim_plugins_dir}"/fzf_lua.lua
 link dotfiles/nvim_plugins_lualine.lua "${nvim_plugins_dir}"/lualine.lua
-link dotfiles/nvim_plugins_luasnip.lua "${nvim_plugins_dir}"/luasnip.lua
 link dotfiles/nvim_plugins_mason.lua "${nvim_plugins_dir}"/mason.lua
 link dotfiles/nvim_plugins_neotree.lua "${nvim_plugins_dir}"/neotree.lua
-link dotfiles/nvim_plugins_nvim_cmp.lua "${nvim_plugins_dir}"/nvim_cmp.lua
 link dotfiles/nvim_plugins_nvim_lint.lua "${nvim_plugins_dir}"/nvim_lint.lua
 link \
   dotfiles/nvim_plugins_nvim_lspconfig.lua \
   "${nvim_plugins_dir}"/nvim_lspconfig.lua
 link dotfiles/nvim_plugins_ranger.lua "${nvim_plugins_dir}"/ranger.lua
-link dotfiles/nvim_plugins_telescope.lua "${nvim_plugins_dir}"/telescope.lua
 link dotfiles/nvim_plugins_treesitter.lua "${nvim_plugins_dir}"/treesitter.lua
 link dotfiles/nvim_plugins_which_key.lua "${nvim_plugins_dir}"/which_key.lua
 link \

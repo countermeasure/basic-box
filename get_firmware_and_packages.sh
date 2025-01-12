@@ -28,8 +28,8 @@ cd extra/packages || exit 1
 
 # Ensure the Mullvad VPN app package is present.
 mullvad_version=$(get_version mullvad)
-wget_to_directory 'mullvad' "https://mullvad.net/media/app/\
-MullvadVPN-${mullvad_version}_amd64.deb"
+wget_to_directory 'mullvad' "https://cdn.mullvad.net/app/desktop/releases/\
+${mullvad_version}/MullvadVPN-${mullvad_version}_amd64.deb"
 link "mullvad/MullvadVPN-${mullvad_version}_amd64.deb" 'mullvad.deb'
 
 # Ensure the zoxide package is present.
@@ -109,9 +109,6 @@ bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl.tar.gz"
 link \
   "bandwhich/bandwhich-v${bandwhich_version}-x86_64-unknown-linux-musl.tar.gz" \
   'bandwhich.tar.gz'
-wget_to_directory 'bandwhich' "https://github.com/imsnif/bandwhich/archive/\
-refs/tags/v${bandwhich_version}.tar.gz"
-link "bandwhich/v${bandwhich_version}.tar.gz" 'bandwhich_source.tar.gz'
 
 # Ensure the pyenv package is present.
 pyenv_version=$(get_version pyenv)

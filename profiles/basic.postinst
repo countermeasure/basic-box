@@ -325,6 +325,9 @@ keyd_dir="${user_config_dir}"/keyd
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/keyd_default.conf "${keyd_dir}"/default.conf
 ln --symbolic "${keyd_dir}"/default.conf /etc/keyd/default.conf
+place_as_root_user_with_mode_644 \
+  /tmp/keyd_source/keyd.service.in /lib/systemd/system/keyd.service
+sed --in-place 's/@PREFIX@/\/usr\/local/g' /lib/systemd/system/keyd.service
 
 # Make the "box" command available everywhere.
 place_as_ordinary_user_with_mode_755 \
@@ -478,8 +481,14 @@ place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_config_options.lua \
   "${nvim_config_dir}"/lua/config/options.lua
 place_as_ordinary_user_with_mode_644 \
+  ${installer_dir}/nvim_plugins_blink.lua \
+  "${nvim_config_dir}"/lua/plugins/blink.lua
+place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_colourscheme.lua \
   "${nvim_config_dir}"/lua/plugins/colourscheme.lua
+place_as_ordinary_user_with_mode_644 \
+  ${installer_dir}/nvim_plugins_fzf_lua.lua \
+  "${nvim_config_dir}"/lua/plugins/fzf_lua.lua
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_conform.lua \
   "${nvim_config_dir}"/lua/plugins/conform.lua
@@ -487,17 +496,11 @@ place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_lualine.lua \
   "${nvim_config_dir}"/lua/plugins/lualine.lua
 place_as_ordinary_user_with_mode_644 \
-  ${installer_dir}/nvim_plugins_luasnip.lua \
-  "${nvim_config_dir}"/lua/plugins/luasnip.lua
-place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_mason.lua \
   "${nvim_config_dir}"/lua/plugins/mason.lua
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_neotree.lua \
   "${nvim_config_dir}"/lua/plugins/neotree.lua
-place_as_ordinary_user_with_mode_644 \
-  ${installer_dir}/nvim_plugins_nvim_cmp.lua \
-  "${nvim_config_dir}"/lua/plugins/nvim_cmp.lua
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_nvim_lint.lua \
   "${nvim_config_dir}"/lua/plugins/nvim_lint.lua
@@ -507,9 +510,6 @@ place_as_ordinary_user_with_mode_644 \
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_ranger.lua \
   "${nvim_config_dir}"/lua/plugins/ranger.lua
-place_as_ordinary_user_with_mode_644 \
-  ${installer_dir}/nvim_plugins_telescope.lua \
-  "${nvim_config_dir}"/lua/plugins/telescope.lua
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/nvim_plugins_treesitter.lua \
   "${nvim_config_dir}"/lua/plugins/treesitter.lua
@@ -542,12 +542,16 @@ place_as_ordinary_user_with_mode_644 \
 apt install --yes atool
 
 # Install bandwhich.
+mkdir -p /tmp/bandwhich
 tar --extract \
   --file ${installer_dir}/bandwhich.tar.gz \
-  --directory /usr/local/bin
-extract_tar bandwhich_source.tar.gz /tmp/bandwhich_source
+  --directory /tmp/bandwhich
+place_as_root_user_with_mode_755 \
+  /tmp/bandwhich/bandwhich /usr/local/bin/bandwhich
 place_as_root_user_with_mode_644 \
-  /tmp/bandwhich_source/docs/bandwhich.1 /usr/local/share/man/man1/bandwhich.1
+  /tmp/bandwhich/assets/bandwhich.1 /usr/local/share/man/man1/bandwhich.1
+place_as_ordinary_user_with_mode_644 \
+  /tmp/bandwhich/assets/bandwhich.fish "${fish_completions_dir}"/bandwhich.fish
 # Allow bandwhich to run without being called with sudo.
 setcap \
   cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep \

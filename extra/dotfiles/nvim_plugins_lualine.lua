@@ -80,8 +80,13 @@ return {
                 return package.loaded["noice"]
                   and require("noice").api.status.command.has()
               end,
-              color = Util.ui.fg("Statement"),
+              {
+                color = function()
+                  return { fg = Snacks.util.color("Statement") }
+                end,
+              },
             },
+
             {
               function()
                 return require("noice").api.status.mode.get()
@@ -90,7 +95,11 @@ return {
                 return package.loaded["noice"]
                   and require("noice").api.status.mode.has()
               end,
-              color = Util.ui.fg("Constant"),
+              {
+                color = function()
+                  return { fg = Snacks.util.color("Constant") }
+                end,
+              },
             },
             {
               function()
@@ -99,12 +108,20 @@ return {
               cond = function()
                 return package.loaded["dap"] and require("dap").status() ~= ""
               end,
-              color = Util.ui.fg("Debug"),
+              {
+                color = function()
+                  return { fg = Snacks.util.color("Debug") }
+                end,
+              },
             },
             {
               require("lazy.status").updates,
               cond = require("lazy.status").has_updates,
-              color = Util.ui.fg("Special"),
+              {
+                color = function()
+                  return { fg = Snacks.util.color("Special") }
+                end,
+              },
               padding = 1,
             },
             {
