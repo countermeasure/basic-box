@@ -27,8 +27,8 @@ cd ../extra/packages || exit 1
 
 # Ensure the Mullvad VPN app package is present.
 mullvad_vpn_version=$(get_version mullvad_vpn)
-wget --timestamping "https://mullvad.net/media/app/\
-MullvadVPN-${mullvad_vpn_version}_amd64.deb"
+wget --timestamping "https://cdn.mullvad.net/app/desktop/releases/\
+${mullvad_vpn_version}/MullvadVPN-${mullvad_vpn_version}_amd64.deb"
 link "MullvadVPN-${mullvad_vpn_version}_amd64.deb" 'mullvad_vpn.deb'
 
 # Ensure the zoxide package is present.
