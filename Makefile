@@ -67,4 +67,13 @@ usb: check sudo image
 		--icon \
 		/usr/share/icons/Adwaita/scalable/devices/media-removable-symbolic.svg
 
-.PHONY: check image sudo symlinks usb
+vm:
+	# @./get_firmware_and_packages.sh
+	@qemu-img create -f qcow2 tmp/mirror/qemu-test.hd.img 12G
+	@build-simple-cdd \
+		--conf basic.conf \
+		--debian-mirror http://localhost:9999/debian \
+		--qemu \
+		--verbose
+
+.PHONY: check image sudo symlinks usb vm
