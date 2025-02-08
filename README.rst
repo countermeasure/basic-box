@@ -107,6 +107,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - dbus-x11 installed
 - Signal installed
 - duf installed
+- Mullvad Browser installed
 
 
 Set up
