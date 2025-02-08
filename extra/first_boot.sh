@@ -3,33 +3,23 @@
 # Set intuitive error behaviour.
 set -o errexit -o nounset -o pipefail
 
-# Install the Mullvad VPN. This task has to wait until the first boot because
-# it installs into the /opt directory, which doesn't seem to be allowed in the
-# postinst script.
-apt install --yes /usr/local/simple-cdd/mullvad.deb
-mullvad auto-connect set on
-mullvad dns set default \
-  --block-ads \
-  --block-adult-content \
-  --block-gambling \
-  --block-malware \
-  --block-trackers
-mullvad lockdown-mode set on
-
-# Enable the check_vpn systemd service. This task needs to occur after the
-# Mullvad VPN is installed and set up, or the user will see a spurious warning
-# when the machine boots for the very first time.
 user=$(ls /home)
-runuser \
-  --login \
-  "${user}" \
-  --command \
-  'XDG_RUNTIME_DIR=/run/user/1000 dbus-launch systemctl --user enable check_vpn.service'
-runuser \
-  --login \
-  "${user}" \
-  --command \
-  'XDG_RUNTIME_DIR=/run/user/1000 dbus-launch systemctl --user start check_vpn.service'
+
+run_as_ordinary_user() {
+  # Run a command as the ordinary user with dbus-launch.
+  runuser --login "${user}" --command "dbus-launch $1"
+}
+
+# Configure the Mullvad VPN. This task has to wait until the first boot because
+# it doesn't seem to work in the postinst script.
+run_as_ordinary_user 'mullvad auto-connect set on'
+run_as_ordinary_user "mullvad dns set default \
+--block-ads \
+--block-adult-content \
+--block-gambling \
+--block-malware \
+--block-trackers"
+run_as_ordinary_user 'mullvad lockdown-mode set on'
 
 # Enable the UFW firewall.
 ufw enable
@@ -48,4 +38,3 @@ rkhunter --cronjob --report-warnings-only --summary || true
 systemctl disable first_boot.service
 rm /etc/systemd/system/first_boot.service
 rm /home/"${user}"/.local/bin/first_boot
-rm /usr/local/simple-cdd/mullvad.deb

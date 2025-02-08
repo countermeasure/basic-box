@@ -79,6 +79,7 @@ link dotfiles/ranger_rc.conf "${HOME}"/.config/ranger/rc.conf
 link dotfiles/ranger_rifle.conf "${HOME}"/.config/ranger/rifle.conf
 link dotfiles/ranger_scope.sh "${HOME}"/.config/ranger/scope.sh
 link dotfiles/sources_fish.list /etc/apt/sources.list.d/fish.list
+link dotfiles/sources_mullvad.list /etc/apt/sources.list.d/mullvad.list
 link dotfiles/sources_signal.list /etc/apt/sources.list.d/signal.list
 link dotfiles/sources_syncthing.list /etc/apt/sources.list.d/syncthing.list
 link dotfiles/starship.toml "${HOME}"/.config/starship.toml

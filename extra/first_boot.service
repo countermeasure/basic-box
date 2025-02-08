@@ -5,4 +5,4 @@ Description=Configure system on first boot.
 ExecStart=sh -c '/home/$(ls /home)/.local/bin/first_boot'
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target

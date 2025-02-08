@@ -141,10 +141,14 @@ create_directory_as_ordinary_user "${fish_config_dir}/functions"
 # Install the UFW firewall.
 apt install --yes ufw
 
-# Copy the mullvad.deb file into place so that it is available to first_boot.sh
-# which will install the Mullvad VPN app.
+# Install Mullvad VPN.
+wget \
+  --output-document /usr/share/keyrings/mullvad-keyring.asc \
+  https://repository.mullvad.net/deb/mullvad-keyring.asc
 place_as_root_user_with_mode_644 \
-  ${installer_dir}/mullvad.deb /usr/local/simple-cdd/mullvad.deb
+  ${installer_dir}/sources_mullvad.list /etc/apt/sources.list.d/mullvad.list
+apt update
+apt install --yes mullvad-vpn
 
 # Set up a desktop entry to run the first_login script at login. This performs
 # configuration tasks which require user interaction, and is then removed.
@@ -736,6 +740,8 @@ place_as_ordinary_user_with_mode_755 \
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/check_vpn.service \
   "${user_config_dir}"/systemd/user/check_vpn.service
+# Enable the check_vpn systemd service.
+run_as_ordinary_user 'systemctl --user enable check_vpn.service'
 
 # Don't show the GNOME Initial Setup workflow.
 place_as_ordinary_user_with_mode_644 \

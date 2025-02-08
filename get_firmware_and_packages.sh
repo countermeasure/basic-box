@@ -26,12 +26,6 @@ non-free/firmware/bookworm/current/firmware.tar.gz"
 mkdir -p extra/packages
 cd extra/packages || exit 1
 
-# Ensure the Mullvad VPN app package is present.
-mullvad_version=$(get_version mullvad)
-wget_to_directory 'mullvad' "https://cdn.mullvad.net/app/desktop/releases/\
-${mullvad_version}/MullvadVPN-${mullvad_version}_amd64.deb"
-link "mullvad/MullvadVPN-${mullvad_version}_amd64.deb" 'mullvad.deb'
-
 # Ensure the zoxide package is present.
 zoxide_version=$(get_version zoxide)
 wget_to_directory 'zoxide' "https://github.com/ajeetdsouza/zoxide/releases/\
