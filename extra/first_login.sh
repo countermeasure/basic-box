@@ -13,13 +13,14 @@ echo
 echo 'Step 1: Set up an additional encrypted disk'
 echo 'Step 2: Enable the Mullvad VPN'
 echo 'Step 3: Change some KeePassXC settings'
+echo 'Step 4: Run the Basic Box tests'
 echo
 read -n 1 -p 'Press any key to continue...' -r -s
 
 # Set up an additional encrypted disk.
 clear
 echo
-echo 'Step 1 of 3: Set up an additional encrypted disk'
+echo 'Step 1 of 4: Set up an additional encrypted disk'
 echo '------------------------------------------------'
 echo
 boot_device_partition_table_uuid=$(
@@ -119,7 +120,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 # Enable and configure the Mullvad VPN.
 clear
 echo
-echo 'Step 2 of 3: Enable the Mullvad VPN'
+echo 'Step 2 of 4: Enable the Mullvad VPN'
 echo '-----------------------------------'
 echo
 exit_code=''
@@ -144,7 +145,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 # Change KeePassXC settings.
 clear
 echo
-echo 'Step 3 of 3: Change some KeePassXC settings'
+echo 'Step 3 of 4: Change some KeePassXC settings'
 echo '-------------------------------------------'
 echo
 echo "Some of KeePassXC's settings can't be set with its configuration file,"
@@ -155,12 +156,10 @@ echo
 echo 'Operation 1: Enable Firefox integration'
 echo 'Operation 2: Set clipboard clearing timeout'
 echo
-echo 'This is the last configuration step you need to carry out.'
-echo
 read -n 1 -p 'Press any key to continue...' -r -s
 clear
 echo
-echo 'Step 3 of 3: Change some KeePassXC settings'
+echo 'Step 3 of 4: Change some KeePassXC settings'
 echo '-------------------------------------------'
 echo
 echo 'Operation 1 of 2: Enable Firefox integration'
@@ -175,7 +174,7 @@ read -n 1 -p 'Press any key to continue...' -r -s
 keepassxc 2>/dev/null
 clear
 echo
-echo 'Step 3 of 3: Change some KeePassXC settings'
+echo 'Step 3 of 4: Change some KeePassXC settings'
 echo '-------------------------------------------'
 echo
 echo 'Operation 2 of 2: Set clipboard clearing timeout'
@@ -188,6 +187,22 @@ echo 'KeePassXC.'
 echo
 read -n 1 -p 'Press any key to continue...' -r -s
 keepassxc 2>/dev/null
+
+# Run tests.
+clear
+echo
+echo 'Step 4 of 4: Run the Basic Box tests'
+echo '------------------------------------'
+echo
+echo 'Now the test suite needs to run to verify the installation.'
+echo
+echo 'This is the last configuration step you need to carry out.'
+echo
+read -n 1 -p 'Press any key to run the test suite...' -r -s
+echo
+box test
+echo
+read -n 1 -p 'Press any key to continue...' -r -s
 
 # Print a farewell.
 clear

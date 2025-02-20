@@ -5,6 +5,10 @@ set -o errexit -o nounset -o pipefail
 
 # Utility functions.
 
+readonly ansi_clear='\033[0m'
+readonly ansi_green='\033[1;32m'
+readonly ansi_red='\033[1;31m'
+
 _off() {
   echo 'Powering off...'
   sleep 1
@@ -15,6 +19,120 @@ _reboot() {
   echo 'Rebooting...'
   sleep 1
   systemctl reboot
+}
+
+_test_alternative() {
+  if update-alternatives --display "$1" | grep --extended-regexp --quiet "$2 - priority $3"; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}Alternative ${1} is $2 priority $3"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}Alternative ${1} is not $2 priority $3"
+  fi
+}
+
+_test_command_output() {
+  output=$($1)
+  if [[ ${output} == "$2" ]]; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}The result of '${1}' was as expected"
+  else
+    echo -e \
+      "${ansi_red}✗ ${ansi_clear}The result of '${1}' was not as expected"
+  fi
+}
+
+_test_directory_exists() {
+  if [[ -d $1 ]]; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}Directory ${1} exists"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}Directory ${1} does not exist"
+  fi
+}
+
+_test_executable_exists() {
+  if [[ $(echo "$1" | rev | cut -d / -f 1 | rev | xargs which) == "$1" ]]; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}${1} is an executable"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}${1} is not an executable"
+  fi
+}
+
+_test_file_exists() {
+  if [[ -f $1 ]]; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}File ${1} exists"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}File ${1} does not exist"
+  fi
+}
+
+_test_git_config() {
+  if [[ $(git config --get "$1") == "$2" ]]; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}Git setting ${1} is ${2}"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}Git setting ${1} is not ${2}"
+  fi
+}
+
+_test_gsettings() {
+  if [[ $(gsettings get org."$1" "$2") == "$3" ]]; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}GNOME setting org.${1} ${2} is ${3}"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}GNOME setting org.${1} ${2} is not ${3}"
+  fi
+}
+
+_test_line_in_file() {
+  if grep --quiet "$1" "$2"; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}${2} contains '${1}'"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}${2} does not contain '${1}'"
+  fi
+}
+
+_test_man_page_exists() {
+  if man "$1" &>/dev/null; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}The man page for ${1} exists"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}The man page for ${1} does not exist"
+  fi
+}
+
+_test_package_is_installed() {
+  if [[ -n $(apt list --installed --quiet --quiet "$1" 2>/dev/null) ]]; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}${1} package is installed"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}${1} package is not installed"
+  fi
+}
+
+_test_package_is_not_installed() {
+  if [[ -z $(apt list --installed --quiet --quiet "$1" 2>/dev/null) ]]; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}${1} package is not installed"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}${1} package is installed"
+  fi
+}
+
+_test_python_package_is_installed() {
+  if pipx list | grep --extended-regexp --quiet "package $1 .+ installed"; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}${1} Python package is installed"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}${1} Python package is not installed"
+  fi
+}
+
+_test_symlink_exists() {
+  if [[ -L $1 ]]; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}${1} symlink exists"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}${1} symlink does not exist"
+  fi
+}
+
+_test_systemd_user_service_is_active() {
+  if systemctl status --user "$1" | grep --quiet 'Active: active (running)'; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}Systemd ${1} user service is active"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}Systemd ${1} user service is not active"
+  fi
 }
 
 _wipe() {
@@ -227,6 +345,7 @@ main_help() {
   echo '  reinstall  Destroy all data on this machine then reboot.'
   echo '  scan       Scan for malware or rootkits.'
   echo '  sync       Start Syncthing.'
+  echo '  test       Test the installation is functioning correctly.'
   echo '  upgrade    Upgrade firmware and software packages.'
   echo '  wifi       Show wifi access points.'
 }
@@ -382,6 +501,276 @@ sync() {
   manage_syncthing &>/dev/null &
 }
 
+test() {
+  # Tests arising from basic.postinst.
+  _test_package_is_installed build-essential
+  _test_package_is_installed dbus-x11
+  _test_file_exists /etc/apt/trusted.gpg.d/shells_fish.gpg
+  _test_file_exists /etc/apt/sources.list.d/fish.list
+  _test_package_is_installed fish
+  username=$(ls /home)
+  user_dir=/home/${username}
+  user_config_dir=${user_dir}/.config
+  fish_config_dir="${user_config_dir}"/fish
+  _test_file_exists "${fish_config_dir}"/config.fish
+  _test_file_exists "${fish_config_dir}"/fish_aliases
+  _test_file_exists "${fish_config_dir}"/themes/box.theme
+  _test_file_exists "${fish_config_dir}"/fish_functions
+  _test_directory_exists "${fish_config_dir}"/conf.d
+  _test_directory_exists "${fish_config_dir}"/functions
+  _test_package_is_installed ufw
+  _test_file_exists /usr/share/keyrings/mullvad-keyring.asc
+  _test_file_exists /etc/apt/sources.list.d/mullvad.list
+  _test_package_is_installed mullvad-vpn
+  _test_package_is_installed torbrowser-launcher
+  _test_package_is_installed pipx
+  _test_package_is_installed python3-pip
+  fish_completions_dir=${fish_config_dir}/completions
+  _test_file_exists "${fish_completions_dir}"/pipx.fish
+  _test_file_exists "${user_dir}"/.bash_aliases
+  _test_file_exists "${user_dir}"/.bash_functions
+  _test_file_exists "${user_dir}"/.bashrc_modifications
+  _test_line_in_file '# Enable .bashrc modifications.' "${user_dir}"/.bashrc
+  # shellcheck disable=2016
+  _test_line_in_file '. "${HOME}/.bashrc_modifications"' "${user_dir}"/.bashrc
+  _test_file_exists "${user_dir}"/.profile_modifications
+  _test_line_in_file '# Enable .profile modifications.' "${user_dir}"/.profile
+  # shellcheck disable=2016
+  _test_line_in_file \
+    '. "${HOME}/.profile_modifications"' "${user_dir}"/.profile
+  _test_python_package_is_installed yt-dlp
+  _test_man_page_exists yt-dlp
+  _test_file_exists /usr/share/bash-completion/completions/yt-dlp
+  _test_file_exists "${fish_completions_dir}"/yt-dlp.fish
+  _test_package_is_installed ffmpeg
+  _test_package_is_installed ranger
+  _test_gsettings gnome.desktop.interface color-scheme "'prefer-dark'"
+  _test_gsettings gnome.desktop.interface gtk-theme "'Adwaita-dark'"
+  _test_gsettings gnome.desktop.interface clock-show-weekday true
+  _test_gsettings gnome.desktop.interface show-battery-percentage true
+  _test_gsettings gnome.desktop.session idle-delay 'uint32 0'
+  _test_gsettings gnome.settings-daemon.plugins.power idle-dim false
+  _test_gsettings \
+    gnome.settings-daemon.plugins.power sleep-inactive-ac-type "'nothing'"
+  _test_gsettings gnome.settings-daemon.plugins.color night-light-enabled true
+  _test_gsettings gnome.desktop.peripherals.mouse natural-scroll true
+  _test_gsettings gnome.desktop.peripherals.touchpad speed 0.25
+  _test_gsettings gnome.desktop.peripherals.touchpad tap-to-click true
+  _test_line_in_file 'AutomaticLoginEnable = true' /etc/gdm3/daemon.conf
+  _test_line_in_file "AutomaticLogin = ${username}" /etc/gdm3/daemon.conf
+  _test_package_is_installed fd-find
+  _test_symlink_exists /usr/bin/fd
+  _test_package_is_installed ripgrep
+  _test_package_is_installed exa
+  _test_package_is_installed bat
+  _test_symlink_exists /usr/bin/bat
+  _test_package_is_installed fzf
+  _test_package_is_installed zoxide
+  _test_package_is_installed htop
+  _test_file_exists "${user_config_dir}"/htop/htoprc
+  _test_gsettings gnome.Terminal.Legacy.Settings menu-accelerator-enabled false
+  _test_package_is_installed ncdu
+  _test_executable_exists /usr/local/bin/delta
+  _test_file_exists /usr/share/bash-completion/completions/delta.bash
+  _test_file_exists "${fish_completions_dir}"/delta.fish
+  _test_package_is_installed git
+  _test_git_config user.name Basic
+  _test_git_config user.email basic@basic.box
+  _test_git_config branch.sort -committerdate
+  _test_git_config log.date 'format:%b %d %Y'
+  git_commit_format="%C(yellow)%h %C(white)%<(31)%s %C(dim white)Commit by \
+%Creset%C(magenta)%an %C(cyan)%ar %C(dim white)on %ad %C(auto)%d"
+  _test_git_config format.pretty "${git_commit_format}"
+  _test_git_config pull.rebase true
+  _test_git_config push.default current
+  _test_git_config rerere.autoupdate true
+  _test_git_config rerere.enabled true
+  _test_git_config core.pager delta
+  _test_git_config delta.navigate true
+  _test_git_config diff.colorMoved default
+  _test_git_config interactive.diffFilter 'delta --color-only'
+  _test_git_config merge.conflictstyle diff3
+  _test_git_config delta.line-numbers true
+  _test_git_config init.defaultBranch main
+  _test_package_is_installed gitk
+  _test_file_exists "${user_config_dir}"/git/gitk
+  _test_executable_exists /usr/local/bin/keyd
+  keyd_dir="${user_config_dir}"/keyd
+  _test_file_exists "${keyd_dir}"/default.conf
+  _test_symlink_exists /etc/keyd/default.conf
+  user_bin_dir=${user_dir}/.local/bin
+  _test_executable_exists "${user_bin_dir}"/box
+  _test_package_is_installed direnv
+  _test_file_exists /usr/local/share/fonts/fira_code.ttf
+  _test_gsettings \
+    gnome.desktop.interface monospace-font-name "'FiraCode Nerd Font 11'"
+  _test_executable_exists /usr/local/bin/starship
+  _test_file_exists /usr/share/bash-completion/completions/starship.bash
+  _test_file_exists "${fish_completions_dir}"/starship.fish
+  _test_file_exists "${user_config_dir}"/starship.toml
+  _test_python_package_is_installed httpie
+  bash_completions_dir=${user_dir}/.local/share/bash-completion/completions
+  _test_file_exists "${bash_completions_dir}"/http.bash
+  _test_symlink_exists "${bash_completions_dir}"/https.bash
+  _test_file_exists "${fish_completions_dir}"/http.fish
+  _test_file_exists "${fish_completions_dir}"/https.fish
+  _test_line_in_file 'complete -c https' "${fish_completions_dir}"/https.fish
+  _test_package_is_installed nmap
+  _test_package_is_installed keepassxc
+  _test_file_exists "${user_config_dir}"/keepassxc/keepassxc.ini
+  _test_file_exists "${user_dir}"/setup.rst
+  _test_python_package_is_installed ipython
+  _test_python_package_is_installed entomb
+  _test_package_is_installed mtr-tiny
+  _test_package_is_installed tree
+  _test_python_package_is_installed tldr
+  _test_file_exists "${bash_completions_dir}"/tldr.bash
+  _test_package_is_installed offlineimap
+  _test_file_exists "${user_config_dir}"/git/ignore
+  _test_python_package_is_installed trash-cli
+  _test_man_page_exists trash
+  _test_man_page_exists trash-empty
+  _test_man_page_exists trash-list
+  _test_man_page_exists trash-put
+  _test_man_page_exists trash-restore
+  _test_man_page_exists trash-rm
+  _test_file_exists "${user_config_dir}"/ranger/rc.conf
+  _test_package_is_not_installed vim-tiny
+  nvim_path=/usr/local/bin/nvim
+  _test_executable_exists ${nvim_path}
+  _test_man_page_exists nvim
+  _test_alternative editor ${nvim_path} 50
+  _test_alternative ex ${nvim_path} 50
+  _test_alternative rview ${nvim_path} 50
+  _test_alternative rvim ${nvim_path} 50
+  _test_alternative vi ${nvim_path} 50
+  _test_alternative view ${nvim_path} 50
+  _test_alternative vim ${nvim_path} 50
+  _test_alternative vimdiff ${nvim_path} 50
+  nvim_config_dir=${user_config_dir}/nvim
+  _test_file_exists "${nvim_config_dir}"/init.lua
+  _test_file_exists "${nvim_config_dir}"/lazy-lock.json
+  _test_file_exists "${nvim_config_dir}"/lua/config/autocmds.lua
+  _test_file_exists "${nvim_config_dir}"/lua/config/keymaps.lua
+  _test_file_exists "${nvim_config_dir}"/lua/config/lazy.lua
+  _test_file_exists "${nvim_config_dir}"/lua/config/options.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/blink.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/colourscheme.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/fzf_lua.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/conform.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/lualine.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/mason.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/neotree.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/nvim_lint.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/ranger.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/treesitter.lua
+  _test_file_exists "${nvim_config_dir}"/lua/plugins/which_key.lua
+  _test_python_package_is_installed python-lsp-server
+  _test_package_is_installed curl
+  _test_package_is_installed rfkill
+  _test_file_exists "${user_config_dir}"/yt-dlp/config
+  _test_package_is_installed atool
+  _test_executable_exists /usr/local/bin/bandwhich
+  _test_man_page_exists bandwhich
+  _test_file_exists "${fish_completions_dir}"/bandwhich.fish
+  _test_executable_exists /usr/local/bin/bandwhich
+  _test_package_is_installed whois
+  _test_file_exists "${user_config_dir}"/ranger/colorschemes/box.py
+  _test_package_is_installed smartmontools
+  _test_package_is_installed python-is-python3
+  _test_package_is_installed zathura
+  _test_file_exists "${user_config_dir}"/zathura/zathurarc
+  _test_file_exists "${user_config_dir}"/ranger/rifle.conf
+  _test_file_exists "${user_config_dir}"/ranger/scope.sh
+  _test_package_is_installed acpi
+  _test_file_exists /usr/share/keyrings/syncthing-archive-keyring.gpg
+  _test_file_exists /etc/apt/sources.list.d/syncthing.list
+  _test_package_is_installed syncthing
+  sudoers_dir=/etc/sudoers.d
+  _test_file_exists ${sudoers_dir}/ufw
+  _test_file_exists "${user_dir}"/.ipython/profile_default/ipython_config.py
+  _test_file_exists ${sudoers_dir}/apt
+  _test_package_is_installed lynis
+  _test_file_exists ${sudoers_dir}/lynis
+  _test_package_is_installed clamav
+  _test_package_is_installed rkhunter
+  _test_file_exists ${sudoers_dir}/rkhunter
+  _test_executable_exists "${user_dir}"/.pyenv/bin/pyenv
+  _test_package_is_installed build-essential
+  _test_package_is_installed curl
+  _test_package_is_installed libbz2-dev
+  _test_package_is_installed libffi-dev
+  _test_package_is_installed liblzma-dev
+  _test_package_is_installed libncursesw5-dev
+  _test_package_is_installed libreadline-dev
+  _test_package_is_installed libsqlite3-dev
+  _test_package_is_installed libssl-dev
+  _test_package_is_installed libxml2-dev
+  _test_package_is_installed libxmlsec1-dev
+  _test_package_is_installed llvm
+  _test_package_is_installed make
+  _test_package_is_installed tk-dev
+  _test_package_is_installed wget
+  _test_package_is_installed xz-utils
+  _test_package_is_installed zlib1g-dev
+  _test_executable_exists /usr/local/bin/geckodriver
+  _test_python_package_is_installed jupyterlab
+  jupyterlab_apputils_extension_dir="${user_dir}/.jupyter/lab/user-settings/\
+@jupyterlab/apputils-extension"
+  _test_file_exists \
+    "${jupyterlab_apputils_extension_dir}"/themes.jupyterlab-settings
+  jupyterlab_codemiror_extension_dir="${user_dir}/.jupyter/lab/user-settings/\
+@jupyterlab/codemirror-extension"
+  _test_file_exists \
+    "${jupyterlab_codemiror_extension_dir}"/commands.jupyterlab-settings
+  _test_file_exists ${sudoers_dir}/powertop
+  _test_package_is_installed tlp
+  _test_file_exists ${sudoers_dir}/tlp
+  _test_file_exists /etc/tlp.d/10-charging-thresholds.conf
+  _test_package_is_installed libnotify-bin
+  _test_file_exists ${sudoers_dir}/lecture
+  _test_file_exists ${sudoers_dir}/cryptsetup
+  _test_package_is_installed thunderbird
+  _test_file_exists "${user_bin_dir}"/git_wrapper
+  _test_package_is_installed wl-clipboard
+  _test_package_is_installed podman
+  _test_gsettings gnome.desktop.wm.preferences audible-bell false
+  _test_gsettings gnome.desktop.wm.preferences visual-bell true
+  _test_gsettings gnome.desktop.wm.preferences visual-bell-type "'frame-flash'"
+  _test_file_exists /usr/share/firefox-esr/distribution/policies.json
+  _test_file_exists /etc/NetworkManager/conf.d/mac_randomisation.conf
+  _test_file_exists "${user_bin_dir}"/check_vpn
+  _test_file_exists "${user_config_dir}"/systemd/user/check_vpn.service
+  _test_systemd_user_service_is_active check_vpn.service
+  _test_file_exists "${user_config_dir}"/gnome-initial-setup-done
+  _test_gsettings \
+    gnome.nautilus.preferences default-folder-viewer "'list-view'"
+  _test_gsettings gtk.gtk4.Settings.FileChooser sort-directories-first true
+  _test_gsettings gtk.Settings.FileChooser sort-directories-first true
+  _test_file_exists /usr/share/keyrings/signal-desktop-keyring.gpg
+  _test_file_exists /etc/apt/sources.list.d/signal.list
+  _test_package_is_installed signal-desktop
+  _test_package_is_installed duf
+  _test_package_is_installed mullvad-browser
+  _test_directory_exists "${user_dir}"/.cache/fish/generated_completions
+  # Tests arising from first_boot.sh
+  _test_command_output 'sudo ufw status' 'Status: active'
+  _test_command_output 'mullvad auto-connect get' 'Autoconnect: on'
+  _test_command_output \
+    'mullvad dns get' \
+    "Custom DNS: no
+Block ads: true
+Block trackers: true
+Block malware: true
+Block adult content: true
+Block gambling: true
+Block social media: false"
+  _test_command_output \
+    'mullvad lockdown-mode get' \
+    'Block traffic when the VPN is disconnected: on'
+  _test_systemd_user_service_is_active check_vpn.service
+}
+
 upgrade() {
   echo 'Upgrading Debian packages...'
   echo
@@ -448,6 +837,9 @@ case "${1-}" in
     ;;
   sync)
     sync
+    ;;
+  test)
+    test
     ;;
   upgrade)
     upgrade
