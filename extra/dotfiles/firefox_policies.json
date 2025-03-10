@@ -13,6 +13,10 @@
         "install_url": "https://addons.mozilla.org/firefox/downloads/latest/darkreader/latest.xpi",
         "installation_mode": "normal_installed"
       },
+      "extension@one-tab.com": {
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/onetab/latest.xpi",
+       "installation_mode": "normal_installed"
+      },
       "jid1-MnnxcxisBPnSXQ@jetpack": {
         "install_url": "https://addons.mozilla.org/firefox/downloads/latest/privacy-badger17/latest.xpi",
         "installation_mode": "normal_installed"
