@@ -27,6 +27,7 @@ The **Basic Box** installer creates a Debian 12 system with:
   - Dark Reader
   - Firefox Multi-Account Containers
   - KeePassXC-Browser
+  - OneTab
   - Privacy Badger
   - uBlock Origin
 
