@@ -752,6 +752,17 @@ test() {
   _test_package_is_installed signal-desktop
   _test_package_is_installed duf
   _test_package_is_installed mullvad-browser
+  _test_package_is_installed dict
+  _test_package_is_installed dictd
+  _test_package_is_installed dict-wn
+  _test_command_output \
+    'dict linux' \
+    "1 definition found
+
+From WordNet (r) 3.0 (2006) [wn]:
+
+  Linux
+      n 1: an open-source version of the UNIX operating system"
   _test_directory_exists "${user_dir}"/.cache/fish/generated_completions
   # Tests arising from first_boot.sh
   _test_service_is_active ufw
