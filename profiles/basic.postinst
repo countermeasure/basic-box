@@ -769,6 +769,9 @@ apt install --yes duf
 # Install Mullvad Browser.
 apt install --yes mullvad-browser
 
+# Install dictionary client, server and database.
+apt install --yes dict dictd dict-wn
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
