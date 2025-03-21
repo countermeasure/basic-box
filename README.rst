@@ -109,6 +109,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - Signal installed
 - duf installed
 - Mullvad Browser installed
+- dict, dictd and dict-wn installed
 
 
 Set up

@@ -752,6 +752,9 @@ test() {
   _test_package_is_installed signal-desktop
   _test_package_is_installed duf
   _test_package_is_installed mullvad-browser
+  _test_package_is_installed dict
+  _test_package_is_installed dictd
+  _test_package_is_installed dict-wn
   _test_directory_exists "${user_dir}"/.cache/fish/generated_completions
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
