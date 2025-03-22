@@ -332,6 +332,8 @@ ln --symbolic "${keyd_dir}"/default.conf /etc/keyd/default.conf
 place_as_root_user_with_mode_644 \
   /tmp/keyd_source/keyd.service.in /lib/systemd/system/keyd.service
 sed --in-place 's/@PREFIX@/\/usr\/local/g' /lib/systemd/system/keyd.service
+# Enable the keyd systemd service to activate custom key remapping.
+systemctl enable keyd.service
 
 # Make the "box" command available everywhere.
 place_as_ordinary_user_with_mode_755 \
