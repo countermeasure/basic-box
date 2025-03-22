@@ -127,6 +127,14 @@ _test_symlink_exists() {
   fi
 }
 
+_test_systemd_service_is_active() {
+  if systemctl status "$1" | grep --quiet 'Active: active (running)'; then
+    echo -e "${ansi_green}🗸 ${ansi_clear}Systemd ${1} service is active"
+  else
+    echo -e "${ansi_red}✗ ${ansi_clear}Systemd ${1} service is not active"
+  fi
+}
+
 _test_systemd_user_service_is_active() {
   if systemctl status --user "$1" | grep --quiet 'Active: active (running)'; then
     echo -e "${ansi_green}🗸 ${ansi_clear}Systemd ${1} user service is active"
@@ -598,6 +606,7 @@ test() {
   keyd_dir="${user_config_dir}"/keyd
   _test_file_exists "${keyd_dir}"/default.conf
   _test_symlink_exists /etc/keyd/default.conf
+  _test_systemd_service_is_active keyd
   user_bin_dir=${user_dir}/.local/bin
   _test_executable_exists "${user_bin_dir}"/box
   _test_package_is_installed direnv

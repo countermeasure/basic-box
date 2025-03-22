@@ -58,7 +58,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - Git installed
 - gitk installed
 - keyd installed
-- optional key remapping which:
+- key remapping, which can be deactivated, which:
 
   - modifies the CapsLock key to produce Control when held and Escape when
     tapped
