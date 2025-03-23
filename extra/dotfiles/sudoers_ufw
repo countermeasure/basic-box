@@ -4,3 +4,9 @@
 # security risk associated with this because closing ports in the firewall
 # should reduce rather than increase the attack surface.
 %sudo ALL=(root) NOPASSWD: /usr/sbin/ufw delete allow syncthing
+
+# The "ufw status" command is used by the "box firewall" command, so it's
+# convenient to make it passwordless. There doesn't seem to be a significant
+# security risk associated with this because it only shows the firewall state
+# and does not change it.
+%sudo ALL=(root) NOPASSWD: /usr/sbin/ufw status, /usr/sbin/ufw status *

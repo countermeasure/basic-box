@@ -94,6 +94,10 @@ destroy() {
   _off
 }
 
+firewall() {
+  sudo ufw status verbose
+}
+
 ip() {
   curl \
     --silent \
@@ -214,6 +218,7 @@ main_help() {
   echo '  audit      Audit system with Lynis.'
   echo '  battery    Show battery information.'
   echo '  destroy    Destroy all data on this machine.'
+  echo '  firewall   Show firewall information.'
   echo '  ip         Show public IP address.'
   echo '  keyboard   Control key mapping.'
   echo '  mac        Show MAC address of active network device.'
@@ -416,6 +421,9 @@ case "${1-}" in
     ;;
   destroy)
     destroy
+    ;;
+  firewall)
+    firewall
     ;;
   ip)
     ip
