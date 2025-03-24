@@ -774,6 +774,21 @@ apt install --yes mullvad-browser
 # Install dictionary client, server and database.
 apt install --yes dict dictd dict-wn
 
+# Set GNOME Shell dock contents.
+favorite_apps="[\
+'firefox-esr.desktop', \
+'mullvad-browser.desktop', \
+'torbrowser.desktop', \
+'signal-desktop.desktop', \
+'thunderbird.desktop', \
+'mullvad-vpn.desktop', \
+'org.keepassxc.KeePassXC.desktop', \
+'org.gnome.clocks.desktop', \
+'org.gnome.Maps.desktop', \
+'org.gnome.Nautilus.desktop', \
+'org.gnome.Terminal.desktop']"
+gsettings_set "gnome.shell favorite-apps \"${favorite_apps}\""
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
