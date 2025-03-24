@@ -809,6 +809,18 @@ test() {
   _test_package_is_installed dict
   _test_package_is_installed dictd
   _test_package_is_installed dict-wn
+  _test_gsettings gnome.shell favorite-apps "[\
+'mullvad-browser.desktop', \
+'torbrowser.desktop', \
+'firefox-esr.desktop', \
+'signal-desktop.desktop', \
+'thunderbird.desktop', \
+'mullvad-vpn.desktop', \
+'org.keepassxc.KeePassXC.desktop', \
+'org.gnome.clocks.desktop', \
+'org.gnome.Maps.desktop', \
+'org.gnome.Nautilus.desktop', \
+'org.gnome.Terminal.desktop']"
   _test_directory_exists "${user_dir}"/.cache/fish/generated_completions
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
