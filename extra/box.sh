@@ -178,40 +178,93 @@ audit() {
 }
 
 battery() {
-  discharging_power=0
-  for battery in {0..1}; do
-    battery_power_file="/sys/class/power_supply/BAT${battery}/power_now"
-    if [[ -f ${battery_power_file} ]]; then
-      battery_status_file="/sys/class/power_supply/BAT${battery}/status"
-      battery_status=$(<"${battery_status_file}")
-      if [[ ${battery_status} = 'Discharging' ]]; then
-        discharging_power_in_microwatts=$(<"${battery_power_file}")
-        discharging_power=$(
-          echo "scale=1; ${discharging_power_in_microwatts} / 10^6" \
-            | bc
-        )
-        echo "Battery ${battery}: Discharging at ${discharging_power}W"
-        break
+  if [[ -n "$1" ]]; then
+    case "$1" in
+      -h | --help)
+        battery_help
+        ;;
+      fill)
+        for battery in {0..1}; do
+          directory="/sys/class/power_supply/BAT${battery}"
+          if [[ -d ${directory} ]]; then
+            sudo tlp fullcharge "BAT${battery}"
+          fi
+        done
+        ;;
+      reset)
+        for battery in {0..1}; do
+          directory="/sys/class/power_supply/BAT${battery}"
+          if [[ -d ${directory} ]]; then
+            sudo tlp setcharge "BAT${battery}"
+          fi
+        done
+        ;;
+      *)
+        battery_catchall "$1"
+        ;;
+    esac
+  else
+    discharging_power=0
+    for battery in {0..1}; do
+      battery_power_file="/sys/class/power_supply/BAT${battery}/power_now"
+      if [[ -f ${battery_power_file} ]]; then
+        battery_status_file="/sys/class/power_supply/BAT${battery}/status"
+        battery_status=$(<"${battery_status_file}")
+        if [[ ${battery_status} = 'Discharging' ]]; then
+          discharging_power_in_microwatts=$(<"${battery_power_file}")
+          discharging_power=$(
+            echo "scale=1; ${discharging_power_in_microwatts} / 10^6" \
+              | bc
+          )
+          echo "Battery ${battery}: Discharging at ${discharging_power}W"
+          break
+        fi
       fi
+    done
+    if [[ ${discharging_power} = 0 ]]; then
+      echo 'Currently on mains power.'
     fi
-  done
-  if [[ ${discharging_power} = 0 ]]; then
-    echo 'Currently on mains power.'
+    echo
+    acpi
+    echo
+    for battery in {0..1}; do
+      directory="/sys/class/power_supply/BAT${battery}"
+      if [[ -d ${directory} ]]; then
+        start_threshold=$(<"${directory}"/charge_start_threshold)
+        stop_threshold=$(<"${directory}"/charge_stop_threshold)
+        charging_output="Battery ${battery}: "
+        charging_output+="Charging starts below ${start_threshold}%, "
+        charging_output+="stops at ${stop_threshold}%"
+        echo "${charging_output}"
+      fi
+    done
   fi
+}
+
+battery_catchall() {
+  echo "\"$1\" is not a recognised argument."
   echo
-  acpi
+  echo 'Here is the relevant help...'
   echo
-  for battery in {0..1}; do
-    directory="/sys/class/power_supply/BAT${battery}"
-    if [[ -d ${directory} ]]; then
-      start_threshold=$(<"${directory}"/charge_start_threshold)
-      stop_threshold=$(<"${directory}"/charge_stop_threshold)
-      charging_output="Battery ${battery}: "
-      charging_output+="Charging starts below ${start_threshold}%, "
-      charging_output+="stops at ${stop_threshold}%"
-      echo "${charging_output}"
-    fi
-  done
+  echo
+  battery_help
+  exit 1
+}
+
+battery_help() {
+  echo 'usage: box battery'
+  echo
+  echo 'Show battery information.'
+  echo
+  echo 'usage: box battery <arg>'
+  echo
+  echo 'Control batteries.'
+  echo
+  echo 'Arguments:'
+  echo
+  echo '  -h|--help  Show this help.'
+  echo '  fill       Charge batteries to full capacity.'
+  echo '  reset      Reset charge thresholds to usual values.'
 }
 
 destroy() {
@@ -342,7 +395,7 @@ main_help() {
   echo
   echo '  -h|--help  Show this help.'
   echo '  audit      Audit system with Lynis.'
-  echo '  battery    Show battery information.'
+  echo '  battery    Show battery information and control batteries.'
   echo '  destroy    Destroy all data on this machine.'
   echo '  firewall   Show firewall information.'
   echo '  ip         Show public IP address.'
@@ -818,7 +871,7 @@ case "${1-}" in
     audit
     ;;
   battery)
-    battery
+    battery "${2-}"
     ;;
   destroy)
     destroy
