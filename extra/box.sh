@@ -816,6 +816,20 @@ From WordNet (r) 3.0 (2006) [wn]:
 
   Linux
       n 1: an open-source version of the UNIX operating system"
+  _test_command_output \
+    'gsettings get org.gnome.shell favorite-apps' \
+    "[\
+'mullvad-browser.desktop', \
+'torbrowser.desktop', \
+'firefox-esr.desktop', \
+'signal-desktop.desktop', \
+'thunderbird.desktop', \
+'mullvad-vpn.desktop', \
+'org.keepassxc.KeePassXC.desktop', \
+'org.gnome.clocks.desktop', \
+'org.gnome.Maps.desktop', \
+'org.gnome.Nautilus.desktop', \
+'org.gnome.Terminal.desktop']"
   _test_directory_exists "${user_dir}"/.cache/fish/generated_completions
   # Tests arising from first_boot.sh
   _test_service_is_active ufw
