@@ -1070,6 +1070,35 @@ git_stash() {
 
 ###############################################################################
 #
+#  Clear stashed changes.
+#
+#  Arguments:
+#    None.
+#
+###############################################################################
+# TODO: Test this an add an alias for fish and bash.
+git_stash_clear() {
+  # Pop the stashed changes.
+  initial_staged_diff=$(_staged_diff_hash)
+  initial_unstaged_diff=$(_unstaged_diff_hash)
+  git stash pop --quiet clear
+  final_staged_diff=$(_staged_diff_hash)
+  final_unstaged_diff=$(_unstaged_diff_hash)
+
+  # Show information.
+  _print_result \
+    "${initial_staged_diff}${initial_unstaged_diff}" \
+    "${final_staged_diff}${final_unstaged_diff}"
+  if [[ 
+    "${initial_staged_diff}${initial_unstaged_diff}" != "${final_staged_diff}${final_unstaged_diff}" ]] \
+    ; then
+    _print_changes
+    _print_latest_commit
+  fi
+}
+
+###############################################################################
+#
 #  Pop stashed changes.
 #
 #  Arguments:

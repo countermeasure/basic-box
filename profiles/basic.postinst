@@ -319,6 +319,10 @@ git_global_config_set 'merge.conflictstyle' 'diff3'
 git_global_config_set 'delta.line-numbers' 'true'
 # Add Git global config setting for default branch in new repositories.
 git_global_config_set 'init.defaultBranch' 'main'
+# TODO: Explain this...
+# https://blog.gitbutler.com/how-git-core-devs-configure-git/
+git_global_config_set 'rebase.autoStash' 'true'
+git_global_config_set 'commit.verbose' 'true'
 
 # Install gitk
 apt install --yes gitk
@@ -913,6 +917,8 @@ install_with_pipx ast-grep
 # TODO: Make completions with "ast-grep completions fish".
 #
 # TODO: Stop supporting bash for aliases, functions, completions, etc???
+
+# TODO https://blog.gitbutler.com/how-git-core-devs-configure-git/
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
