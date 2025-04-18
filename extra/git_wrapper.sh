@@ -638,6 +638,28 @@ git_diff_unstaged() {
 #    None.
 #
 ###############################################################################
+
+# In 📂 …/cedars-proj/code on 🌱 3723_show_claims_data_for_program (a04fbbb) via 🐍 v3.10 (direnv)
+# ❯ gf
+# From github.com:sound-data/cedars-proj
+#  - [deleted]           (none)     -> origin/cancel-impact-profile
+#  - [deleted]           (none)     -> origin/generate-avoided-costs-and-review-button
+#  - [deleted]           (none)     -> origin/restore-e3-target-sector-in-ac-elec-key
+# remote: Enumerating objects: 87, done.
+# remote: Counting objects: 100% (81/81), done.
+# remote: Compressing objects: 100% (31/31), done.
+# remote: Total 87 (delta 51), reused 67 (delta 45), pack-reused 6 (from 1)
+# Unpacking objects: 100% (87/87), 14.33 KiB | 667.00 KiB/s, done.
+#  * [new branch]        4651_reports_crash     -> origin/4651_reports_crash
+#  * [new branch]        attempt-at-improving-circle-ci-runs -> origin/attempt-at-improving-circle-ci-runs
+#    df75bd44..f7348e1d  custom-impact-profiles -> origin/custom-impact-profiles
+#    59075cb2..bcac22fb  development            -> origin/development
+#    a04fbbbd..cf013bb4  testing                -> origin/testing
+#  * [new branch]        validate-end-use-shape-name-does-not-exist -> origin/validate-end-use-shape-name-does-not-exist
+# 🗸 Done
+#
+# TODO: Count [deleted] and [new branch] and report these using notify-send
+
 git_fetch() {
   # Do the fetch.
   git fetch --all --prune
@@ -647,7 +669,7 @@ git_fetch() {
   _print_branches remote 10
   notify-send \
     'Git' \
-    'Fetched [TODO: No of branches???]' \
+    'Fetched [TODO: No of branches added??? deleted???]' \
     --icon /usr/share/icons/Adwaita/scalable/status/media-playlist-shuffle-symbolic.svg
 }
 

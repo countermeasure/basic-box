@@ -105,6 +105,66 @@ ip() {
     | sed -e 's/\",$//'
 }
 
+identity() {
+  case "$1" in
+    -h | --help)
+      identity_help
+      ;;
+    default)
+      hostname host
+      # set username to user
+      # set home directory to user
+      echo
+      echo 'The identity of the user has been set to default values:'
+      echo '* TODO host name...'
+      echo '* TODO user name...'
+      echo '* TODO group name...'
+      echo '* TODO home directory name...'
+      ;;
+    randomise)
+      echo
+      echo 'The identity of the user will be randomised at each boot.'
+      echo 'These settings will be set to random values:'
+      echo '* TODO host name...'
+      echo '* TODO user name...'
+      echo '* TODO group name...'
+      echo '* TODO home directory name...'
+      ;;
+    *)
+      identity_catchall "$1"
+      ;;
+  esac
+}
+
+identity_catchall() {
+  if [ "$1" = '' ]; then
+    echo 'An argument is required.'
+  else
+    echo "\"$1\" is not a recognised argument."
+  fi
+  echo
+  echo 'Here is the relevant help...'
+  echo
+  echo
+  identity_help
+  exit 1
+}
+
+identity_help() {
+  echo 'usage: box identity <arg>'
+  echo
+  echo 'TODO... .'
+  echo
+  echo 'Arguments:'
+  echo
+  echo '  -h|--help  Show this help.'
+  echo '  custom     TODO Map keys so that:'
+  echo '             * holding the CapsLock key produces Control,'
+  echo '             * tapping the CapsLock key produces Escape, and'
+  echo '             * the Escape key produces CapsLock.'
+  echo '  default    TODO Ensure all keys have their default behaviour.'
+}
+
 keyboard() {
   case "$1" in
     -h | --help)
@@ -418,6 +478,9 @@ case "${1-}" in
     ;;
   destroy)
     destroy
+    ;;
+  identity)
+    identity "${2-}"
     ;;
   ip)
     ip

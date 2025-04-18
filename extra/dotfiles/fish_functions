@@ -72,15 +72,15 @@ end
 #
 ###############################################################################
 function prefer
+    command $argv[2..-1]
     # If the alias is not being passed to a pipe, show the prefer message.
     if test -t 1
-        set ansi_clear '\033[0m'
-        set ansi_yellow '\033[1;33m'
         echo
-        echo -e "$ansi_yellow💡 Prefer $argv[1] to $argv[2]$ansi_clear"
-        echo
+        set_color yellow
+        echo "💡 Prefer $argv[1] to $argv[2]"
+        set_color normal
+        return 1
     end
-    command $argv[2..-1]
 end
 
 ###############################################################################
@@ -95,10 +95,10 @@ end
 #
 ###############################################################################
 function protect
-    set ansi_clear '\033[0m'
-    set ansi_yellow '\033[1;33m'
     echo
-    echo -e "$ansi_yellow✋ Use $argv[1] instead of $argv[2]$ansi_clear"
+    set_color yellow
+    echo "✋ Use $argv[1] instead of $argv[2]"
+    set_color normal
     return 1
 end
 
@@ -141,4 +141,68 @@ function set_window_title
         set window_title $condensed_pwd
     end
     echo "📂  $window_title"
+end
+
+###############################################################################
+#
+#  Sync one directory with another.
+#
+#  The contents of the second directory will be modified so that it is an exact
+#  copy of the first directory.
+#
+#  Arguments:
+#    Strings. The path to the directory to sync from, then the path of the
+#    directory to be synced.
+#
+###############################################################################
+function sync_directory
+    # TODO: Make an equivalent function/alias for Bash?
+    echo "This will make $argv[2] into an exact copy of $argv[1]."
+    echo
+    echo "Everything in $argv[2] which is not in $argv[1] will be deleted."
+    echo
+    while true
+        read --prompt-str 'Do you want to continue? [y/n] ' confirm
+        switch $confirm
+            case Y y
+                echo
+                rsync --archive --delete --info=progress2 $argv[1]/ $argv[2]
+                return 0
+            case N n
+                echo
+                echo 'Nothing done.'
+                return 1
+        end
+    end
+end
+
+###############################################################################
+#
+#  Compare the contents of two directories.
+#
+#  Arguments:
+#    Strings. The paths to the two directories.
+#
+###############################################################################
+function compare_directories
+    python /home/user/.config/fish/compare_directories.py $argv[1] $argv[2]
+end
+
+###############################################################################
+#
+#  Tail a log on a remote server with syntax highlighting.
+#
+#  Arguments:
+#    Strings. The server name, then the path to the log file.
+#
+###############################################################################
+function tail_remote
+    if test -z $argv[1]
+        echo
+        echo "Call this command like so:"
+        echo "tail_remote <server> <file_path>"
+        return 1
+    end
+
+    ssh $argv[1] tail -f $argv[2] | bat --language=log --paging=never --plain
 end
