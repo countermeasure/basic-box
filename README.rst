@@ -124,6 +124,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - duf installed
 - Mullvad Browser installed
 - dict, dictd and dict-wn installed
+- GNOME Shell extension manager installed
 
 
 Set up

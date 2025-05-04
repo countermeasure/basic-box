@@ -898,6 +898,8 @@ bluetooth-quick-connect@bjarosze.gmail.com/schemas"
   _test_gsettings gnome.shell.extensions.system-monitor memory-style "'digit'"
   _test_gsettings gnome.shell.extensions.system-monitor net-style "'digit'"
   _test_directory_exists "${user_dir}"/.cache/fish/generated_completions
+  _test_package_is_not_installed gnome-shell-extension-prefs
+  _test_package_is_installed gnome-shell-extension-manager
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
   _test_command_output 'mullvad auto-connect get' 'Autoconnect: on'
