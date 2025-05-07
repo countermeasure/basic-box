@@ -178,6 +178,46 @@ end
 
 ###############################################################################
 #
+#  Backup to SSD card (temporary function)
+#
+#  The contents of the second directory will be modified so that it is an exact
+#  copy of the first directory.
+#
+#  Arguments:
+#    None.
+#
+###############################################################################
+function backup_to_ssd
+    # TODO: Make an equivalent function/alias for Bash?
+    set target_directory /media/user/foxtrot/backup
+    set source_directory /home/user/Data
+    echo "This will make $target_directory into an exact copy of $source_directory."
+    echo
+    echo "Everything in $target_directory which is not in $source_directory will be deleted."
+    echo
+    while true
+        read --prompt-str 'Do you want to continue? [y/n] ' confirm
+        switch $confirm
+            case Y y
+                echo
+                rsync \
+                    --archive \
+                    --delete \
+                    --exclude lost+found/ \
+                    --info progress2 \
+                    $source_directory/ \
+                    $target_directory
+                return 0
+            case N n
+                echo
+                echo 'Nothing done.'
+                return 1
+        end
+    end
+end
+
+###############################################################################
+#
 #  Compare the contents of two directories.
 #
 #  Arguments:
@@ -205,4 +245,16 @@ function tail_remote
     end
 
     ssh $argv[1] tail -f $argv[2] | bat --language=log --paging=never --plain
+end
+
+###############################################################################
+#
+#  TODO
+#
+#  Arguments:
+#    Strings. The server name, then the path to the log file.
+#
+###############################################################################
+function yt
+    yt-dlp "$argv[1]"
 end
