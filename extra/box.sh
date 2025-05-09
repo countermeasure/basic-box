@@ -851,7 +851,7 @@ ${custom_keybindings_key_path}/custom1/"
 ${custom_keybindings_key_path}/custom2/"
   _test_gsettings ${custom_keybinding_2} binding "'<Super>v'"
   _test_gsettings \
-    ${custom_keybinding_2} command "'/opt/Mullvad\\ VPN/mullvad-vpn'"
+    ${custom_keybinding_2} command "'/opt/Mullvad\\\ VPN/mullvad-vpn'"
   _test_gsettings ${custom_keybinding_2} name "'VPN'"
   _test_gsettings gnome.shell enabled-extensions "[\
 'bluetooth-quick-connect@bjarosze.gmail.com', \
