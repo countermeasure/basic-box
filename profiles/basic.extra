@@ -81,6 +81,7 @@ extra/packages/nvim.appimage
 extra/packages/nvim_source.tar.gz
 extra/packages/paperwm.zip
 extra/packages/pyenv_source.tar.gz
+extra/packages/spacebar.zip
 extra/packages/starship.tar.gz
 extra/packages/trash_cli_source.tar.gz
 extra/packages/yt_dlp.tar.gz

@@ -124,3 +124,11 @@ paperwm_version=$(get_version paperwm)
 wget_to_directory 'paperwm' "https://github.com/paperwm/PaperWM/archive/refs/\
 tags/v${paperwm_version}.zip"
 link "paperwm/v${paperwm_version}.zip" 'paperwm.zip'
+
+# Ensure the Space Bar package is present.
+spacebar_version=$(get_version spacebar)
+wget_to_directory 'spacebar' "https://extensions.gnome.org/extension-data/\
+space-barluchrioh.v${spacebar_version}.shell-extension.zip"
+link \
+  "spacebar/space-barluchrioh.v${spacebar_version}.shell-extension.zip" \
+  'spacebar.zip'

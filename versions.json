@@ -14,6 +14,7 @@
   "pyls-isort": "0.2.2",
   "python-lsp-black": "2.0.0",
   "python-lsp-server": "1.12.0",
+  "spacebar": "22",
   "starship": "1.22.1",
   "tldr": "3.3.0",
   "trash-cli": "0.24.5.26",
