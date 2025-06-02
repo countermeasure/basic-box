@@ -8,7 +8,6 @@ installer_dir=/media/cdrom/simple-cdd
 username=$(ls /home)
 user_dir=/home/${username}
 
-bash_completions_dir=${user_dir}/.local/share/bash-completion/completions
 fish_completions_dir=${user_dir}/.config/fish/completions
 user_bin_dir=${user_dir}/.local/bin
 user_config_dir=${user_dir}/.config
@@ -147,6 +146,16 @@ run_as_ordinary_user 'yes | fish --command "fish_config theme save box"'
 # is opened and having notifications shown then as a result.
 create_directory_as_ordinary_user "${fish_config_dir}/conf.d"
 create_directory_as_ordinary_user "${fish_config_dir}/functions"
+# Add a snippet at the end of ~/.bashrc which will start a fish shell if the
+# parent shell is not fish so that every shell the user interacts with is a
+# fish shell.
+cat <<EOF >>"${user_dir}"/.bashrc
+
+# If the parent process is not fish, launch the fish shell.
+if [[ \$(ps --no-header --pid=\${PPID} --format=comm) != 'fish' ]]; then
+  exec fish
+fi
+EOF
 
 # Install the UFW firewall.
 apt install --yes ufw
@@ -180,17 +189,6 @@ run_as_ordinary_user \
 place_as_ordinary_user_with_mode_644 \
   /tmp/pipx_completions.fish "${fish_completions_dir}"/pipx.fish
 
-# Copy .bashrc extensions into place and enable them.
-place_as_ordinary_user_with_mode_644 \
-  ${installer_dir}/dot_bash_aliases "${user_dir}"/.bash_aliases
-place_as_ordinary_user_with_mode_644 \
-  ${installer_dir}/dot_bash_functions "${user_dir}"/.bash_functions
-place_as_ordinary_user_with_mode_644 \
-  ${installer_dir}/dot_bashrc_modifications "${user_dir}"/.bashrc_modifications
-printf '\n# Enable .bashrc modifications.\n' >>"${user_dir}"/.bashrc
-# shellcheck disable=SC2016
-echo '. "${HOME}/.bashrc_modifications"' >>"${user_dir}"/.bashrc
-
 # Copy .profile extension into place and enable it.
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/dot_profile_modifications \
@@ -204,9 +202,6 @@ install_with_pipx yt-dlp
 extract_tar yt_dlp.tar.gz /tmp/yt_dlp
 place_as_root_user_with_mode_644 \
   /tmp/yt_dlp/yt-dlp.1 /usr/local/share/man/man1/yt-dlp.1
-place_as_root_user_with_mode_644 \
-  /tmp/yt_dlp/completions/bash/yt-dlp \
-  /usr/share/bash-completion/completions/yt-dlp
 place_as_ordinary_user_with_mode_644 \
   /tmp/yt_dlp/completions/fish/yt-dlp.fish \
   "${fish_completions_dir}"/yt-dlp.fish
@@ -285,9 +280,6 @@ apt install --yes ncdu
 extract_tar delta.tar.gz /tmp/delta
 place_as_root_user_with_mode_755 /tmp/delta/delta /usr/local/bin/delta
 extract_tar delta_source.tar.gz /tmp/delta_source
-place_as_root_user_with_mode_644 \
-  tmp/delta_source/etc/completion/completion.bash \
-  /usr/share/bash-completion/completions/delta.bash
 place_as_ordinary_user_with_mode_644 \
   /tmp/delta_source/etc/completion/completion.fish \
   "${fish_completions_dir}"/delta.fish
@@ -365,8 +357,6 @@ tar --extract \
   --directory /usr/local/bin
 # The Starship binary is called with its full path here as calling it just with
 # starship doesn't work.
-/usr/local/bin/starship completions bash > \
-  /usr/share/bash-completion/completions/starship.bash
 /usr/local/bin/starship completions fish >/tmp/starship.fish
 place_as_ordinary_user_with_mode_644 \
   /tmp/starship.fish "${fish_completions_dir}"/starship.fish
@@ -375,13 +365,6 @@ place_as_ordinary_user_with_mode_644 \
 
 # Install HTTPie.
 install_with_pipx httpie
-# The completion files need to be named with the commands which they relate to
-# to work, so rather than naming them httpie.*, they are named http[s].*.
-place_as_ordinary_user_with_mode_644 \
-  ${installer_dir}/httpie-completion.bash "${bash_completions_dir}"/http.bash
-ln --symbolic \
-  "${bash_completions_dir}"/http.bash \
-  "${bash_completions_dir}"/https.bash
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/httpie-completion.fish "${fish_completions_dir}"/http.fish
 # HTTPie doesn't provide a fish completion file for https, so the fish
@@ -418,11 +401,6 @@ apt install --yes tree
 
 # Install tldr-pages.
 install_with_pipx tldr
-# tldr is called with its full path here as calling it just with tldr doesn't
-# work.
-"${user_bin_dir}"/tldr --print-completion bash >/tmp/tldr.bash
-place_as_ordinary_user_with_mode_644 \
-  /tmp/tldr.bash "${bash_completions_dir}"/tldr.bash
 
 # Install OfflineIMAP.
 apt install --yes offlineimap

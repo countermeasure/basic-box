@@ -1,7 +1,7 @@
 # Don't show a greeting when starting fish.
 set fish_greeting
 
-# Set the window title.
+# Set the window title to the truncated current working directory.
 function fish_title
     set_window_title
 end
@@ -20,6 +20,24 @@ source $HOME/.config/fish/fish_functions
 # Auto-completion for fzf is not available for fish.
 fzf_key_bindings
 
+# Sort fzf lists from the top down.
+set --export --global FZF_DEFAULT_OPTS --reverse
+
+# Have fzf use fd as the default source.
+set --export --global FZF_DEFAULT_COMMAND 'fd --type file'
+
+# Have fzf use fd as the source source for Ctrl-t.
+set --export --global FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
+
+# Colourise man pages by setting bat as the man pager.
+set --export --global MANPAGER 'sh -c "col -bx | bat -l man -p"'
+
+# Share JupyterLab user settings across all JupyterLab environments. Without
+# this, each JupyterLab installation in each virtual environment will have its
+# own user settings.
+set --export --global \
+    JUPYTERLAB_SETTINGS_DIR "$HOME/.jupyter/lab/user-settings"
+
 # Enable zoxide.
 zoxide init fish | source
 
@@ -30,8 +48,10 @@ starship init fish | source
 # This should appear after shell extensions that manipulate the prompt.
 direnv hook fish | source
 
+# Don't show direnv messages when changing directory.
+set --export --global DIRENV_LOG_FORMAT
+
 # Enable pyenv.
-# Neither setting the $PYENV_ROOT environment variable nor adding
-# $PYENV_ROOT/bin to $PATH are necessary here, because both are already done by
-# bash.
-pyenv init - | source
+pyenv init - fish | source
+set --export --global PYENV_ROOT $HOME/.pyenv
+fish_add_path $PYENV_ROOT/bin
