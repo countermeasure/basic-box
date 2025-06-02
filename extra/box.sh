@@ -876,7 +876,8 @@ ${custom_keybindings_key_path}/custom3/"
 'disable-workspace-switcher@jbradaric.me', \
 'system-monitor@paradoxxx.zero.gmail.com', \
 'ubuntu-appindicators@ubuntu.com', \
-'paperwm@paperwm.github.com']"
+'paperwm@paperwm.github.com', \
+'space-bar@luchrioh']"
   bluetooth_quick_connect_schemadir="/usr/share/gnome-shell/extensions/\
 bluetooth-quick-connect@bjarosze.gmail.com/schemas"
   _test_gsettings_with_schemadir \

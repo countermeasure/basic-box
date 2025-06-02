@@ -54,6 +54,7 @@ The **Basic Box** installer creates a Debian 12 system with:
   - NoAnnoyance v2
   - PaperWM
   - Quick Close in Overview
+  - Space Bar
   - system-monitor
   - Ubuntu AppIndicator
 

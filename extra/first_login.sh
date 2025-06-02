@@ -39,6 +39,26 @@ gsettings --schemadir "${paperwm_schemadir}" set \
 gsettings --schemadir "${paperwm_schemadir}" set \
   org.gnome.shell.extensions.paperwm vertical-margin-bottom 20
 
+# Enable and configure Space Bar GNOME extension.
+gnome-extensions enable space-bar@luchrioh
+spacebar_appearance_setting='org.gnome.shell.extensions.space-bar.appearance'
+spacebar_behaviour_setting='org.gnome.shell.extensions.space-bar.behavior'
+spacebar_shortcuts_setting='org.gnome.shell.extensions.space-bar.shortcuts'
+spacebar_schemadir="${extensions_dir}/space-bar@luchrioh/schemas"
+gsettings --schemadir "${spacebar_schemadir}" set \
+  ${spacebar_behaviour_setting} always-show-numbers true
+gsettings --schemadir "${spacebar_schemadir}" set \
+  ${spacebar_behaviour_setting} position-index 2
+gsettings --schemadir "${spacebar_schemadir}" set \
+  ${spacebar_behaviour_setting} toggle-overview false
+gsettings --schemadir "${spacebar_schemadir}" set \
+  ${spacebar_appearance_setting} \
+  active-workspace-background-color 'rgb(255,79,0)'
+gsettings --schemadir "${spacebar_schemadir}" set \
+  ${spacebar_appearance_setting} active-workspace-text-color 'rgb(36,31,49)'
+gsettings --schemadir "${spacebar_schemadir}" set \
+  ${spacebar_shortcuts_setting} enable-activate-workspace-shortcuts false
+
 # Print a welcome.
 echo
 echo 'Welcome to your new Basic Box'
