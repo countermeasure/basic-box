@@ -16,7 +16,6 @@ ${sudo}\
 ${line_break}\
 ${jobs}\
 ${battery}\
-${shell}\
 ${character}\
 ]\
 (bold bright-black)\
@@ -59,12 +58,6 @@ diverged = "⇡${ahead_count}⇣${behind_count}"
 [python]
 format = "via [${symbol}(${version})](${style}) "
 version_format = "v${major}.${minor}"
-
-[shell]
-bash_indicator = "bash "
-disabled = false
-fish_indicator = ""
-format = "[${indicator}](bold red)"
 
 [status]
 disabled = false

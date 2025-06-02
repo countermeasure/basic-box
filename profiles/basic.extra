@@ -11,9 +11,6 @@ extra/git_wrapper.sh
 extra/setup.rst
 
 extra/dotfiles/config.fish
-extra/dotfiles/dot_bash_aliases
-extra/dotfiles/dot_bash_functions
-extra/dotfiles/dot_bashrc_modifications
 extra/dotfiles/dot_profile_modifications
 extra/dotfiles/firefox_policies.json
 extra/dotfiles/fish.theme
@@ -74,7 +71,6 @@ extra/packages/delta.tar.gz
 extra/packages/delta_source.tar.gz
 extra/packages/fira_code.ttf
 extra/packages/geckodriver.tar.gz
-extra/packages/httpie-completion.bash
 extra/packages/httpie-completion.fish
 extra/packages/keyd_source.tar.gz
 extra/packages/nvim.appimage

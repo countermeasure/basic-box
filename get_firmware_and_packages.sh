@@ -68,9 +68,6 @@ link 'starship/starship-x86_64-unknown-linux-gnu.tar.gz' 'starship.tar.gz'
 # Ensure the HTTPie completion files are present.
 httpie_version=$(get_version httpie)
 wget_to_directory 'httpie' "https://github.com/httpie/httpie/raw/\
-${httpie_version}/extras/httpie-completion.bash"
-link 'httpie/httpie-completion.bash' 'httpie-completion.bash'
-wget_to_directory 'httpie' "https://github.com/httpie/httpie/raw/\
 ${httpie_version}/extras/httpie-completion.fish"
 link 'httpie/httpie-completion.fish' 'httpie-completion.fish'
 

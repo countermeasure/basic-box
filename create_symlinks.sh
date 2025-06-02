@@ -23,9 +23,6 @@ link check_vpn.sh "${HOME}"/.local/bin/check_vpn
 link git_wrapper.sh "${HOME}"/.local/bin/git_wrapper
 link setup.rst "${HOME}"/setup.rst
 link dotfiles/config.fish "${HOME}"/.config/fish/config.fish
-link dotfiles/dot_bash_aliases "${HOME}"/.bash_aliases
-link dotfiles/dot_bash_functions "${HOME}"/.bash_functions
-link dotfiles/dot_bashrc_modifications "${HOME}"/.bashrc_modifications
 link dotfiles/dot_profile_modifications "${HOME}"/.profile_modifications
 link \
   dotfiles/firefox_policies.json \

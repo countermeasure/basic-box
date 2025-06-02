@@ -88,7 +88,7 @@ _test_gsettings_with_schemadir() {
 }
 
 _test_line_in_file() {
-  if grep --quiet "$1" "$2"; then
+  if grep --fixed-strings --quiet "$1" "$2"; then
     echo -e "${ansi_green}🗸 ${ansi_clear}${2} contains '${1}'"
   else
     echo -e "${ansi_red}✗ ${ansi_clear}${2} does not contain '${1}'"
@@ -598,12 +598,14 @@ test() {
   _test_package_is_installed python3-pip
   fish_completions_dir=${fish_config_dir}/completions
   _test_file_exists "${fish_completions_dir}"/pipx.fish
-  _test_file_exists "${user_dir}"/.bash_aliases
-  _test_file_exists "${user_dir}"/.bash_functions
-  _test_file_exists "${user_dir}"/.bashrc_modifications
-  _test_line_in_file '# Enable .bashrc modifications.' "${user_dir}"/.bashrc
+  _test_line_in_file \
+    '# If the parent process is not fish, launch the fish shell.' \
+    "${user_dir}"/.bashrc
   # shellcheck disable=2016
-  _test_line_in_file '. "${HOME}/.bashrc_modifications"' "${user_dir}"/.bashrc
+  _test_line_in_file \
+    "if [[ \$(ps --no-header --pid=\${PPID} --format=comm) != 'fish' ]]; then" \
+    "${user_dir}"/.bashrc
+  _test_line_in_file 'exec fish' "${user_dir}"/.bashrc
   _test_file_exists "${user_dir}"/.profile_modifications
   _test_line_in_file '# Enable .profile modifications.' "${user_dir}"/.profile
   # shellcheck disable=2016
@@ -611,7 +613,6 @@ test() {
     '. "${HOME}/.profile_modifications"' "${user_dir}"/.profile
   _test_python_package_is_installed yt-dlp
   _test_man_page_exists yt-dlp
-  _test_file_exists /usr/share/bash-completion/completions/yt-dlp
   _test_file_exists "${fish_completions_dir}"/yt-dlp.fish
   _test_package_is_installed ffmpeg
   _test_package_is_installed ranger
@@ -642,7 +643,6 @@ test() {
   _test_gsettings gnome.Terminal.Legacy.Settings menu-accelerator-enabled false
   _test_package_is_installed ncdu
   _test_executable_exists /usr/local/bin/delta
-  _test_file_exists /usr/share/bash-completion/completions/delta.bash
   _test_file_exists "${fish_completions_dir}"/delta.fish
   _test_package_is_installed git
   _test_git_config user.name Basic
@@ -677,13 +677,9 @@ test() {
   _test_gsettings \
     gnome.desktop.interface monospace-font-name "'FiraCode Nerd Font 11'"
   _test_executable_exists /usr/local/bin/starship
-  _test_file_exists /usr/share/bash-completion/completions/starship.bash
   _test_file_exists "${fish_completions_dir}"/starship.fish
   _test_file_exists "${user_config_dir}"/starship.toml
   _test_python_package_is_installed httpie
-  bash_completions_dir=${user_dir}/.local/share/bash-completion/completions
-  _test_file_exists "${bash_completions_dir}"/http.bash
-  _test_symlink_exists "${bash_completions_dir}"/https.bash
   _test_file_exists "${fish_completions_dir}"/http.fish
   _test_file_exists "${fish_completions_dir}"/https.fish
   _test_line_in_file 'complete -c https' "${fish_completions_dir}"/https.fish
@@ -696,7 +692,6 @@ test() {
   _test_package_is_installed mtr-tiny
   _test_package_is_installed tree
   _test_python_package_is_installed tldr
-  _test_file_exists "${bash_completions_dir}"/tldr.bash
   _test_package_is_installed offlineimap
   _test_file_exists "${user_config_dir}"/git/ignore
   _test_python_package_is_installed trash-cli

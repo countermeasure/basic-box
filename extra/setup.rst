@@ -15,16 +15,6 @@ You should change the password of your user with::
     $ passwd
 
 
-Bash
-----
-
-You can place any Bash aliases or functions you have into files with names
-which start with ``.bashrc_`` and save those files into the ``$HOME``
-directory.
-
-Files which start with ``.bashrc_`` in ``$HOME`` are sourced by Bash.
-
-
 Git
 ---
 
