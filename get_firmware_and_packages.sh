@@ -83,8 +83,8 @@ link "trash_cli/${trash_cli_version}.tar.gz" 'trash_cli_source.tar.gz'
 # Ensure the Neovim package is present.
 neovim_version=$(get_version neovim)
 wget_to_directory 'neovim' "https://github.com/neovim/neovim/releases/\
-download/v${neovim_version}/nvim.appimage"
-link 'neovim/nvim.appimage' 'nvim.appimage'
+download/v${neovim_version}/nvim-linux-x86_64.appimage"
+link 'neovim/nvim-linux-x86_64.appimage' 'nvim.appimage'
 wget_to_directory 'neovim' "https://github.com/neovim/neovim/archive/refs/\
 tags/v${neovim_version}.tar.gz"
 link "neovim/v${neovim_version}.tar.gz" 'nvim_source.tar.gz'
