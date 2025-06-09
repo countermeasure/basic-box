@@ -44,6 +44,7 @@ The **Basic Box** installer creates a Debian 12 system with:
   - Enable natural scrolling for mouse
   - Speed up trackpad and enable trackpad tap-to-click
   - Enable 9 permanent workspaces
+  - Set cursor to blink indefinitely
 
 - these GNOME extensions installed, enabled and configured:
 

@@ -947,6 +947,7 @@ bluetooth-quick-connect@bjarosze.gmail.com/schemas"
   _test_gsettings ${keybindings_setting} switch-to-application-7 '@as []'
   _test_gsettings ${keybindings_setting} switch-to-application-8 '@as []'
   _test_gsettings ${keybindings_setting} switch-to-application-9 '@as []'
+  _test_gsettings gnome.desktop.interface cursor-blink-timeout 86400
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
   _test_command_output 'mullvad auto-connect get' 'Autoconnect: on'
