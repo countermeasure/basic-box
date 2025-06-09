@@ -908,6 +908,9 @@ space-bar@luchrioh"
 create_directory_as_ordinary_user "${spacebar_dir}"
 run_as_ordinary_user "unzip ${installer_dir}/spacebar.zip -d ${spacebar_dir}"
 
+# Make the terminal cursor blink indefinitely.
+gsettings_set 'gnome.desktop.interface cursor-blink-timeout 86400'
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
