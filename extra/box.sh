@@ -9,6 +9,12 @@ readonly ansi_clear='\033[0m'
 readonly ansi_green='\033[1;32m'
 readonly ansi_red='\033[1;31m'
 
+_notify() {
+  notify-send "Box" "$1" \
+    --icon \
+    /usr/share/icons/Adwaita/scalable/legacy/utilities-terminal-symbolic.svg
+}
+
 _off() {
   echo 'Powering off...'
   sleep 1
@@ -183,6 +189,7 @@ _wipe() {
 audit() {
   echo 'Auditing the system with Lynis...'
   sudo lynis audit system
+  _notify 'Audit is complete.'
 }
 
 battery() {
@@ -513,6 +520,7 @@ scan() {
       scan_catchall "${1-}"
       ;;
   esac
+  _notify 'Scan is complete.'
 }
 
 scan_catchall() {
@@ -964,6 +972,7 @@ Block social media: false"
     'mullvad lockdown-mode get' \
     'Block traffic when the VPN is disconnected: on'
   _test_systemd_user_service_is_active check_vpn.service
+  _notify 'Test is complete.'
 }
 
 upgrade() {
@@ -983,6 +992,8 @@ upgrade() {
   echo
   fwupdmgr --force refresh
   fwupdmgr upgrade
+  _notify 'Packages upgrade is complete.'
+
 }
 
 wifi() {
