@@ -121,6 +121,8 @@ function gr --wraps "git rebase" --description 'alias gr=git_wrapper rebase'
 end
 alias gra='git_wrapper rebase_abort'
 alias grc='git_wrapper rebase_continue'
+# This next line should turn into a git_wrapper function.
+alias gref='git reflog --date=relative'
 # alias gri='git_wrapper rebase_interactive'
 function gri --wraps "git rebase" \
     --description 'alias gri=git_wrapper rebase_interactive'
@@ -174,6 +176,7 @@ alias l='exa --colour-scale --group-directories-first --long'
 alias la='exa --all --colour-scale --group-directories-first --long'
 alias less='less --HILITE-UNREAD --ignore-case --LONG-PROMPT --QUIET'
 alias ln='ln --interactive --verbose'
+alias log='sudo journalctl -f | bat --language log --paging never --plain'
 alias ls='prefer l ls'
 alias lsblk='lsblk --output name,size,type,tran,mountpoint,path'
 

@@ -264,7 +264,18 @@ end
 #
 ###############################################################################
 function yt
-    yt-dlp "$argv[1]"
+    yt-dlp "$argv"
+end
+
+function cdl
+    if test -z $argv[1]
+        cd
+    else
+        cd "$argv"
+    end
+    echo
+    # TODO: Maybe add a + zzz more to the end of the tail
+    la --color=always | tail --lines 10
 end
 
 function cd

@@ -23,3 +23,9 @@ eval "$(pyenv init -)"
 # access is set to be blocked when disconnected from the VPN. This is to guard
 # against switched lockdown mode off and forgetting to switch it back on.
 mullvad lockdown-mode set on &>/dev/null || true
+
+# Ensure that the microphone is off when the system boots.
+amixer set Capture nocap
+
+# Ensure that the speaker is muted when the system boots.
+amixer set Master mute

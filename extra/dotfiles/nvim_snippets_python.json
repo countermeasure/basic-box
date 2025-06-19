@@ -24,19 +24,21 @@
       "",
       "#########################################################",
       "",
-      "# Temporarily add the icecream debugger.",
+      "# Temporarily add the IceCream debugger.",
       "# https://github.com/gruns/icecream/blob/master/README.md",
       "",
       "from icecream import ic",
       "",
       "ic.configureOutput(includeContext=True)",
       "",
+      "# TODO: Remove the IceCream debugger and all ic() calls.",
+      "",
       "#########################################################",
       "",
       "ic($1)",
       ""
     ],
-    "description": "TODO: Code snippet for icecream"
+    "description": "TODO: Code snippet for IceCream"
   },
   "pysnooper": {
     "prefix": "pysnooper",
