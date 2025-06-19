@@ -55,3 +55,64 @@ set --export --global DIRENV_LOG_FORMAT
 pyenv init - fish | source
 set --export --global PYENV_ROOT $HOME/.pyenv
 fish_add_path $PYENV_ROOT/bin
+
+# Handle commands which exit with a non-zero exit code.
+function handle_non_zero_exit_code --on-event fish_postexec
+    # Cache the exit code of the command that was just run, because the $status
+    # variable is updated with every command that runs in this function.
+    set exit_code $status
+
+    # Do nothing and return if the exit code is zero.
+    if test $exit_code -eq 0
+        return 0
+    end
+
+    # If what was entered was not a recognised command, see if zoxide can
+    # resolve it to a directory. A 127 exit code means the command was not
+    # found.
+    if test $exit_code -eq 127
+        # TODO: Work out how to stop all output from z, even when there's a
+        # failure to find a directory to move to.
+        set stripped_command (string trim $argv[1])
+        __zoxide_z $stripped_command
+        set exit_code $status
+        # $status is now the exit code of the __zoxide_z command.
+        # If zoxide doesn't find a match, its exit code is 1, but we want the
+        # exit code to be 127, because what that actually means is that the
+        # command wasn't found.
+        if test $exit_code -eq 1
+            set exit_code 127
+        end
+    end
+
+    # If the exit code is still non-zero at this point in the function, show a
+    # message describing it and ring the bell.
+    if test $exit_code -ne 0
+        echo
+
+        # Show a message describing the error.
+        set_color --bold red
+        set icon '💥'
+        switch $exit_code
+            case 127
+                echo "$icon \"$argv\" not found as a command or directory"
+            case 130
+                echo "$icon Command interrupted"
+            case "*"
+                echo "$icon Error code $exit_code"
+        end
+        set_color normal
+
+        # Ring the bell five times in quick succession. For a visual bell, this
+        # will flash the window.
+        for i in (seq 1 5)
+            sleep 0.1
+            tput bel
+        end
+    end
+end
+
+# Stop the default message when a command is not found being displayed by
+# making this a noop.
+function fish_command_not_found
+end

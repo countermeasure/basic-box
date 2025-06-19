@@ -22,6 +22,7 @@ ${character}\
 """
 
 [character]
+error_symbol = "❯"
 success_symbol = "❯"
 
 [cmd_duration]
@@ -58,11 +59,6 @@ diverged = "⇡${ahead_count}⇣${behind_count}"
 [python]
 format = "via [${symbol}(${version})](${style}) "
 version_format = "v${major}.${minor}"
-
-[status]
-disabled = false
-format = "[${symbol} Exit code ${status}](${style})\n"
-symbol = "💥"
 
 [sudo]
 disabled = false
