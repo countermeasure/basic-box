@@ -123,6 +123,29 @@ function set_command_start_time --on-event fish_preexec
     set --global time_command_started (date +%s)
 end
 
+# TODO: Update this comment.
+function show_time_command_started --on-event fish_preexec
+    set command_lines_count (echo $argv | wc -l)
+    if test $command_lines_count -gt 1
+        set lines_cursor_has_moved $command_lines_count
+    else
+        set prompt_characters_count 10
+        set command_characters_count (string length $argv)
+        set all_characters_count \
+            (math $prompt_characters_count + 1 + $command_characters_count)
+        set lines_cursor_has_moved \
+            (math -s0 "(1 + (($all_characters_count - 1) / $COLUMNS))")
+    end
+
+    tput sc
+    tput cuu $lines_cursor_has_moved
+    tput cuf 3
+    set_color --bold brblack
+    echo (date +%H:%M)
+    set_color normal
+    tput rc
+end
+
 # TODO: Heading
 function show_command_duration --on-event fish_postexec
     # Work out how long the command took, and do nothing if it was less than
