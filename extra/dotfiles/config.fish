@@ -189,3 +189,31 @@ function show_command_duration --on-event fish_postexec
     end
     set_color normal
 end
+
+# Update the prompt once a command is run to show what time it started.
+function show_time_command_started --on-event fish_preexec
+    # Work out how many lines the cursor has moved below the prompt.
+    set command_lines_count (echo $argv | wc -l)
+    if test $command_lines_count -gt 1
+        set lines_cursor_has_moved $command_lines_count
+    else
+        set prompt_characters_count 10
+        set command_characters_count (string length $argv)
+        set all_characters_count \
+            (math $prompt_characters_count + 1 + $command_characters_count)
+        set lines_cursor_has_moved \
+            (math -s0 "(1 + (($all_characters_count - 1) / $COLUMNS))")
+    end
+    # Save the cursor position.
+    tput sc
+    # Move the cursor up to the line the prompt is on if it has moved down.
+    tput cuu $lines_cursor_has_moved
+    # Move the cursor along the line to the start of the time placeholder.
+    tput cuf 3
+    # Replace the time placeholder with the current time.
+    set_color --bold brblack
+    echo (date +%H:%M)
+    set_color normal
+    # Restore the cursor position.
+    tput rc
+end

@@ -13,8 +13,9 @@ ${python}\
 ${custom.direnv}\
 ${sudo}\
 ${line_break}\
-${jobs}\
+${custom.time_placeholder}\
 ${battery}\
+${jobs}\
 ${character}\
 ]\
 (bold bright-black)\
@@ -27,6 +28,11 @@ success_symbol = "❯"
 [custom.direnv]
 format = "[\\(direnv\\)](yellow bold) "
 when = "env | grep '^DIRENV_FILE='"
+
+[custom.time_placeholder]
+command = "echo At --:--"
+style = "bold bright-black"
+when = true
 
 [directory]
 format = "In 📂 [${path}](${style})[${read_only}](${read_only_style}) "
