@@ -1,7 +1,6 @@
 command_timeout = 2000
 format = """
 [\
-(${cmd_duration}\n)\
 ${fill}\
 ${line_break}\
 ${directory}\
@@ -24,10 +23,6 @@ ${character}\
 [character]
 error_symbol = "❯"
 success_symbol = "❯"
-
-[cmd_duration]
-format = "[⚡ That took ${duration}](${style})\n"
-show_notifications = true
 
 [custom.direnv]
 format = "[\\(direnv\\)](yellow bold) "

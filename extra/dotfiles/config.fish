@@ -114,3 +114,78 @@ end
 # making this a noop.
 function fish_command_not_found
 end
+
+# Make the time a command starts available to the functions which run on the
+# fish_postexec event in seconds since the Epoch.
+function set_command_start_time --on-event fish_preexec
+    set --global time_command_started (date +%s)
+end
+
+# Show how long a command took, both in the terminal and as a notification.
+function show_command_duration --on-event fish_postexec
+    # Work out how long the command took.
+    set time_command_ended (date +%s)
+    set duration_in_seconds (math $time_command_ended - $time_command_started)
+
+    # Do nothing if the command took less than five seconds.
+    if test $duration_in_seconds -lt 5
+        return 0
+    end
+
+    # Get the name of the command.
+    # First, if there are multiple statements, get the first one.
+    set first_statement (string split ';' $argv)[1]
+    # Then, get the command from the first statement, including sudo if sudo is
+    # present.
+    set command (string split ' ' $first_statement)[1]
+    if test $command = sudo
+        set command_with_sudo (string split ' ' $first_statement)[1..2]
+        set command (string join ' ' $command_with_sudo)
+    end
+
+    # Do nothing for commands for which the duration is of no interest.
+    set commands_to_ignore f ranger
+    set command_without_sudo (string replace --regex "^sudo " "" $command)
+    if contains $command_without_sudo $commands_to_ignore
+        return 0
+    end
+
+    # Create a message about how long the command took.
+    set seconds (math $duration_in_seconds % 60)
+    set minutes (math \(floor \($duration_in_seconds / 60\)\) % 60)
+    set hours (math -s0 $duration_in_seconds / 3600)
+    echo
+    if test $duration_in_seconds -lt 60
+        set duration "$duration_in_seconds"s
+    else if test $duration_in_seconds -lt 600
+        set duration "$minutes"m "$seconds"s
+    else if test $duration_in_seconds -lt 3600
+        set duration "$minutes"m
+    else
+        set duration "$hours"h "$minutes"m
+    end
+    set duration_message "The \"$command\" command ran for $duration"
+
+    # Print a message about how long the command took. If it took longer than
+    # one minute, the message will include the command's start time, and a
+    # notification matching the message will also be displayed.
+    set_color --bold brblack
+    if test $duration_in_seconds -lt 60
+        echo "⌛ $duration_message"
+    else
+        set start_time (date -d @$time_command_started +%H:%M)
+        set end_time (date -d @$time_command_ended +%H:%M)
+        set verbose_duration_message \
+            "$duration_message, from $start_time to $end_time"
+        echo "⌛ $verbose_duration_message"
+        set commands_to_not_notify_about box
+        if not contains $command_without_sudo $commands_to_not_notify_about
+            set icon_path /usr/share/icons/Adwaita/scalable
+            notify-send \
+                'Command completed' \
+                "$verbose_duration_message." \
+                --icon $icon_path/legacy/utilities-terminal-symbolic.svg
+        end
+    end
+    set_color normal
+end
