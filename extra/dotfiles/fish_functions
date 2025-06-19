@@ -2,6 +2,56 @@
 
 ###############################################################################
 #
+#  Override the cd builtin to show a message when the directory is changed.
+#
+###############################################################################
+function cd
+    switch (count $argv)
+        case 0
+            builtin cd
+            set exit_code $status
+        case 1
+            builtin cd $argv
+            set exit_code $status
+        case '*'
+            echo 'Too many arguments for cd command'
+            set exit_code 1
+    end
+    if test $exit_code -ne 0
+        return $exit_code
+    end
+    printf "Moved to "
+    set_color --bold green
+    echo "📂 $(get_trimmed_pwd)"
+    set_color normal
+end
+
+###############################################################################
+#
+#  Get the trimmed current working directory.
+#
+###############################################################################
+function get_trimmed_pwd
+    set condensed_pwd (pwd | sed "s|^$HOME|~|")
+    set separators_in_condensed_pwd \
+        (string match --all --regex '/' $condensed_pwd)
+    set number_of_non_home_directories (count $separators_in_condensed_pwd)
+    set number_of_directories_to_show 2
+    if test $number_of_non_home_directories -gt $number_of_directories_to_show
+        set directories_to_show (
+            echo $condensed_pwd \
+                | rev \
+                | cut -d / -f -$number_of_directories_to_show \
+                | rev
+        )
+        echo …/$directories_to_show
+    else
+        echo $condensed_pwd
+    end
+end
+
+###############################################################################
+#
 #  Change to a parent directory.
 #
 #  Arguments:
@@ -104,25 +154,9 @@ end
 
 ###############################################################################
 #
-#  Set the window title to the truncated current working directory.
+#  Set the window title to the trimmed current working directory.
 #
 ###############################################################################
 function set_window_title
-    set condensed_pwd (pwd | sed "s|^$HOME|~|")
-    set separators_in_condensed_pwd \
-        (string match --all --regex '/' $condensed_pwd)
-    set non_home_directory_count (count $separators_in_condensed_pwd)
-    set non_home_directories_to_show 2
-    if test $non_home_directory_count -gt $non_home_directories_to_show
-        set base_title (
-            echo $condensed_pwd \
-                | rev \
-                | cut -d / -f -$non_home_directories_to_show \
-                | rev
-        )
-        set window_title …/$base_title
-    else
-        set window_title $condensed_pwd
-    end
-    echo "📂  $window_title"
+    echo "📂  $(get_trimmed_pwd)"
 end
