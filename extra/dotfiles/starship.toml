@@ -26,8 +26,7 @@ error_symbol = "❯"
 success_symbol = "❯"
 
 [cmd_duration]
-format = "[⚡ That took ${duration}](${style})\n"
-show_notifications = true
+disabled = true
 
 [custom.direnv]
 format = "[\\(direnv\\)](yellow bold) "
