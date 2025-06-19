@@ -16,22 +16,27 @@ ${sudo}\
 ${line_break}\
 ${jobs}\
 ${battery}\
-${shell}\
+${custom.time_placeholder}\
 ${character}\
 ]\
 (bold bright-black)\
 """
 
 [character]
+error_symbol = "❯"
 success_symbol = "❯"
 
 [cmd_duration]
-format = "[⚡ That took ${duration}](${style})\n"
-show_notifications = true
+disabled = true
 
 [custom.direnv]
 format = "[\\(direnv\\)](yellow bold) "
 when = "env | grep '^DIRENV_FILE='"
+
+[custom.time_placeholder]
+command = "echo At --:--"
+style = "bold bright-black"
+when = true
 
 [directory]
 format = "In 📂 [${path}](${style})[${read_only}](${read_only_style}) "
@@ -59,17 +64,6 @@ diverged = "⇡${ahead_count}⇣${behind_count}"
 [python]
 format = "via [${symbol}(${version})](${style}) "
 version_format = "v${major}.${minor}"
-
-[shell]
-bash_indicator = "bash "
-disabled = false
-fish_indicator = ""
-format = "[${indicator}](bold red)"
-
-# [status]
-# disabled = false
-# format = "[${symbol} Exit code ${status}](${style})\n"
-# symbol = "💥"
 
 [sudo]
 disabled = false

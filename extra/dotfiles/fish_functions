@@ -124,6 +124,15 @@ end
 #
 ###############################################################################
 function set_window_title
+    echo "📂  $(get_trimmed_pwd)"
+end
+
+###############################################################################
+#
+#  Set the window title to the truncated current working directory.
+#
+###############################################################################
+function get_trimmed_pwd
     set condensed_pwd (pwd | sed "s|^$HOME|~|")
     set separators_in_condensed_pwd \
         (string match --all --regex '/' $condensed_pwd)
@@ -136,11 +145,10 @@ function set_window_title
                 | cut -d / -f -$non_home_directories_to_show \
                 | rev
         )
-        set window_title …/$base_title
+        echo …/$base_title
     else
-        set window_title $condensed_pwd
+        echo $condensed_pwd
     end
-    echo "📂  $window_title"
 end
 
 ###############################################################################
@@ -257,4 +265,20 @@ end
 ###############################################################################
 function yt
     yt-dlp "$argv[1]"
+end
+
+function cd
+    switch (count $argv)
+        case 0
+            builtin cd
+        case 1
+            builtin cd $argv
+        case '*'
+            echo 'Too many args for cd command'
+            return 1
+    end
+    printf "Moved to "
+    set_color --bold green
+    echo "📂 $(get_trimmed_pwd)"
+    set_color normal
 end
