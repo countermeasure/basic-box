@@ -192,6 +192,72 @@ audit() {
   _notify 'Audit is complete'
 }
 
+backup() {
+  config_file="${HOME}/.config/box/backup.json"
+  # TODO: Should the last run file go in config or somewhere else?
+  last_run_file="${HOME}/.config/box/last_run.txt"
+  if [ -f "${config_file}" ]; then
+    config=$(cat "${config_file}")
+  else
+    echo 'The config file for this command is missing.'
+    echo
+    echo "It should be at this path: ${config_file}"
+    echo
+    echo 'And should be in this form:'
+    echo '  {'
+    echo '    "source": "/absolute/path/to/the/director/to/backup",'
+    echo '    "destinations": ['
+    echo '      "/absolute/path/to/one/backup/destination/directory",'
+    echo '      "/absolute/path/to/another/backup/destination/directory"'
+    echo '     ]'
+    echo '  }'
+    return 1
+  fi
+
+  # TODO: Check that the config file is immutable.
+  # TODO: Check that the config file has parsable data.
+
+  source_directory=$(echo "${config}" | jq -r '.source')
+  destination_directories=$(echo "${config}" | jq -r '.destinations[]')
+
+  for destination_directory in $destination_directories; do
+    if [ -d "${destination_directory}" ]; then
+      echo \
+        "This will back up ${source_directory} to ${destination_directory}."
+      echo
+      while true; do
+        read -p "Continue? (y/n) " -r continue
+        if [[ ${continue} == 'y' ]]; then
+          echo
+          rsync \
+            --archive \
+            --delete \
+            --exclude lost+found/ \
+            --info progress2 \
+            "${source_directory}/" \
+            "${destination_directory}"
+          # TODO: What format should the run date be saved in?
+          date >"${last_run_file}"
+          return 0
+        elif [[ ${continue} == 'n' ]]; then
+          echo
+          echo "Nothing done."
+          return 1
+        fi
+      done
+    fi
+  done
+
+  echo "No backup destinations found."
+  echo
+  echo 'Looked for these backup destinations:'
+  echo
+  for destination_directory in $destination_directories; do
+    echo "  * $destination_directory"
+  done
+  return 1
+}
+
 battery() {
   if [[ -n "$1" ]]; then
     case "$1" in
@@ -412,6 +478,7 @@ main_help() {
   echo
   echo '  -h|--help  Show this help.'
   echo '  audit      Audit system with Lynis.'
+  echo '  backup     Back up this machine.'
   echo '  battery    Show battery information and control batteries.'
   echo '  destroy    Destroy all data on this machine.'
   echo '  firewall   Show firewall information.'
@@ -1009,6 +1076,9 @@ case "${1-}" in
     ;;
   audit)
     audit
+    ;;
+  backup)
+    backup
     ;;
   battery)
     battery "${2-}"
