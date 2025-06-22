@@ -192,6 +192,174 @@ audit() {
   _notify 'Audit is complete.'
 }
 
+backup() {
+  backup_config_directory=${HOME}/.box/config/backup
+  backup_data_directory=${HOME}/.box/data/backup
+  media_user_directory="/media/${USER}"
+  device_path=$(fd --type d --max-depth 1 . "${media_user_directory}")
+
+  show_latest_backups() {
+    # Show the latest backup for all backup devices.
+    echo 'Latest backups'
+    echo '--------------'
+    if [[ ! -d ${backup_config_directory} ]]; then
+      echo 'There are no backups.'
+      echo
+      echo 'TODO: Explain what to do to make the first backup.'
+      exit 1
+    fi
+    backup_configs=$(fd --type f --max-depth 1 . "${backup_config_directory}")
+    for backup_config in ${backup_configs}; do
+      device_name=$(basename "${backup_config}")
+      # TODO: Shorten the next line.
+      latest_backup_time=$(cat "${backup_data_directory}/${device_name}/latest")
+      latest_backup_time_in_seconds=$(date -d "${latest_backup_time}" +%s)
+      time_now_in_seconds=$(date +%s)
+      seconds_since_last_backup=$((\
+        time_now_in_seconds - latest_backup_time_in_seconds))
+      if [[ ${seconds_since_last_backup} -lt 60 ]]; then
+        time_of_latest_backup='just now'
+      elif [[ ${seconds_since_last_backup} -lt 3600 ]]; then
+        minutes=$((seconds_since_last_backup / 60))
+        time_of_latest_backup="${minutes}m ago"
+      elif [[ ${seconds_since_last_backup} -lt $((24 * 60 * 60)) ]]; then
+        hours=$((seconds_since_last_backup / (60 * 60)))
+        time_of_latest_backup="${hours}h ago"
+      elif [[ ${seconds_since_last_backup} -lt $((3 * 24 * 60 * 60)) ]]; then
+        hours=$(((seconds_since_last_backup / (60 * 60)) % 24))
+        days=$((seconds_since_last_backup / (60 * 60 * 24)))
+        time_of_latest_backup="${days}d ${hours}h ago"
+      else
+        days=$((seconds_since_last_backup / (60 * 60 * 24)))
+        time_of_latest_backup="${days}d ago"
+      fi
+      echo "${device_name}: ${time_of_latest_backup}"
+    done
+    echo
+  }
+
+  show_latest_backups
+
+  # Handle no backup device being present.
+  if [[ -z "${device_path}" ]]; then
+    echo 'No backup device was found.'
+    return 0
+  fi
+
+  # Print the backup device which was found.
+  echo 'Current device'
+  echo '--------------'
+  device_name=$(basename "${device_path}")
+  echo "Backup device \"${device_name}\" was found."
+  echo
+
+  # Make a config file for a new backup device.
+  device_config_file=${backup_config_directory}/${device_name}
+  if [[ ! -f ${device_config_file} ]]; then
+    echo "No matching config file was found at ${device_config_file}."
+    echo
+    while true; do
+      read -p "Would you like to make a config file? (y/n) " -r continue
+      echo
+      case ${continue} in
+        y)
+          default_source_path=${HOME}/Data
+          echo 'Provide the directory which is to be backed up.'
+          echo
+          backup_directory_prompt="Leave blank for ${default_source_path}, or \
+    enter a different directory: "
+          read -p "${backup_directory_prompt}" -r source_path
+          mkdir -p "${backup_config_directory}"
+          if [[ -n "${source_path}" ]]; then
+            echo "${source_path}" >"${device_config_file}"
+          else
+            echo "${default_source_path}" >"${device_config_file}"
+          fi
+          chmod 400 "${device_config_file}"
+          echo
+          echo 'Config file created.'
+          echo
+          break
+          ;;
+        n)
+          echo
+          echo "Nothing done."
+          return 1
+          ;;
+      esac
+    done
+  fi
+
+  # Confirm and then do the backup.
+  source_directory=$(cat "${device_config_file}")
+  destination_directory="${media_user_directory}/${device_name}/backup"
+  while true; do
+    backup_prompt="Backup ${source_directory} to this device? (y/n) "
+    read -p "${backup_prompt}" -r continue
+    case ${continue} in
+      y)
+        echo
+        echo 'Backing up'
+        echo '----------'
+        # Do the backup.
+        rsync \
+          --archive \
+          --delete \
+          --exclude lost+found/ \
+          --info progress2 \
+          "${source_directory}/" \
+          "${destination_directory}"
+        # Write the time of the backup to files in the config directory and on
+        # the backup device.
+        device_data_directory="${backup_data_directory}/${device_name}"
+        mkdir --parents "${device_data_directory}"
+        timestamp=$(date)
+        echo "${timestamp}" >"${device_data_directory}/latest"
+        echo "${timestamp}" >"${destination_directory}/../latest_backup"
+        echo
+        # Show current backup device statuses.
+        show_latest_backups
+        # Print a confirmation and generate a confirmation notification.
+        completion_message="Backup to \"${device_name}\" has finished."
+        echo "${completion_message}"
+        _notify "${completion_message}"
+        echo
+        # Eject the backup device, if required.
+        while true; do
+          read \
+            -p "Would you like to eject \"${device_name}\"? (y/n) " \
+            -r eject_device
+          case ${eject_device} in
+            y)
+              # The path needs to final slash removed to use in the awk
+              # statement.
+              path="${device_path::-1}"
+              luks_device_path=$(
+                lsblk --output mountpoint,path \
+                  | awk --assign path="${path}" '$1 == path { print $2 }'
+              )
+              sudo umount "${device_path}"
+              sudo cryptsetup close "${luks_device_path}"
+              echo
+              echo "The \"${device_name}\" device can be removed."
+              return 0
+              ;;
+            n)
+              echo
+              echo "The \"${device_name}\" device was not ejected."
+              return 0
+              ;;
+          esac
+        done
+        ;;
+      n)
+        echo "No backup was done."
+        return 1
+        ;;
+    esac
+  done
+}
+
 battery() {
   if [[ -n "$1" ]]; then
     case "$1" in
@@ -412,6 +580,7 @@ main_help() {
   echo
   echo '  -h|--help  Show this help.'
   echo '  audit      Audit system with Lynis.'
+  echo '  backup     Show backup information and backup this machine.'
   echo '  battery    Show battery information and control batteries.'
   echo '  destroy    Destroy all data on this machine.'
   echo '  firewall   Show firewall information.'
@@ -1011,6 +1180,9 @@ case "${1-}" in
     ;;
   audit)
     audit
+    ;;
+  backup)
+    backup
     ;;
   battery)
     battery "${2-}"
