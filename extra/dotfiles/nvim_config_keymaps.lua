@@ -26,3 +26,33 @@ vim.keymap.del("n", "<leader>fT")
 vim.keymap.set("n", "<leader>FT", function()
   Util.float_term()
 end, { desc = "Terminal (cwd)" })
+
+-- Move the current line to the bottom of the buffer.
+vim.keymap.set("n", "mb", function()
+  local view = vim.fn.winsaveview()
+  vim.cmd("normal ddGp")
+  vim.fn.winrestview(view)
+end, { desc = "Move line to start of buffer" })
+
+-- Move the current selection to the bottom of the buffer.
+vim.keymap.set("v", "mb", function()
+  local view = vim.fn.winsaveview()
+  vim.cmd("normal dGp")
+  vim.fn.winrestview(view)
+end, { desc = "Move line to start of buffer" })
+
+-- Move the current line to the top of the buffer.
+vim.keymap.set("n", "mt", function()
+  local view = vim.fn.winsaveview()
+  vim.cmd("normal ddggP")
+  vim.fn.winrestview(view)
+  vim.cmd("normal j")
+end, { desc = "Move line to start of buffer" })
+
+-- Move the current selection to the top of the buffer.
+vim.keymap.set("v", "mt", function()
+  local view = vim.fn.winsaveview()
+  vim.cmd("normal dggP")
+  vim.fn.winrestview(view)
+  vim.cmd("normal j")
+end, { desc = "Move line to start of buffer" })
