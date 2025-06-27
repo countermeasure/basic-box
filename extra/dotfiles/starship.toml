@@ -48,6 +48,7 @@ symbol = "─"
 
 [git_branch]
 symbol = "🌱 "
+truncation_length = 24
 
 [git_commit]
 only_detached = false
