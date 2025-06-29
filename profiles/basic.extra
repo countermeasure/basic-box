@@ -1,5 +1,7 @@
 versions.json
 
+build/build.txt
+
 extra/box.sh
 extra/check_vpn.service
 extra/check_vpn.sh
