@@ -348,6 +348,10 @@ battery_help() {
   echo '  reset      Reset charge thresholds to usual values.'
 }
 
+build() {
+  cat "${HOME}/.config/box/build.txt"
+}
+
 destroy() {
   _wipe
   echo
@@ -480,6 +484,7 @@ main_help() {
   echo '  audit      Audit system with Lynis.'
   echo '  backup     Back up this machine.'
   echo '  battery    Show battery information and control batteries.'
+  echo '  build      Show build information for this machine.'
   echo '  destroy    Destroy all data on this machine.'
   echo '  firewall   Show firewall information.'
   echo '  ip         Show public IP address.'
@@ -1082,6 +1087,9 @@ case "${1-}" in
     ;;
   battery)
     battery "${2-}"
+    ;;
+  build)
+    build
     ;;
   destroy)
     destroy
