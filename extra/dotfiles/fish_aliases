@@ -87,12 +87,13 @@ alias gdu='git_wrapper diff_unstaged'
 function gf --wraps "git fetch" --description 'alias gf=git_wrapper fetch'
     git_wrapper fetch $argv
 end
-# alias gk='gitk &'
+# alias gk='gitk &; disown'
 # This can't be declared as an alias in fish, because doing this will
 # automatically add $argv after the &, and even though the function will run, a
 # warning message will be printed.
-function gk --description 'alias gk=gitk &'
+function gk --description 'alias gk=gitk &; disown'
     gitk &
+    disown
 end
 alias gl='git_wrapper log'
 alias glg='git_wrapper log_graph'
@@ -158,9 +159,10 @@ function gus --wraps "git restore" \
     git_wrapper unstage $argv
 end
 
-# alias j='jupyter-lab &>/dev/null &'
-function j --description 'alias j=jupyter-lab &>/dev/null &'
+# alias j='jupyter-lab &>/dev/null &; disown'
+function j --description 'alias j=jupyter-lab &>/dev/null &; disown'
     jupyter-lab &>/dev/null &
+    disown
 end
 
 # "l" for "list".
