@@ -450,6 +450,10 @@ battery_help() {
   echo '  reset      Reset charge thresholds to usual values.'
 }
 
+build() {
+  cat "${HOME}/.box/build.txt"
+}
+
 destroy() {
   _wipe
   echo
@@ -582,6 +586,7 @@ main_help() {
   echo '  audit      Audit system with Lynis.'
   echo '  backup     Show backup information and backup this machine.'
   echo '  battery    Show battery information and control batteries.'
+  echo '  build      Show build information for this machine.'
   echo '  destroy    Destroy all data on this machine.'
   echo '  firewall   Show firewall information.'
   echo '  ip         Show public IP address.'
@@ -1126,6 +1131,7 @@ bluetooth-quick-connect@bjarosze.gmail.com/schemas"
   _test_gsettings ${keybindings_setting} switch-to-application-9 '@as []'
   _test_gsettings gnome.desktop.interface cursor-blink-timeout 86400
   _test_package_is_installed rsync
+  _test_file_exists "${user_dir}"/.box/build.txt
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
   _test_command_output 'mullvad auto-connect get' 'Autoconnect: on'
@@ -1186,6 +1192,9 @@ case "${1-}" in
     ;;
   battery)
     battery "${2-}"
+    ;;
+  build)
+    build
     ;;
   destroy)
     destroy
