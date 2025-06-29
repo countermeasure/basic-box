@@ -26,6 +26,16 @@ check:
 
 image:
 	@./get_firmware_and_packages.sh
+	# Make a file with build information about the installer.
+	# TODO: Condense this two liners into one liners.
+	@mkdir --parents build
+	@rm --force build/build.txt
+	@printf "Date:   " > build/build.txt
+	@date +"%d %b %Y" >> build/build.txt
+	@printf "Commit: " >> build/build.txt
+	@git rev-parse --short HEAD >> build/build.txt
+	@printf "Branch: " >> build/build.txt
+	@git rev-parse --abbrev-ref HEAD >> build/build.txt
 	@build-simple-cdd --conf basic.conf --verbose
 	# Add firmware to the installer image which has just been built. There
 	# doesn't seem to be a good way to do this with simple-cdd directly.
