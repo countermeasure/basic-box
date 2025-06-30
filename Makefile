@@ -1,3 +1,9 @@
+branch != git rev-parse --abbrev-ref HEAD
+
+commit != git rev-parse --short HEAD
+
+date != date +"%d %b %Y"
+
 target_device != lsblk --output tran,path | awk '$$1 == "usb" { print $$2 }'
 
 target_device_description != \
@@ -26,16 +32,13 @@ check:
 
 image:
 	@./get_firmware_and_packages.sh
-	# Make a file with build information about the installer.
-	# TODO: Condense this two liners into one liners.
+	@# Make a file with build information about the installer.
+	# TODO: Condense this into a heredoc, and make it json.
 	@mkdir --parents build
-	@rm --force build/build.txt
-	@printf "Date:   " > build/build.txt
-	@date +"%d %b %Y" >> build/build.txt
-	@printf "Commit: " >> build/build.txt
-	@git rev-parse --short HEAD >> build/build.txt
-	@printf "Branch: " >> build/build.txt
-	@git rev-parse --abbrev-ref HEAD >> build/build.txt
+	@echo "Date:   $(date)" > build/build.txt
+	@echo "Commit: $(commit)" >> build/build.txt
+	@echo "Branch: $(branch)" >> build/build.txt
+ 	@# Build the image.
 	@build-simple-cdd --conf basic.conf --verbose
 	# Add firmware to the installer image which has just been built. There
 	# doesn't seem to be a good way to do this with simple-cdd directly.
