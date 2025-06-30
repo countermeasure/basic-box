@@ -223,7 +223,7 @@ backup() {
   for destination_directory in $destination_directories; do
     if [ -d "${destination_directory}" ]; then
       echo \
-        "This will back up ${source_directory} to ${destination_directory}."
+        "This will backup ${source_directory} to ${destination_directory}."
       echo
       while true; do
         read -p "Continue? (y/n) " -r continue
@@ -238,6 +238,7 @@ backup() {
             "${destination_directory}"
           # TODO: What format should the run date be saved in?
           date >"${last_run_file}"
+          _notify 'Backup is complete'
           return 0
         elif [[ ${continue} == 'n' ]]; then
           echo
@@ -482,7 +483,7 @@ main_help() {
   echo
   echo '  -h|--help  Show this help.'
   echo '  audit      Audit system with Lynis.'
-  echo '  backup     Back up this machine.'
+  echo '  backup     Backup this machine.'
   echo '  battery    Show battery information and control batteries.'
   echo '  build      Show build information for this machine.'
   echo '  destroy    Destroy all data on this machine.'
