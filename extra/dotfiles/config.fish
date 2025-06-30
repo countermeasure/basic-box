@@ -208,7 +208,7 @@ function show_command_duration --on-event fish_postexec
             # stop using the quotes around it.
             notify-send \
                 "\"$command\" command completed" \
-                "The command took $duration, starting at $start_time" \
+                "The command took $duration, starting at $start_time." \
                 --icon \
                 $icon_path/legacy/utilities-terminal-symbolic.svg
         end
