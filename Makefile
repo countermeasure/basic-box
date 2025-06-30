@@ -38,7 +38,7 @@ image:
 	@echo "Date:   $(date)" > build/build.txt
 	@echo "Commit: $(commit)" >> build/build.txt
 	@echo "Branch: $(branch)" >> build/build.txt
- 	@# Build the image.
+	@# Build the image.
 	@build-simple-cdd --conf basic.conf --verbose
 	# Add firmware to the installer image which has just been built. There
 	# doesn't seem to be a good way to do this with simple-cdd directly.
