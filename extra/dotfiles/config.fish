@@ -73,8 +73,10 @@ function handle_non_zero_exit_code --on-event fish_postexec
     if test $exit_code -eq 127
         # TODO: Work out how to stop all output from z, even when there's a
         # failure to find a directory to move to.
-        set stripped_command (string trim $argv[1])
-        __zoxide_z $stripped_command
+        # TODO: Best to split argv, then strip all whitespace from the
+        # resulting list members
+        set stripped_command (string trim $argv)
+        __zoxide_z (string split ' ' $stripped_command)
         set exit_code $status
         # $status is now the exit code of the __zoxide_z command.
         # If zoxide doesn't find a match, its exit code is 1, but we want the
