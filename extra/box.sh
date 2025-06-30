@@ -238,7 +238,11 @@ backup() {
             "${destination_directory}"
           # TODO: What format should the run date be saved in?
           date >"${last_run_file}"
-          _notify 'Backup is complete'
+          echo
+          echo 'Backup is complete.'
+          echo
+          echo "Eject the destination device at ${destination_directory}."
+          _notify 'Backup is complete.'
           return 0
         elif [[ ${continue} == 'n' ]]; then
           echo
