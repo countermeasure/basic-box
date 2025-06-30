@@ -189,7 +189,7 @@ _wipe() {
 audit() {
   echo 'Auditing the system with Lynis...'
   sudo lynis audit system
-  _notify 'Audit is complete'
+  _notify 'Audit is complete.'
 }
 
 backup() {
@@ -593,7 +593,7 @@ scan() {
       scan_catchall "${1-}"
       ;;
   esac
-  _notify 'Scan is complete'
+  _notify 'Scan is complete.'
 }
 
 scan_catchall() {
@@ -1045,7 +1045,7 @@ Block social media: false"
     'mullvad lockdown-mode get' \
     'Block traffic when the VPN is disconnected: on'
   _test_systemd_user_service_is_active check_vpn.service
-  _notify 'Test is complete'
+  _notify 'Test is complete.'
 }
 
 upgrade() {
@@ -1065,7 +1065,7 @@ upgrade() {
   echo
   fwupdmgr --force refresh
   fwupdmgr upgrade
-  _notify 'Packages upgrade is complete'
+  _notify 'Packages upgrade is complete.'
 
 }
 
