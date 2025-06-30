@@ -130,6 +130,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - dict, dictd and dict-wn installed
 - GNOME Shell extension manager installed
 - a terminal prompt that displays the time a command started to run
+- rsync installed
 
 
 Set up
