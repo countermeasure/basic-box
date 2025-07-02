@@ -202,17 +202,21 @@ function show_command_duration --on-event fish_postexec
         echo "$duration_message"
     else
         set start_time (date -d @$time_command_started +%H:%M)
-        echo "$duration_message, starting at $start_time"
+        set end_time (date -d @$time_command_ended +%H:%M)
+        # TODO: Make the command bold or something in the message, and
+        # stop using the quotes around it.
+        set verbose_duration_message \
+            "$duration_message, running from $start_time to $end_time"
+        echo $verbose_duration_message
         set icon_path /usr/share/icons/Adwaita/scalable
         set commands_to_not_notify_about box
         if not contains $command_without_sudo $commands_to_not_notify_about
             # TODO: Make the command bold or something in the notification, and
             # stop using the quotes around it.
             notify-send \
-                "\"$command\" command completed" \
-                "The command took $duration, starting at $start_time." \
-                --icon \
-                $icon_path/legacy/utilities-terminal-symbolic.svg
+                'Command completed' \
+                "$verbose_duration_message." \
+                --icon $icon_path/legacy/utilities-terminal-symbolic.svg
         end
     end
     set_color normal
