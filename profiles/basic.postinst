@@ -918,6 +918,10 @@ box_dir="${user_dir}"/.box
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/build.txt "${box_dir}"/build.txt
 
+# Install Flameshot.
+# TODO: Bind to the PrintScreen key?
+apt install --yes flameshot
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
