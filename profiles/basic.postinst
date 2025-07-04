@@ -786,7 +786,8 @@ custom_keybindings="[\
 '${custom_keybindings_key_path}/custom0/', \
 '${custom_keybindings_key_path}/custom1/', \
 '${custom_keybindings_key_path}/custom2/', \
-'${custom_keybindings_key_path}/custom3/']"
+'${custom_keybindings_key_path}/custom3/', \
+'${custom_keybindings_key_path}/custom4/']"
 gsettings_set \
   "${media_keys_setting} custom-keybindings \"${custom_keybindings}\""
 # Set Super key email keybinding.
@@ -819,6 +820,13 @@ ${custom_keybindings_key_path}/custom3/"
 gsettings_set "${custom_keybinding_3} binding '<Super>v'"
 gsettings_set "${custom_keybinding_3} command '/opt/Mullvad\ VPN/mullvad-vpn'"
 gsettings_set "${custom_keybinding_3} name 'VPN'"
+# Set Print key Flameshot keybinding.
+custom_keybinding_4="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom4/"
+gsettings_set "${custom_keybinding_4} binding 'Print'"
+gsettings_set "${custom_keybinding_4} command 'flameshot gui'"
+gsettings_set "${custom_keybinding_4} name 'Screenshot'"
+gsettings_set 'gnome.shell.keybindings show-screenshot-ui "[]"'
 
 # Set up GNOME Shell extensions.
 # Install, enable and configure the Bluetooth Quick Connect extension.
@@ -917,6 +925,12 @@ apt install --yes rsync
 box_dir="${user_dir}"/.box
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/build.txt "${box_dir}"/build.txt
+
+# Install and configure Flameshot.
+# Flameshot is bound to the Print key above in this file.
+apt install --yes flameshot
+place_as_ordinary_user_with_mode_644 \
+  ${installer_dir}/flameshot.ini "${user_config_dir}"/flameshot/flameshot.ini
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
