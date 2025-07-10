@@ -193,74 +193,62 @@ audit() {
 }
 
 backup() {
-  config_file="${HOME}/.config/box/backup.json"
-  # TODO: Should the last run file go in config or somewhere else?
-  last_run_file="${HOME}/.config/box/last_run.txt"
-  if [ -f "${config_file}" ]; then
-    config=$(cat "${config_file}")
-  else
-    echo 'The config file for this command is missing.'
+  device_path=$(fd --type d --max-depth 1 . /media/"${USER}")
+
+  if [[ -u "${device_path}" ]]; then
+    echo 'No backup device was found.'
+    return 1
+  fi
+
+  device_name=$(basename "${device_path}")
+  echo "Backup device ${device_name} was found."
+
+  device_config_file="${HOME}/.box/config/backup/${device_name}"
+  if [[ ! -f ${device_config_file} ]]; then
     echo
-    echo "It should be at this path: ${config_file}"
-    echo
-    echo 'And should be in this form:'
-    echo '  {'
-    echo '    "source": "/absolute/path/to/the/director/to/backup",'
-    echo '    "destinations": ['
-    echo '      "/absolute/path/to/one/backup/destination/directory",'
-    echo '      "/absolute/path/to/another/backup/destination/directory"'
-    echo '     ]'
-    echo '  }'
+    echo 'No config file for that device was found.'
     return 1
   fi
 
   # TODO: Check that the config file is immutable.
   # TODO: Check that the config file has parsable data.
 
-  source_directory=$(echo "${config}" | jq -r '.source')
-  destination_directories=$(echo "${config}" | jq -r '.destinations[]')
+  source_directory=$(cat "${device_config_file}")
+  destination_directory="/media/${USER}/${device_name}/backup"
 
-  for destination_directory in $destination_directories; do
-    if [ -d "${destination_directory}" ]; then
-      echo \
-        "This will backup ${source_directory} to ${destination_directory}."
+  echo "This will backup ${source_directory} to ${destination_directory}."
+  echo
+
+  while true; do
+    read -p "Continue? (y/n) " -r continue
+    if [[ ${continue} == 'y' ]]; then
       echo
-      while true; do
-        read -p "Continue? (y/n) " -r continue
-        if [[ ${continue} == 'y' ]]; then
-          echo
-          rsync \
-            --archive \
-            --delete \
-            --exclude lost+found/ \
-            --info progress2 \
-            "${source_directory}/" \
-            "${destination_directory}"
-          # TODO: What format should the run date be saved in?
-          date >"${last_run_file}"
-          echo
-          echo 'Backup is complete.'
-          echo
-          echo "Eject the destination device at ${destination_directory}."
-          _notify 'Backup is complete.'
-          return 0
-        elif [[ ${continue} == 'n' ]]; then
-          echo
-          echo "Nothing done."
-          return 1
-        fi
-      done
+      # rsync \
+      #   --archive \
+      #   --delete \
+      #   --exclude lost+found/ \
+      #   --info progress2 \
+      #   "${source_directory}/" \
+      #   "${destination_directory}"
+      device_data_directory="${HOME}/.box/data/backup/${device_name}"
+      mkdir --parents "${device_data_directory}"
+
+      date >"${device_data_directory}/latest"
+
+      # TODO: Add a backup timestamp to a file in the backup device somewhere.
+
+      echo
+      echo 'Backup is complete.'
+      echo
+      echo "Eject the ${device_name} device."
+      _notify 'Backup is complete.'
+      return 0
+    elif [[ ${continue} == 'n' ]]; then
+      echo
+      echo "Nothing done."
+      return 1
     fi
   done
-
-  echo "No backup destinations found."
-  echo
-  echo 'Looked for these backup destinations:'
-  echo
-  for destination_directory in $destination_directories; do
-    echo "  * $destination_directory"
-  done
-  return 1
 }
 
 battery() {
