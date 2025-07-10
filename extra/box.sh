@@ -223,13 +223,13 @@ backup() {
     read -p "Continue? (y/n) " -r continue
     if [[ ${continue} == 'y' ]]; then
       echo
-      # rsync \
-      #   --archive \
-      #   --delete \
-      #   --exclude lost+found/ \
-      #   --info progress2 \
-      #   "${source_directory}/" \
-      #   "${destination_directory}"
+      rsync \
+        --archive \
+        --delete \
+        --exclude lost+found/ \
+        --info progress2 \
+        "${source_directory}/" \
+        "${destination_directory}"
       device_data_directory="${HOME}/.box/data/backup/${device_name}"
       mkdir --parents "${device_data_directory}"
 
