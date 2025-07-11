@@ -366,7 +366,7 @@ battery_help() {
 }
 
 build() {
-  cat "${HOME}/.config/box/build.txt"
+  cat "${HOME}/.box/build.txt"
 }
 
 destroy() {
@@ -1044,6 +1044,7 @@ bluetooth-quick-connect@bjarosze.gmail.com/schemas"
   _test_gsettings ${keybindings_setting} switch-to-application-7 '@as []'
   _test_gsettings ${keybindings_setting} switch-to-application-8 '@as []'
   _test_gsettings ${keybindings_setting} switch-to-application-9 '@as []'
+  _test_file_exists ${HOME}/.box/build.txt
   _test_package_is_installed rsync
   _test_package_is_installed flameshot
   # Tests arising from first_boot.sh
