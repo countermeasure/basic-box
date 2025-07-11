@@ -195,34 +195,57 @@ audit() {
 backup() {
   device_path=$(fd --type d --max-depth 1 . /media/"${USER}")
 
+  # Handle no backup device being present.
   if [[ -u "${device_path}" ]]; then
     echo 'No backup device was found.'
     return 1
   fi
 
+  # Print the backup device which was found.
   device_name=$(basename "${device_path}")
   echo "Backup device ${device_name} was found."
-
-  device_config_file="${HOME}/.box/config/backup/${device_name}"
-  if [[ ! -f ${device_config_file} ]]; then
-    echo
-    echo 'No config file for that device was found.'
-    return 1
-  fi
-
-  # TODO: Check that the config file is immutable.
-  # TODO: Check that the config file has parsable data.
-
-  source_directory=$(cat "${device_config_file}")
-  destination_directory="/media/${USER}/${device_name}/backup"
-
-  echo "This will backup ${source_directory} to ${destination_directory}."
   echo
 
+  # Make a config file for a new backup device.
+  device_config_file="${HOME}/.box/config/backup/${device_name}"
+  if [[ ! -f ${device_config_file} ]]; then
+    echo "No matching config file was found at ${device_config_file}."
+    echo
+    read -p "Would you like to make a config file? (y/n) " -r continue
+    echo
+    if [[ ${continue} == 'y' ]]; then
+      default_source_path='/home/user/Data'
+      echo 'Provide the directory which is to be backed up.'
+      echo
+      backup_directory_prompt="Leave blank for ${default_source_path}, or \
+enter a different directory: "
+      read -p "${backup_directory_prompt}" -r source_path
+      if [[ -n "${source_path}" ]]; then
+        echo "${source_path}" >"${device_config_file}"
+      else
+        echo ${default_source_path} >"${device_config_file}"
+      fi
+      chmod 400 "${device_config_file}"
+      echo
+      echo 'Config file created.'
+      echo
+    elif [[ ${continue} == 'n' ]]; then
+      echo
+      echo "Nothing done."
+      return 1
+    fi
+  fi
+
+  # Confirm and then do the backup.
+  source_directory=$(cat "${device_config_file}")
+  destination_directory="/media/${USER}/${device_name}/backup"
+  echo "This will backup ${source_directory} to ${destination_directory}."
+  echo
   while true; do
     read -p "Continue? (y/n) " -r continue
     if [[ ${continue} == 'y' ]]; then
       echo
+      # Do the backup.
       rsync \
         --archive \
         --delete \
@@ -230,13 +253,14 @@ backup() {
         --info progress2 \
         "${source_directory}/" \
         "${destination_directory}"
+      # Write the time of the backup to files in the config directory and on
+      # the backup device.
       device_data_directory="${HOME}/.box/data/backup/${device_name}"
       mkdir --parents "${device_data_directory}"
-
-      date >"${device_data_directory}/latest"
-
-      # TODO: Add a backup timestamp to a file in the backup device somewhere.
-
+      timestamp=$(date)
+      echo "${timestamp}" >"${device_data_directory}/latest"
+      echo "${timestamp}" >"${destination_directory}/latest_backup"
+      # Print a confirmation and generate a confirmation notification.
       echo
       echo 'Backup is complete.'
       echo
