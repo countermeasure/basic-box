@@ -192,14 +192,14 @@ function show_command_duration --on-event fish_postexec
     end
     # TODO: Make the command bold or something in the message, and
     # stop using the quotes around it.
-    set duration_message "⌛ The \"$command\" command took $duration"
+    set duration_message "The \"$command\" command took $duration"
 
     # Print a message about how long the command took. If it took longer than
     # one minute, the message will include the command's start time, and a
     # notification matching the message will also be displayed.
     set_color --bold brblack
     if test $duration_in_seconds -lt 60
-        echo "$duration_message"
+        echo "⌛ $duration_message"
     else
         set start_time (date -d @$time_command_started +%H:%M)
         set end_time (date -d @$time_command_ended +%H:%M)
@@ -207,7 +207,7 @@ function show_command_duration --on-event fish_postexec
         # stop using the quotes around it.
         set verbose_duration_message \
             "$duration_message, running from $start_time to $end_time"
-        echo $verbose_duration_message
+        echo "⌛ $verbose_duration_message"
         set icon_path /usr/share/icons/Adwaita/scalable
         set commands_to_not_notify_about box
         if not contains $command_without_sudo $commands_to_not_notify_about
