@@ -259,7 +259,7 @@ enter a different directory: "
       mkdir --parents "${device_data_directory}"
       timestamp=$(date)
       echo "${timestamp}" >"${device_data_directory}/latest"
-      echo "${timestamp}" >"${destination_directory}/latest_backup"
+      echo "${timestamp}" >"${destination_directory}/../latest_backup"
       # Print a confirmation and generate a confirmation notification.
       echo
       echo 'Backup is complete.'
