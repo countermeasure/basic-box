@@ -912,7 +912,7 @@ run_as_ordinary_user "unzip ${installer_dir}/spacebar.zip -d ${spacebar_dir}"
 gsettings_set 'gnome.desktop.interface cursor-blink-timeout 86400'
 
 # Place the build file in the box config directory.
-box_dir="${user_dir}"/box
+box_dir="${user_dir}"/.box
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/build.txt "${box_dir}"/build.txt
 #
