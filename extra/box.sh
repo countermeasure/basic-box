@@ -264,11 +264,11 @@ enter a different directory: "
       echo
       echo 'Backup is complete.'
       echo
+      # TODO: Eject the device automatically??? Or ask to at least???
       echo "Eject the ${device_name} device."
       _notify 'Backup is complete.'
       return 0
     elif [[ ${continue} == 'n' ]]; then
-      echo
       echo "Nothing done."
       return 1
     fi
