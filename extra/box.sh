@@ -196,7 +196,7 @@ backup() {
   device_path=$(fd --type d --max-depth 1 . /media/"${USER}")
 
   # Handle no backup device being present.
-  if [[ -u "${device_path}" ]]; then
+  if [[ -z "${device_path}" ]]; then
     echo 'No backup device was found.'
     return 1
   fi
