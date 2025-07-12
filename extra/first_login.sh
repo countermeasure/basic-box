@@ -95,10 +95,12 @@ non_boot_encrypted_disks_count=$(
     echo "${non_boot_encrypted_disks}" | wc --lines
   fi
 )
+home_data_directory="${HOME}/Data"
 if [[ ${non_boot_encrypted_disks_count} = 0 ]]; then
   echo 'No additional encrypted disk was found.'
   echo
-  echo 'There is nothing to do at this step.'
+  mkdir "${home_data_directory}"
+  echo "A directory has been created at ${home_data_directory}."
 elif [[ ${non_boot_encrypted_disks_count} = 1 ]]; then
   disk="${non_boot_encrypted_disks}"
   disk_description=$(
@@ -132,7 +134,6 @@ elif [[ ${non_boot_encrypted_disks_count} = 1 ]]; then
   echo "${crypttab_entry}" | sudo tee --append /etc/crypttab >/dev/null
   mount_point="/mnt/${device_name}"
   sudo mkdir "${mount_point}"
-  home_data_directory="${HOME}/Data"
   ln --symbolic "${mount_point}" "${home_data_directory}"
   device_path="/dev/mapper/${device_name}"
   fstab_entry="${device_path} ${mount_point} ext4 defaults 0 2"
