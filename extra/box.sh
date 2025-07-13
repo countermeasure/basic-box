@@ -195,10 +195,41 @@ audit() {
 backup() {
   device_path=$(fd --type d --max-depth 1 . /media/"${USER}")
 
+  # Show the latest backup for all backup devices.
+  echo 'Latest backups'
+  echo '--------------'
+  backup_configs=$(fd --type f --max-depth 1 . "${HOME}/.box/config/backup")
+  for backup_config in ${backup_configs}; do
+    device_name=$(basename "${backup_config}")
+    latest_backup_time=$(cat "${HOME}/.box/data/backup/${device_name}/latest")
+    latest_backup_time_in_seconds=$(date -d "${latest_backup_time}" +%s)
+    time_now_in_seconds=$(date +%s)
+    seconds_since_last_backup=$((\
+      time_now_in_seconds - latest_backup_time_in_seconds))
+    if [[ ${seconds_since_last_backup} -lt 60 ]]; then
+      time_of_latest_backup='just now'
+    elif [[ ${seconds_since_last_backup} -lt 3600 ]]; then
+      minutes=$((seconds_since_last_backup / 60))
+      time_of_latest_backup="${minutes}m ago"
+    elif [[ ${seconds_since_last_backup} -lt $((24 * 60 * 60)) ]]; then
+      hours=$((seconds_since_last_backup / (60 * 60)))
+      time_of_latest_backup="${hours}h ago"
+    elif [[ ${seconds_since_last_backup} -lt $((3 * 24 * 60 * 60)) ]]; then
+      hours=$(((seconds_since_last_backup / (60 * 60)) % 24))
+      days=$((seconds_since_last_backup / (60 * 60 * 24)))
+      time_of_latest_backup="${days}d ${hours}h ago"
+    else
+      days=$((seconds_since_last_backup / (60 * 60 * 24)))
+      time_of_latest_backup="${days}d ago"
+    fi
+    echo "${device_name}: ${time_of_latest_backup}"
+  done
+  echo
+
   # Handle no backup device being present.
   if [[ -z "${device_path}" ]]; then
     echo 'No backup device was found.'
-    return 1
+    return 0
   fi
 
   # Print the backup device which was found.
@@ -264,7 +295,6 @@ enter a different directory: "
       echo
       echo 'Backup is complete.'
       echo
-      # TODO: Eject the device automatically??? Or ask to at least???
       echo "Eject the ${device_name} device."
       _notify 'Backup is complete.'
       return 0
