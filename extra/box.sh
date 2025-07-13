@@ -529,7 +529,7 @@ main_help() {
   echo
   echo '  -h|--help  Show this help.'
   echo '  audit      Audit system with Lynis.'
-  echo '  backup     Backup this machine.'
+  echo '  backup     Show backup information and backup this machine.'
   echo '  battery    Show battery information and control batteries.'
   echo '  build      Show build information for this machine.'
   echo '  destroy    Destroy all data on this machine.'
