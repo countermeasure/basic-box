@@ -101,10 +101,6 @@ if [[ ${non_boot_encrypted_disks_count} = 0 ]]; then
   echo
   mkdir "${home_data_directory}"
   echo "A directory has been created at ${home_data_directory}."
-  # TODO: Next line needed?
-  # mkdir --parents "${home_data_directory}/.box"
-  cp "${HOME}/.box/build" "${HOME}/Data/.box/build"
-  ln --symbolic "${home_data_directory}/.box" "${HOME}/.box"
 elif [[ ${non_boot_encrypted_disks_count} = 1 ]]; then
   disk="${non_boot_encrypted_disks}"
   disk_description=$(
@@ -139,10 +135,6 @@ elif [[ ${non_boot_encrypted_disks_count} = 1 ]]; then
   mount_point="/mnt/${device_name}"
   sudo mkdir "${mount_point}"
   ln --symbolic "${mount_point}" "${home_data_directory}"
-  # TODO: Next line needed?
-  # mkdir --parents "${home_data_directory}/.box"
-  cp "${HOME}/.box/build" "${HOME}/Data/.box/build"
-  ln --symbolic "${home_data_directory}/.box" "${HOME}/.box"
   device_path="/dev/mapper/${device_name}"
   fstab_entry="${device_path} ${mount_point} ext4 defaults 0 2"
   echo "${entry_label}" | sudo tee --append /etc/fstab >/dev/null
