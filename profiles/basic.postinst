@@ -932,6 +932,9 @@ apt install --yes flameshot
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/flameshot.ini "${user_config_dir}"/flameshot/flameshot.ini
 
+# Create the installation file in the box config directory.
+run_as_ordinary_user "date >${box_dir}/installation.txt"
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
