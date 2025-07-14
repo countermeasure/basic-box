@@ -466,7 +466,13 @@ battery_help() {
 }
 
 build() {
+  echo 'Build'
+  echo '-----'
   cat "${HOME}/.box/build.txt"
+  echo
+  echo 'Installation'
+  echo '------------'
+  cat "${HOME}/.box/installation.txt"
 }
 
 destroy() {
@@ -1156,6 +1162,7 @@ ${custom_keybindings_key_path}/custom4/"
   _test_gsettings ${custom_keybinding_4} name "'Screenshot'"
   _test_gsettings ${keybindings_setting} show-screenshot-ui '@as []'
   _test_directory_exists "${user_dir}"/Data
+  _test_file_exists "${user_dir}"/.box/installation.txt
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
   _test_command_output 'mullvad auto-connect get' 'Autoconnect: on'
