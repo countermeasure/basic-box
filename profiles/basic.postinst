@@ -918,6 +918,9 @@ box_dir="${user_dir}"/.box
 place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/build.txt "${box_dir}"/build.txt
 
+# Create the installation file in the box config directory.
+date >"${box_dir}"/installation.txt
+
 # Install Flameshot.
 # TODO: Bind to the PrintScreen key?
 apt install --yes flameshot
