@@ -233,8 +233,10 @@ backup() {
   fi
 
   # Print the backup device which was found.
+  echo 'Current device'
+  echo '--------------'
   device_name=$(basename "${device_path}")
-  echo "Backup device ${device_name} was found."
+  echo "Backup device \"${device_name}\" was found."
   echo
 
   # Make a config file for a new backup device.
@@ -270,10 +272,9 @@ enter a different directory: "
   # Confirm and then do the backup.
   source_directory=$(cat "${device_config_file}")
   destination_directory="/media/${USER}/${device_name}/backup"
-  echo "This will backup ${source_directory} to ${destination_directory}."
-  echo
   while true; do
-    read -p "Continue? (y/n) " -r continue
+    backup_prompt="Backup ${source_directory} to this device? (y/n) "
+    read -p "${backup_prompt}" -r continue
     if [[ ${continue} == 'y' ]]; then
       echo
       # Do the backup.
@@ -292,11 +293,11 @@ enter a different directory: "
       echo "${timestamp}" >"${device_data_directory}/latest"
       echo "${timestamp}" >"${destination_directory}/../latest_backup"
       # Print a confirmation and generate a confirmation notification.
+      completion_message="Backup is complete. Eject the \"${device_name}\" \
+device."
       echo
-      echo 'Backup is complete.'
-      echo
-      echo "Eject the ${device_name} device."
-      _notify 'Backup is complete.'
+      echo "${completion_message}"
+      _notify "${completion_message}"
       return 0
     elif [[ ${continue} == 'n' ]]; then
       echo "Nothing done."
