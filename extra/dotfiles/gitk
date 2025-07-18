@@ -1,8 +1,8 @@
 # This file will be overwritten the first time gitk is run, but these settings
 # should survive the overwriting process to be included in the new contents of
 # the file.
-set mainfont {sans 10}
-set textfont {monospace 10}
+set mainfont {{FiraCode Nerd Font} 10}
+set textfont {{FiraCode Nerd Font} 10}
 set uifont {sans 10}
 set datetimeformat {%b %d %Y @ %H:%M}
 set uicolor #282828
