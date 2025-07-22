@@ -153,5 +153,12 @@ end
 #
 ###############################################################################
 function set_window_title
-    echo "📂  $(get_trimmed_pwd)"
+    if test -z $argv
+        echo "📂  $(get_trimmed_pwd)"
+    else
+        # TODO: Truncate $argv if it gets too long?
+        # set truncated_argv $(string shorten --max 24 $argv)
+        # echo "📂  $(get_trimmed_pwd)  🕓  $(date +%H:%M)  ❯  $truncated_argv"
+        echo "📂  $(get_trimmed_pwd)  🕓  $(date +%H:%M)  ❯  $argv"
+    end
 end

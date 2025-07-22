@@ -3,7 +3,7 @@ set fish_greeting
 
 # Set the window title to the truncated current working directory.
 function fish_title
-    set_window_title
+    set_window_title $argv
 end
 
 # Make an escape sequence up to 500ms after the escape key is pressed.
