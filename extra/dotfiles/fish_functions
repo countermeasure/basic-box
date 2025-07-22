@@ -154,9 +154,14 @@ end
 
 ###############################################################################
 #
-#  Set the window title to the trimmed current working directory.
+#  Set the window title to the trimmed current working directory, and if a
+#  command is running show what it is and when it started.
 #
 ###############################################################################
 function set_window_title
-    echo "📂  $(get_trimmed_pwd)"
+    if test -z $argv
+        echo "📂  $(get_trimmed_pwd)"
+    else
+        echo "📂  $(get_trimmed_pwd)  🕓  $(date +%H:%M)  ❯  $argv"
+    end
 end
