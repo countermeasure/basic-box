@@ -158,5 +158,9 @@ end
 #
 ###############################################################################
 function set_window_title
-    echo "📂  $(get_trimmed_pwd)"
+    if test -z $argv
+        echo "📂  $(get_trimmed_pwd)"
+    else
+        echo "📂  $(get_trimmed_pwd)  🕓  $(date +%H:%M)  ❯  $argv"
+    end
 end
