@@ -139,7 +139,7 @@ Set up
 
 Install the dependencies::
 
-  $ sudo apt install jq libnotify-bin make simple-cdd wget
+  $ sudo apt install git libnotify-bin make simple-cdd
 
 
 Usage
