@@ -21,6 +21,19 @@ ${character}\
 (bold bright-black)\
 """
 
+[battery]
+charging_symbol = "  "
+discharging_symbol = "  "
+format = "with [$symbol$percentage]($style) "
+
+[[battery.display]]
+style = "bold red"
+threshold = 15
+
+[[battery.display]]
+style = "bold yellow"
+threshold = 30
+
 [character]
 error_symbol = "❯"
 success_symbol = "❯"
