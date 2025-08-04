@@ -159,6 +159,8 @@ function gus --wraps "git restore" \
     git_wrapper unstage $argv
 end
 
+alias h='history --show-time="%d-%b-%Y %H:%M │ "'
+
 # alias j='jupyter-lab &>/dev/null &; disown'
 function j --description 'alias j=jupyter-lab &>/dev/null &; disown'
     jupyter-lab &>/dev/null &
