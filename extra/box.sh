@@ -914,6 +914,7 @@ test() {
   _test_file_exists "${nvim_config_dir}"/lua/plugins/ranger.lua
   _test_file_exists "${nvim_config_dir}"/lua/plugins/treesitter.lua
   _test_file_exists "${nvim_config_dir}"/lua/plugins/which_key.lua
+  _test_file_exists "${nvim_config_dir}"/snippets/python.json
   _test_python_package_is_installed python-lsp-server
   _test_package_is_installed curl
   _test_package_is_installed rfkill
