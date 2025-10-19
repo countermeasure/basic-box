@@ -1,0 +1,24 @@
+{
+  "icecream": {
+    "prefix": "icecream",
+    "body": [
+      "",
+      "#########################################################",
+      "",
+      "# Temporarily add the IceCream debugger.",
+      "# https://github.com/gruns/icecream/blob/master/README.md",
+      "",
+      "from icecream import ic",
+      "",
+      "ic.configureOutput(includeContext=True, prefix=\">>> \")",
+      "",
+      "# TODO: Remove the IceCream import and all ic() calls.",
+      "",
+      "#########################################################",
+      "",
+      "ic($1)",
+      ""
+    ],
+    "description": "Import and configure IceCream"
+  }
+}

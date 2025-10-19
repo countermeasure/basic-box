@@ -46,6 +46,7 @@ extra/dotfiles/nvim_plugins_nvim_lspconfig.lua
 extra/dotfiles/nvim_plugins_ranger.lua
 extra/dotfiles/nvim_plugins_treesitter.lua
 extra/dotfiles/nvim_plugins_which_key.lua
+extra/dotfiles/nvim_snippets_python.json
 extra/dotfiles/paperwm.css
 extra/dotfiles/ranger_colourscheme.py
 extra/dotfiles/ranger_rc.conf

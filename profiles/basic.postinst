@@ -518,6 +518,10 @@ run_as_ordinary_user \
 python_lsp_black_version=$(get_version python-lsp-black)
 run_as_ordinary_user \
   "pipx inject python-lsp-server python-lsp-black==${python_lsp_black_version}"
+# Put the snippet files in place.
+place_as_ordinary_user_with_mode_644 \
+  ${installer_dir}/nvim_snippets_python.json \
+  "${nvim_config_dir}"/snippets/python.json
 # Set up LazyVim.
 run_as_ordinary_user 'nvim --headless "+Lazy! restore" +qa'
 

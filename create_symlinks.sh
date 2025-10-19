@@ -70,6 +70,8 @@ link \
 link dotfiles/nvim_plugins_ranger.lua "${nvim_plugins_dir}"/ranger.lua
 link dotfiles/nvim_plugins_treesitter.lua "${nvim_plugins_dir}"/treesitter.lua
 link dotfiles/nvim_plugins_which_key.lua "${nvim_plugins_dir}"/which_key.lua
+link \
+  dotfiles/nvim_snippets_python.json "${nvim_config_dir}"/snippets/python.json
 link dotfiles/paperwm.css "${HOME}"/.config/paperwm/user.css
 link \
   dotfiles/ranger_colourscheme.py "${HOME}"/.config/ranger/colorschemes/box.py
