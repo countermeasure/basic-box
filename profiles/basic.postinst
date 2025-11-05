@@ -790,7 +790,8 @@ custom_keybindings="[\
 '${custom_keybindings_key_path}/custom0/', \
 '${custom_keybindings_key_path}/custom1/', \
 '${custom_keybindings_key_path}/custom2/', \
-'${custom_keybindings_key_path}/custom3/']"
+'${custom_keybindings_key_path}/custom3/', \
+'${custom_keybindings_key_path}/custom4/']"
 gsettings_set \
   "${media_keys_setting} custom-keybindings \"${custom_keybindings}\""
 # Set Super key email keybinding.
@@ -823,6 +824,12 @@ ${custom_keybindings_key_path}/custom3/"
 gsettings_set "${custom_keybinding_3} binding '<Super>v'"
 gsettings_set "${custom_keybinding_3} command '/opt/Mullvad\ VPN/mullvad-vpn'"
 gsettings_set "${custom_keybinding_3} name 'VPN'"
+# Set Print key Flameshot keybinding.
+custom_keybinding_4="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom4/"
+gsettings_set "${custom_keybinding_4} binding 'Print'"
+gsettings_set "${custom_keybinding_4} command 'flameshot gui'"
+gsettings_set "${custom_keybinding_4} name 'Screenshot'"
 
 # Set up GNOME Shell extensions.
 # Install, enable and configure the Bluetooth Quick Connect extension.

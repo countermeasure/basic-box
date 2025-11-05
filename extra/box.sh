@@ -1103,6 +1103,12 @@ bluetooth-quick-connect@bjarosze.gmail.com/schemas"
   test_package_is_installed rsync
   test_file_exists "${HOME}"/.box/build.txt
   test_package_is_installed flameshot
+  custom_keybinding_4="${custom_keybinding_setting}:\
+${custom_keybindings_key_path}/custom4/"
+  test_gsettings ${custom_keybinding_4} binding "'Print'"
+  test_gsettings \
+    ${custom_keybinding_4} command "'flameshot gui'"
+  test_gsettings ${custom_keybinding_4} name "'Screenshot'"
   # Tests arising from first_boot.sh
   test_command_output 'sudo ufw status' 'Status: active'
   test_command_output 'mullvad auto-connect get' 'Autoconnect: on'
