@@ -194,15 +194,23 @@ audit() {
 
 backup() {
   device_path=$(fd --type d --max-depth 1 . /media/"${USER}")
+  backup_config_directory=${HOME}/.box/config/backup
+  backup_data_directory=${HOME}/.box/data/backup
 
   show_latest_backups() {
     # Show the latest backup for all backup devices.
     echo 'Latest backups'
     echo '--------------'
-    backup_configs=$(fd --type f --max-depth 1 . "${HOME}/.box/config/backup")
+    if [[ ! -d ${backup_config_directory} ]]; then
+      echo 'There are no backups.'
+      echo
+      echo 'TODO: Explain what to do to make the first backup.'
+      exit 1
+    fi
+    backup_configs=$(fd --type f --max-depth 1 . "${backup_config_directory}")
     for backup_config in ${backup_configs}; do
       device_name=$(basename "${backup_config}")
-      latest_backup_time=$(cat "${HOME}/.box/data/backup/${device_name}/latest")
+      latest_backup_time=$(cat "${backup_data_directory}/${device_name}/latest")
       latest_backup_time_in_seconds=$(date -d "${latest_backup_time}" +%s)
       time_now_in_seconds=$(date +%s)
       seconds_since_last_backup=$((\
@@ -244,23 +252,24 @@ backup() {
   echo
 
   # Make a config file for a new backup device.
-  device_config_file="${HOME}/.box/config/backup/${device_name}"
+  device_config_file=${backup_config_directory}/${device_name}
   if [[ ! -f ${device_config_file} ]]; then
     echo "No matching config file was found at ${device_config_file}."
     echo
     read -p "Would you like to make a config file? (y/n) " -r continue
     echo
     if [[ ${continue} == 'y' ]]; then
-      default_source_path='/home/user/Data'
+      default_source_path=${HOME}/Data
       echo 'Provide the directory which is to be backed up.'
       echo
       backup_directory_prompt="Leave blank for ${default_source_path}, or \
 enter a different directory: "
       read -p "${backup_directory_prompt}" -r source_path
+      mkdir -p "${backup_config_directory}"
       if [[ -n "${source_path}" ]]; then
         echo "${source_path}" >"${device_config_file}"
       else
-        echo ${default_source_path} >"${device_config_file}"
+        echo "${default_source_path}" >"${device_config_file}"
       fi
       chmod 400 "${device_config_file}"
       echo
@@ -293,7 +302,7 @@ enter a different directory: "
         "${destination_directory}"
       # Write the time of the backup to files in the config directory and on
       # the backup device.
-      device_data_directory="${HOME}/.box/data/backup/${device_name}"
+      device_data_directory="${backup_data_directory}/${device_name}"
       mkdir --parents "${device_data_directory}"
       timestamp=$(date)
       echo "${timestamp}" >"${device_data_directory}/latest"
