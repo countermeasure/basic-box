@@ -1109,6 +1109,7 @@ ${custom_keybindings_key_path}/custom4/"
   test_gsettings \
     ${custom_keybinding_4} command "'flameshot gui'"
   test_gsettings ${custom_keybinding_4} name "'Screenshot'"
+  test_gsettings ${keybindings_setting} show-screenshot-ui '@as []'
   test_directory_exists "${user_dir}"/Data
   # Tests arising from first_boot.sh
   test_command_output 'sudo ufw status' 'Status: active'

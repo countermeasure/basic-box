@@ -830,6 +830,7 @@ ${custom_keybindings_key_path}/custom4/"
 gsettings_set "${custom_keybinding_4} binding 'Print'"
 gsettings_set "${custom_keybinding_4} command 'flameshot gui'"
 gsettings_set "${custom_keybinding_4} name 'Screenshot'"
+gsettings_set 'gnome.shell.keybindings show-screenshot-ui "[]"'
 
 # Set up GNOME Shell extensions.
 # Install, enable and configure the Bluetooth Quick Connect extension.
@@ -932,9 +933,11 @@ place_as_ordinary_user_with_mode_644 \
 # Create the installation file in the box config directory.
 date >"${box_dir}"/installation.txt
 
-# Install Flameshot.
-# TODO: Bind to the PrintScreen key?
+# Install and configure Flameshot.
+# TODO: Bind to the PrintScreen key? Note that this is done above?
 apt install --yes flameshot
+place_as_ordinary_user_with_mode_644 \
+  ${installer_dir}/flameshot.ini "${user_config_dir}"/flameshot/flameshot.ini
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
