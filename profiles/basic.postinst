@@ -101,6 +101,13 @@ run_as_ordinary_user() {
   runuser --login "${username}" --command "$1"
 }
 
+# Make the "box" command available everywhere.
+# This is done first in this script so that if another operation fails later in
+# the script and the installation isn't completed, the "box reinstall" command
+# will nevertheless be available.
+place_as_ordinary_user_with_mode_755 \
+  ${installer_dir}/box.sh "${user_bin_dir}"/box
+
 # Install build-essential to provide packages like make and gcc for use in this
 # file to build and install keyd, and for general use including installing
 # Python versions with pyenv.
@@ -336,10 +343,6 @@ place_as_root_user_with_mode_644 \
 sed --in-place 's/@PREFIX@/\/usr\/local/g' /lib/systemd/system/keyd.service
 # Enable the keyd systemd service to activate custom key remapping.
 systemctl enable keyd.service
-
-# Make the "box" command available everywhere.
-place_as_ordinary_user_with_mode_755 \
-  ${installer_dir}/box.sh "${user_bin_dir}"/box
 
 # Install direnv.
 apt install --yes direnv
