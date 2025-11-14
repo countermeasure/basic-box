@@ -934,7 +934,7 @@ place_as_ordinary_user_with_mode_644 \
   ${installer_dir}/build.txt "${box_dir}"/build.txt
 
 # Create the installation file in the box config directory.
-date >"${box_dir}"/installation.txt
+run_as_ordinary_user "date >${box_dir}/installation.txt"
 
 # Install and configure Flameshot.
 # TODO: Bind to the PrintScreen key? Note that this is done above?
