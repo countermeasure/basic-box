@@ -1,3 +1,0 @@
-# On Debian 12, simple-cdd 0.6.9 fails to include zstd, without which the
-# installer image will fail to be built.
-zstd

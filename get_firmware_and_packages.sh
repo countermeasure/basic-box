@@ -20,7 +20,7 @@ wget_to_directory() {
 
 # Ensure the firmware is present.
 wget_to_directory 'firmware' "https://cdimage.debian.org/cdimage/unofficial/\
-non-free/firmware/bookworm/current/firmware.tar.gz"
+non-free/firmware/trixie/current/firmware.tar.gz"
 
 # Ensure the extra packages directory exists and switch into it.
 mkdir -p extra/packages

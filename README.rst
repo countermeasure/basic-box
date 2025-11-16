@@ -1,17 +1,17 @@
 Basic Box
 =========
 
-Builds a basic Debian 12 (Bookworm) installer which asks very few questions.
+Builds a basic Debian 13 (Trixie) installer which asks very few questions.
 
 When more than one drive is present, the installer targets the smallest drive.
 
-Runs on Debian 12.
+Runs on Debian 13.
 
 
 What it does
 ------------
 
-The **Basic Box** installer creates a Debian 12 system with:
+The **Basic Box** installer creates a Debian 13 system with:
 
 - full disk encryption (FDE)
 - no ``root`` user

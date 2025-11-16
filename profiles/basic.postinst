@@ -129,7 +129,7 @@ systemctl enable first_boot.service
 
 # Install fish.
 fish_release_key_url="https://download.opensuse.org/repositories/shells:fish/\
-Debian_12/Release.key"
+Debian_13/Release.key"
 wget \
   --output-document - ${fish_release_key_url} \
   | gpg --dearmor \
