@@ -988,7 +988,6 @@ test() {
   _test_package_is_installed llvm
   _test_package_is_installed make
   _test_package_is_installed tk-dev
-  _test_package_is_installed wget
   _test_package_is_installed xz-utils
   _test_package_is_installed zlib1g-dev
   _test_executable_exists /usr/local/bin/geckodriver
