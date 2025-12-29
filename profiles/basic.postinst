@@ -941,6 +941,9 @@ place_as_ordinary_user_with_mode_644 \
 
 # Create the installation file in the box config directory.
 run_as_ordinary_user "date >${box_dir}/installation.txt"
+#
+# Install btop.
+apt install --yes btop
 
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
