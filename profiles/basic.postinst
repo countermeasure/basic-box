@@ -942,6 +942,9 @@ place_as_ordinary_user_with_mode_644 \
 run_as_ordinary_user \
   "echo \"Date:   $(date +'%d %b %Y')\" >${box_dir}/installation.txt"
 
+# Install btop.
+apt install --yes btop
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
