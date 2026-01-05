@@ -194,6 +194,7 @@ alias rmdir='rmdir --verbose'
 
 alias t='trash'
 
+alias wget='wget --continue'
 alias whois='whois -H'
 
 # "x" for "extract".
