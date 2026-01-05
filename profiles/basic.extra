@@ -79,6 +79,8 @@ extra/packages/httpie-completion.fish
 extra/packages/keyd_source.tar.gz
 extra/packages/nvim.appimage
 extra/packages/nvim_source.tar.gz
+extra/packages/opensnitch.deb
+extra/packages/opensnitch_ui.deb
 extra/packages/paperwm.zip
 extra/packages/pyenv_source.tar.gz
 extra/packages/spacebar.zip

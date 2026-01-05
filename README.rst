@@ -133,6 +133,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - rsync installed
 - Flameshot installed
 - btop installed
+- OpenSnitch installed
 
 
 Set up

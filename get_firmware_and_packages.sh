@@ -129,3 +129,16 @@ space-barluchrioh.v${spacebar_version}.shell-extension.zip"
 link \
   "spacebar/space-barluchrioh.v${spacebar_version}.shell-extension.zip" \
   'spacebar.zip'
+
+# Ensure the OpenSnitch package is present.
+opensnitch_version=$(get_version opensnitch)
+wget_to_directory 'opensnitch' "https://github.com/evilsocket/opensnitch/\
+releases/download/v${opensnitch_version}/\
+opensnitch_${opensnitch_version}-1_amd64.deb"
+wget_to_directory 'opensnitch' "https://github.com/evilsocket/opensnitch/\
+releases/download/v${opensnitch_version}/\
+python3-opensnitch-ui_${opensnitch_version}-1_all.deb"
+link "opensnitch/opensnitch_${opensnitch_version}-1_amd64.deb" 'opensnitch.deb'
+link \
+  "opensnitch/python3-opensnitch-ui_${opensnitch_version}-1_all.deb" \
+  'opensnitch_ui.deb'

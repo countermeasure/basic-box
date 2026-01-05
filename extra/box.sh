@@ -1165,6 +1165,8 @@ ${custom_keybindings_key_path}/custom4/"
   _test_directory_exists "${user_dir}"/Data
   _test_file_exists "${user_dir}"/.box/installation.txt
   _test_package_is_installed btop
+  _test_package_is_installed opensnitch
+  _test_package_is_installed python3-opensnitch-ui
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
   _test_command_output 'mullvad auto-connect get' 'Autoconnect: on'
