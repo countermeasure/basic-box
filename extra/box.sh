@@ -249,12 +249,12 @@ backup() {
   # Print the backup device which was found.
   echo 'Current device'
   echo '--------------'
-  device_name=$(basename "${device_path}")
-  echo "Backup device \"${device_name}\" was found."
+  current_device_name=$(basename "${device_path}")
+  echo "Backup device \"${current_device_name}\" was found."
   echo
 
   # Make a config file for a new backup device.
-  device_config_file=${backup_config_directory}/${device_name}
+  device_config_file=${backup_config_directory}/${current_device_name}
   if [[ ! -f ${device_config_file} ]]; then
     echo "No matching config file was found at ${device_config_file}."
     echo
@@ -292,7 +292,7 @@ backup() {
 
   # Confirm and then do the backup.
   source_directory=$(cat "${device_config_file}")
-  destination_directory="${media_user_directory}/${device_name}/backup"
+  destination_directory="${media_user_directory}/${current_device_name}/backup"
   while true; do
     backup_prompt="Backup ${source_directory} to this device? (y/n) "
     read -p "${backup_prompt}" -r continue
@@ -311,7 +311,7 @@ backup() {
           "${destination_directory}"
         # Write the time of the backup to files in the config directory and on
         # the backup device.
-        device_data_directory="${backup_data_directory}/${device_name}"
+        device_data_directory="${backup_data_directory}/${current_device_name}"
         mkdir --parents "${device_data_directory}"
         timestamp=$(date)
         echo "${timestamp}" >"${device_data_directory}/latest"
@@ -320,14 +320,14 @@ backup() {
         # Show current backup device statuses.
         show_latest_backups
         # Print a confirmation and generate a confirmation notification.
-        completion_message="Backup to \"${device_name}\" has finished."
+        completion_message="Backup to \"${current_device_name}\" has finished."
         echo "${completion_message}"
         _notify "${completion_message}"
         echo
         # Eject the backup device, if required.
         while true; do
           read \
-            -p "Would you like to eject \"${device_name}\"? (y/n) " \
+            -p "Would you like to eject \"${current_device_name}\"? (y/n) " \
             -r eject_device
           case ${eject_device} in
             y)
@@ -341,12 +341,12 @@ backup() {
               sudo umount "${device_path}"
               sudo cryptsetup close "${luks_device_path}"
               echo
-              echo "The \"${device_name}\" device can be removed."
+              echo "The \"${current_device_name}\" device can be removed."
               return 0
               ;;
             n)
               echo
-              echo "The \"${device_name}\" device was not ejected."
+              echo "The \"${current_device_name}\" device was not ejected."
               return 0
               ;;
           esac
