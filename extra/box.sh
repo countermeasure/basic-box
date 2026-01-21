@@ -195,50 +195,55 @@ audit() {
 backup() {
   backup_config_directory=${HOME}/.box/config/backup
   backup_data_directory=${HOME}/.box/data/backup
-  media_user_directory="/media/${USER}"
-  device_path=$(fd --type d --max-depth 1 . "${media_user_directory}")
 
   show_latest_backups() {
-    # Show the latest backup for all backup devices.
     echo 'Latest backups'
     echo '--------------'
-    if [[ ! -d ${backup_config_directory} ]]; then
+
+    backup_configs=$(fd --type f --max-depth 1 . "${backup_config_directory}")
+
+    if [[ -z ${backup_configs} ]]; then
       echo 'There are no backups.'
       echo
-      echo 'TODO: Explain what to do to make the first backup.'
-      exit 1
+      return
     fi
-    backup_configs=$(fd --type f --max-depth 1 . "${backup_config_directory}")
+
     for backup_config in ${backup_configs}; do
       device_name=$(basename "${backup_config}")
-      # TODO: Shorten the next line.
+
       latest_backup_time=$(cat "${backup_data_directory}/${device_name}/latest")
       latest_backup_time_in_seconds=$(date -d "${latest_backup_time}" +%s)
       time_now_in_seconds=$(date +%s)
       seconds_since_last_backup=$((\
         time_now_in_seconds - latest_backup_time_in_seconds))
-      if [[ ${seconds_since_last_backup} -lt 60 ]]; then
+
+      seconds_in_a_minute=60
+      seconds_in_an_hour=$((60 * seconds_in_a_minute))
+      seconds_in_a_day=$((24 * seconds_in_an_hour))
+
+      if [[ ${seconds_since_last_backup} -lt ${seconds_in_a_minute} ]]; then
         time_of_latest_backup='just now'
-      elif [[ ${seconds_since_last_backup} -lt 3600 ]]; then
-        minutes=$((seconds_since_last_backup / 60))
+      elif [[ ${seconds_since_last_backup} -lt ${seconds_in_an_hour} ]]; then
+        minutes=$((seconds_since_last_backup / seconds_in_a_minute))
         time_of_latest_backup="${minutes}m ago"
-      elif [[ ${seconds_since_last_backup} -lt $((24 * 60 * 60)) ]]; then
-        hours=$((seconds_since_last_backup / (60 * 60)))
+      elif [[ ${seconds_since_last_backup} -lt ${seconds_in_a_day} ]]; then
+        hours=$((seconds_since_last_backup / seconds_in_an_hour))
         time_of_latest_backup="${hours}h ago"
-      elif [[ ${seconds_since_last_backup} -lt $((3 * 24 * 60 * 60)) ]]; then
-        hours=$(((seconds_since_last_backup / (60 * 60)) % 24))
-        days=$((seconds_since_last_backup / (60 * 60 * 24)))
-        time_of_latest_backup="${days}d ${hours}h ago"
       else
-        days=$((seconds_since_last_backup / (60 * 60 * 24)))
+        days=$((seconds_since_last_backup / seconds_in_a_day))
         time_of_latest_backup="${days}d ago"
       fi
+
       echo "${device_name}: ${time_of_latest_backup}"
     done
+
     echo
   }
 
   show_latest_backups
+
+  media_user_directory="/media/${USER}"
+  device_path=$(fd --type d --max-depth 1 . "${media_user_directory}")
 
   # Handle no backup device being present.
   if [[ -z "${device_path}" ]]; then
