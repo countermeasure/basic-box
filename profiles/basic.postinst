@@ -950,6 +950,9 @@ apt install --yes \
   ${installer_dir}/opensnitch.deb \
   ${installer_dir}/opensnitch_ui.deb
 
+# Install ExifTool.
+apt install --yes libimage-exiftool-perl
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.

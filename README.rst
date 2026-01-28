@@ -134,6 +134,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - Flameshot installed
 - btop installed
 - OpenSnitch installed
+- ExifTool installed
 
 
 Set up
