@@ -154,7 +154,8 @@ end
 
 ###############################################################################
 #
-#  Set the window title to the trimmed current working directory.
+#  Set the window title to the trimmed current working directory, and if a
+#  command is running show what it is and when it started.
 #
 ###############################################################################
 function set_window_title
