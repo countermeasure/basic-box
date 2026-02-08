@@ -8,6 +8,15 @@ alias cp='cp --archive --interactive --verbose'
 alias delta='delta --line-numbers --navigate'
 alias df='prefer duf df'
 alias diff='prefer delta diff'
+# "dla" for "download audio".
+function dla --wraps yt-dlp \
+    --description 'alias dla=yt-dlp -t mp3 "$argv"'
+    yt-dlp -t mp3 "$argv"
+end
+# "dla" for "download video".
+function dlv --wraps yt-dlp --description 'alias dlv=yt-dlp -t mp4 "$argv"'
+    yt-dlp -t mp4 "$argv"
+end
 
 alias f='ranger' # "f" for "file manager".
 alias fd='fd --exclude .git --follow --hidden'
