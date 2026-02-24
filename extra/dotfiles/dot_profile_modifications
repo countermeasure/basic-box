@@ -23,3 +23,8 @@ eval "$(pyenv init -)"
 # access is set to be blocked when disconnected from the VPN. This is to guard
 # against switched lockdown mode off and forgetting to switch it back on.
 mullvad lockdown-mode set on &>/dev/null || true
+
+# Ensure that camera is inactive, and microphone and speaker are muted.
+sudo modprobe --remove uvcvideo
+amixer set Capture nocap
+amixer set Master mute

@@ -62,6 +62,7 @@ extra/dotfiles/sudoers_apt
 extra/dotfiles/sudoers_cryptsetup
 extra/dotfiles/sudoers_lecture
 extra/dotfiles/sudoers_lynis
+extra/dotfiles/sudoers_modprobe
 extra/dotfiles/sudoers_powertop
 extra/dotfiles/sudoers_rkhunter
 extra/dotfiles/sudoers_tlp

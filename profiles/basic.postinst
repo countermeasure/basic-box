@@ -953,6 +953,12 @@ apt install --yes \
 # Install ExifTool.
 apt install --yes libimage-exiftool-perl
 
+# Allow passwordless sudo for the "modprobe uvcvideo" command which loads and
+# unloads the camera driver. This is so that it can be unloaded when the system
+# boots, and loaded and unloaded more conveniently at other times.
+place_as_root_user_with_mode_440 \
+  ${installer_dir}/sudoers_modprobe ${sudoers_dir}/modprobe
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.

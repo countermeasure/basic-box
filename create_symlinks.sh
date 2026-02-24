@@ -87,6 +87,7 @@ link dotfiles/sudoers_apt /etc/sudoers.d/apt
 link dotfiles/sudoers_cryptsetup /etc/sudoers.d/cryptsetup
 link dotfiles/sudoers_lecture /etc/sudoers.d/lecture
 link dotfiles/sudoers_lynis /etc/sudoers.d/lynis
+link dotfiles/sudoers_modprobe /etc/sudoers.d/modprobe
 link dotfiles/sudoers_powertop /etc/sudoers.d/powertop
 link dotfiles/sudoers_rkhunter /etc/sudoers.d/rkhunter
 link dotfiles/sudoers_tlp /etc/sudoers.d/tlp

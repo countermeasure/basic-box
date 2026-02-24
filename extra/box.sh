@@ -1168,6 +1168,7 @@ ${custom_keybindings_key_path}/custom4/"
   _test_package_is_installed opensnitch
   _test_package_is_installed python3-opensnitch-ui
   _test_package_is_installed libimage-exiftool-perl
+  _test_file_exists ${sudoers_dir}/modprobe
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
   _test_command_output 'mullvad auto-connect get' 'Autoconnect: on'

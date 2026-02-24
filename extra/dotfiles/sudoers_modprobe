@@ -1,0 +1,8 @@
+# The "modprobe uvcvideo" command is used to load and unload the driver for the
+# camera. This driver is loaded by default, so there doesn't seem to be a
+# significant security risk associated with making the command to load and
+# unload it passwordless.
+%sudo ALL=(root) NOPASSWD: \
+    /usr/sbin/modprobe uvcvideo, \
+    /usr/sbin/modprobe -r uvcvideo, \
+    /usr/sbin/modprobe --remove uvcvideo
