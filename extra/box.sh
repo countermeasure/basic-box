@@ -553,6 +553,12 @@ keyboard_help() {
   echo '  default    Ensure all keys have their default behaviour.'
 }
 
+logout() {
+  echo 'Logging out...'
+  sleep 1
+  gnome-session-quit --logout --no-prompt
+}
+
 mac() {
   active_network_device=$(command ip route show default | awk '{ print $5 }')
   if [[ -z ${active_network_device} ]]; then
@@ -612,6 +618,7 @@ main_help() {
   echo '  firewall   Show firewall information.'
   echo '  ip         Show public IP address.'
   echo '  keyboard   Control key mapping.'
+  echo '  logout     Log out.'
   echo '  mac        Show MAC address of active network device.'
   echo '  off        Power off.'
   echo '  reboot     Reboot.'
@@ -1244,6 +1251,9 @@ case "${1-}" in
     ;;
   keyboard)
     keyboard "${2-}"
+    ;;
+  logout)
+    logout
     ;;
   mac)
     mac
