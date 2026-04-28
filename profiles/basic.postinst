@@ -959,6 +959,15 @@ apt install --yes libimage-exiftool-perl
 place_as_root_user_with_mode_440 \
   ${installer_dir}/sudoers_modprobe ${sudoers_dir}/modprobe
 
+# Install the ranger_devicons plugin.
+run_as_ordinary_user "unzip ${installer_dir}/ranger_devicons.zip -d /tmp"
+ranger_devicons_dir="${user_config_dir}/ranger/plugins/ranger_devicons"
+create_directory_as_ordinary_user "${ranger_devicons_dir}"
+ranger_devicons_version=$(get_version ranger_devicons)
+ranger_devicons_tmp_dir="/tmp/ranger_devicons-${ranger_devicons_version}"
+run_as_ordinary_user \
+  "cp --recursive ${ranger_devicons_tmp_dir}/* ${ranger_devicons_dir}"
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.

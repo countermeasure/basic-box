@@ -34,7 +34,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - certain Firefox preferences set for better privacy and a simpler interface
 - pipx installed
 - yt-dlp installed
-- ranger installed
+- ranger and ranger_devicons installed
 - these GNOME changes:
 
   - Enable dark theme

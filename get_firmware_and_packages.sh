@@ -142,3 +142,9 @@ link "opensnitch/opensnitch_${opensnitch_version}-1_amd64.deb" 'opensnitch.deb'
 link \
   "opensnitch/python3-opensnitch-ui_${opensnitch_version}-1_all.deb" \
   'opensnitch_ui.deb'
+
+# Ensure the ranger_devicons package is present.
+ranger_devicons_version=$(get_version ranger_devicons)
+wget_to_directory 'ranger_devicons' "https://github.com/alexanderjeurissen/\
+ranger_devicons/archive/${ranger_devicons_version}.zip"
+link "ranger_devicons/${ranger_devicons_version}.zip" 'ranger_devicons.zip'
