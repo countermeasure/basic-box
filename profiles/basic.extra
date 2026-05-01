@@ -78,6 +78,7 @@ extra/packages/fira_code.ttf
 extra/packages/geckodriver.tar.gz
 extra/packages/httpie-completion.fish
 extra/packages/keyd_source.tar.gz
+extra/packages/localsend.deb
 extra/packages/nvim.appimage
 extra/packages/nvim_source.tar.gz
 extra/packages/opensnitch.deb

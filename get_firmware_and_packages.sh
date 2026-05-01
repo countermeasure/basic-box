@@ -148,3 +148,11 @@ ranger_devicons_version=$(get_version ranger_devicons)
 wget_to_directory 'ranger_devicons' "https://github.com/alexanderjeurissen/\
 ranger_devicons/archive/${ranger_devicons_version}.zip"
 link "ranger_devicons/${ranger_devicons_version}.zip" 'ranger_devicons.zip'
+
+# Ensure the LocalSend package is present.
+localsend_version=$(get_version localsend)
+wget_to_directory 'localsend' "https://github.com/localsend/localsend/\
+releases/download/v${localsend_version}/\
+LocalSend-${localsend_version}-linux-x86-64.deb"
+link \
+  "localsend/LocalSend-${localsend_version}-linux-x86-64.deb" 'localsend.deb'

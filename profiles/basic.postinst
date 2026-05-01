@@ -968,6 +968,9 @@ ranger_devicons_tmp_dir="/tmp/ranger_devicons-${ranger_devicons_version}"
 run_as_ordinary_user \
   "cp --recursive ${ranger_devicons_tmp_dir}/* ${ranger_devicons_dir}"
 
+# Install LocalSend.
+apt install --yes ${installer_dir}/localsend.deb
+
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.

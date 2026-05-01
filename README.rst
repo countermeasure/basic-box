@@ -135,6 +135,7 @@ The **Basic Box** installer creates a Debian 12 system with:
 - btop installed
 - OpenSnitch installed
 - ExifTool installed
+- LocalSend installed
 
 
 Set up

@@ -1178,6 +1178,7 @@ ${custom_keybindings_key_path}/custom4/"
   _test_file_exists ${sudoers_dir}/modprobe
   ranger_plugins_dir=${user_config_dir}/ranger/plugins
   _test_file_exists "${ranger_plugins_dir}"/ranger_devicons/devicons.py
+  _test_package_is_installed localsend
   # Tests arising from first_boot.sh
   _test_command_output 'sudo ufw status' 'Status: active'
   _test_command_output 'mullvad auto-connect get' 'Autoconnect: on'
