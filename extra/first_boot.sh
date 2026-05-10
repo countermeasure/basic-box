@@ -34,6 +34,11 @@ ufw enable
 # ensure that this script doesn't exit here if that happens.
 rkhunter --cronjob --report-warnings-only --summary || true
 
+# Remove the /media/cdrom directory because there is no cdrom. This task has to
+# wait until the first boot because the directory is used throughout the
+# postinst script.
+rmdir /media/cdrom
+
 # Remove the first_boot infrastructure now that its work is done.
 systemctl disable first_boot.service
 rm /etc/systemd/system/first_boot.service

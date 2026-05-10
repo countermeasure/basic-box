@@ -971,9 +971,6 @@ run_as_ordinary_user \
 # Install LocalSend.
 apt install --yes ${installer_dir}/localsend.deb
 
-# Remove the /media/cdrom directory because it's unused.
-rmdir /media/cdrom
-
 # Generate fish completions.
 # This should stay at the end on the basic.postinst file so that it generates
 # completions after all packages have been installed.
