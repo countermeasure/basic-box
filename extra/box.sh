@@ -1207,6 +1207,10 @@ upgrade() {
   echo
   sudo apt --quiet --quiet --yes upgrade
   echo
+  echo 'Removing unneeded Debian packages...'
+  echo
+  sudo apt --quiet --quiet autoremove
+  echo
   echo 'Upgrading Python packages...'
   echo
   pipx upgrade-all
