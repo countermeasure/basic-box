@@ -2,7 +2,10 @@
 # so it's convenient to make them passwordless. There doesn't seem to be a
 # significant security risk associated with this because the packages which
 # will be removed or upgraded have already been installed.
-%sudo ALL=(root) NOPASSWD: /usr/bin/apt autoremove
+%sudo ALL=(root) NOPASSWD: \
+    /usr/bin/apt autoremove, \
+    /usr/bin/apt * autoremove, \
+    /usr/bin/apt autoremove *
 %sudo ALL=(root) NOPASSWD: \
     /usr/bin/apt update, \
     /usr/bin/apt * update, \
