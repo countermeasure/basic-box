@@ -127,10 +127,16 @@ function prefer
         set ansi_clear '\033[0m'
         set ansi_yellow '\033[1;33m'
         echo
-        echo -e "$ansi_yellow💡 Prefer $argv[1] to $argv[2]$ansi_clear"
+        echo -e "$ansi_yellow💡 Preferring $argv[1] to $argv[2]"
+        echo -e "   To run $argv[2], use \"command $argv[2]\"$ansi_clear"
         echo
     end
-    command $argv[2..-1]
+    if test -z $argv[3]
+        $argv[1]
+    else
+        set -e argv[2]
+        $argv
+    end
 end
 
 ###############################################################################
