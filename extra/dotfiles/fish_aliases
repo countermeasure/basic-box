@@ -3,6 +3,7 @@
 alias b='bandwhich'
 
 alias c='clear -x'
+alias cat='prefer bat cat'
 alias cp='cp --archive --interactive --verbose'
 
 alias delta='delta --line-numbers --navigate'
