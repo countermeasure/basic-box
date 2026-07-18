@@ -85,7 +85,7 @@ end
 ###############################################################################
 function only_allow_pip_in_virtualenvs
     if test -n "$VIRTUAL_ENV"
-        command pip $argv
+        pip $argv
     else
         echo 'Prefer pipx to pip when not in a virtualenv'
         return 1
@@ -103,7 +103,7 @@ end
 ###############################################################################
 function only_allow_pip3_in_virtualenvs
     if test -n "$VIRTUAL_ENV"
-        command pip3 $argv
+        pip3 $argv
     else
         echo 'Prefer pipx to pip3 when not in a virtualenv'
         return 1
@@ -124,11 +124,11 @@ end
 function prefer
     # If the alias is not being passed to a pipe, show the prefer message.
     if test -t 1
-        set ansi_clear '\033[0m'
-        set ansi_yellow '\033[1;33m'
         echo
-        echo -e "$ansi_yellow💡 Preferring $argv[1] to $argv[2]"
-        echo -e "   To run $argv[2], use \"command $argv[2]\"$ansi_clear"
+        set_color --bold yellow
+        echo "💡 Preferring $argv[1] to $argv[2]"
+        echo "   To run $argv[2], use \"command $argv[2]\""
+        set_color normal
         echo
     end
     if test -z $argv[3]
@@ -151,10 +151,10 @@ end
 #
 ###############################################################################
 function protect
-    set ansi_clear '\033[0m'
-    set ansi_yellow '\033[1;33m'
     echo
-    echo -e "$ansi_yellow✋ Use $argv[1] instead of $argv[2]$ansi_clear"
+    set_color --bold yellow
+    echo "✋ Use $argv[1] instead of $argv[2]"
+    set_color normal
     return 1
 end
 
