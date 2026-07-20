@@ -257,8 +257,8 @@ ln --symbolic /usr/bin/fdfind /usr/bin/fd
 # Install ripgrep.
 apt install --yes ripgrep
 
-# Install exa.
-apt install --yes exa
+# Install eza.
+apt install --yes eza
 
 # Install bat and symlink batcat to bat.
 apt install --yes bat

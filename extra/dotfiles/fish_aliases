@@ -169,9 +169,9 @@ function j --description 'alias j=jupyter-lab &>/dev/null &; disown'
 end
 
 # "l" for "list".
-alias l='exa --colour-scale --group-directories-first --icons --long'
+alias l='eza --colour-scale --group-directories-first --icons --long'
 # "la" for "list all".
-alias la='exa --all --colour-scale --group-directories-first --icons --long'
+alias la='eza --all --colour-scale --group-directories-first --icons --long'
 alias less='less --HILITE-UNREAD --ignore-case --LONG-PROMPT --QUIET'
 alias ln='ln --interactive --verbose'
 alias ls='prefer l ls'

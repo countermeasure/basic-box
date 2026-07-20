@@ -843,7 +843,7 @@ test() {
   _test_package_is_installed fd-find
   _test_symlink_exists /usr/bin/fd
   _test_package_is_installed ripgrep
-  _test_package_is_installed exa
+  _test_package_is_installed eza
   _test_package_is_installed bat
   _test_symlink_exists /usr/bin/bat
   _test_package_is_installed fzf

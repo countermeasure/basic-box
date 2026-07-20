@@ -62,7 +62,7 @@ The **Basic Box** installer creates a Debian 13 system with:
 - automatic login enabled
 - fd-find (fd) installed
 - ripgrep installed
-- exa installed
+- eza installed
 - bat installed
 - fzf installed
 - zoxide installed
