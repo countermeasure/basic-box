@@ -53,6 +53,11 @@ image: init
 	@rm -rf tmp/firmware
 
 init:
+	@# The ``simple-cdd`` package for Debian 13, which is version 0.6.9, is broken.
+	@# Instead, install version 0.6.10.
+  @# $ wget https://deb.debian.org/debian/pool/main/s/simple-cdd/simple-cdd_0.6.10_all.deb
+  @# $ wget https://deb.debian.org/debian/pool/main/s/simple-cdd/python3-simple-cdd_0.6.10_all.deb
+  @# $ sudo apt install ./simple-cdd_0.6.10_all.deb ./python3-simple-cdd_0.6.10_all.deb
 	@required_packages="jq libnotify-bin make simple-cdd wget"; \
 	for package in $$required_packages; do \
 		if ! dpkg -s $$package >/dev/null 2>&1; then \
@@ -78,7 +83,7 @@ usb: check sudo init image
 		--icon \
 		/usr/share/icons/Adwaita/scalable/devices/media-removable-symbolic.svg
 
-vm:
+vm: init
 	# @./get_firmware_and_packages.sh
 	@qemu-img create -f qcow2 tmp/mirror/qemu-test.hd.img 12G
 	@build-simple-cdd \
