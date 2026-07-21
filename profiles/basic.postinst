@@ -679,6 +679,7 @@ place_as_root_user_with_mode_440 \
   ${installer_dir}/sudoers_powertop ${sudoers_dir}/powertop
 
 # Install TLP.
+# TODO: Is this needed in Debian 13? Hook into GNOME functionality instead?
 apt install --yes tlp
 # Allow passwordless sudo for the "tlp" and "tlp-stat" commands.
 place_as_root_user_with_mode_440 \
