@@ -30,7 +30,7 @@ check:
 	@echo 'All data on that device will be lost.'
 	@echo
 
-image:
+image: init
 	@./get_firmware_and_packages.sh
 	@# Make a file with build information about the installer.
 	@mkdir --parents build
@@ -52,13 +52,22 @@ image:
 		-map tmp/firmware firmware
 	@rm -rf tmp/firmware
 
+init:
+	@required_packages="jq libnotify-bin make simple-cdd wget"; \
+	for package in $$required_packages; do \
+		if ! dpkg -s $$package >/dev/null 2>&1; then \
+			sudo apt install --yes $$package; \
+			echo "Installed $$package"; \
+		fi; \
+	done
+
 sudo:
 	@sudo -v
 
 symlinks:
 	@./create_symlinks.sh
 
-usb: check sudo image
+usb: check sudo init image
 	@echo "Writing the image to the $(target_device_description)..."
 	@# If sync is not called, eject will run before the copy completes.
 	@sudo cp images/debian-12-amd64-CD-1.iso $(target_device); sync
@@ -69,4 +78,4 @@ usb: check sudo image
 		--icon \
 		/usr/share/icons/Adwaita/scalable/devices/media-removable-symbolic.svg
 
-.PHONY: check image sudo symlinks usb
+.PHONY: check image init sudo symlinks usb

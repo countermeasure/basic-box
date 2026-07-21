@@ -138,14 +138,6 @@ The **Basic Box** installer creates a Debian 12 system with:
 - LocalSend installed
 
 
-Set up
-------
-
-Install the dependencies::
-
-  $ sudo apt install jq libnotify-bin make simple-cdd wget
-
-
 Usage
 -----
 
