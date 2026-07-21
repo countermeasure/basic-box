@@ -835,16 +835,17 @@ gsettings_set 'gnome.shell.keybindings show-screenshot-ui "[]"'
 
 # Set up GNOME Shell extensions.
 # Install, enable and configure the Bluetooth Quick Connect extension.
-apt install --yes gnome-shell-extension-bluetooth-quick-connect
-enable_gnome_extension bluetooth-quick-connect@bjarosze.gmail.com
-bluetooth_quick_connect_schemadir="/usr/share/gnome-shell/extensions/\
-bluetooth-quick-connect@bjarosze.gmail.com/schemas"
-gsettings_set_with_schemadir \
-  ${bluetooth_quick_connect_schemadir} \
-  'gnome.shell.extensions.bluetooth-quick-connect bluetooth-auto-power-off true'
-gsettings_set_with_schemadir \
-  ${bluetooth_quick_connect_schemadir} \
-  'gnome.shell.extensions.bluetooth-quick-connect bluetooth-auto-power-on true'
+# TODO: Reinstate somehow???
+# apt install --yes gnome-shell-extension-bluetooth-quick-connect
+# enable_gnome_extension bluetooth-quick-connect@bjarosze.gmail.com
+# bluetooth_quick_connect_schemadir="/usr/share/gnome-shell/extensions/\
+# bluetooth-quick-connect@bjarosze.gmail.com/schemas"
+# gsettings_set_with_schemadir \
+#   ${bluetooth_quick_connect_schemadir} \
+#   'gnome.shell.extensions.bluetooth-quick-connect bluetooth-auto-power-off true'
+# gsettings_set_with_schemadir \
+#   ${bluetooth_quick_connect_schemadir} \
+#   'gnome.shell.extensions.bluetooth-quick-connect bluetooth-auto-power-on true'
 # Install, enable and configure the Dash to Dock extension.
 apt install --yes gnome-shell-extension-dashtodock
 enable_gnome_extension dash-to-dock@micxgx.gmail.com
