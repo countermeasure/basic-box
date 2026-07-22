@@ -53,10 +53,11 @@ image: init
 	@rm -rf tmp/firmware
 
 init:
+	# TODO: Are jq and wget already installed in Trixie?
 	@required_packages="jq libnotify-bin make simple-cdd wget"; \
 	for package in $$required_packages; do \
 		if ! dpkg -s $$package >/dev/null 2>&1; then \
-			if $$package -eq 'simple-cdd'; then \
+			if [ $$package == 'simple-cdd' ]; then \
 				# The ``simple-cdd`` package for Debian 13, which is version 0.6.9, is broken. \
 				# Instead, install version 0.6.10. \
 				wget https://deb.debian.org/debian/pool/main/s/simple-cdd/simple-cdd_0.6.10_all.deb; \
