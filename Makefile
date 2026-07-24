@@ -78,4 +78,10 @@ usb: check sudo init image
 		--icon \
 		/usr/share/icons/Adwaita/scalable/devices/media-removable-symbolic.svg
 
-.PHONY: check image init sudo symlinks usb
+vm: init image
+	# TODO: Add qemu installer to this target or the init target. Maybe a "qemu"
+	# target? Or maybe just this target.
+	@qemu-img create -f qcow2 tmp/mirror/qemu-test.hd.img 6G
+	@build-simple-cdd --conf basic.conf --qemu --verbose
+
+.PHONY: check image init sudo symlinks usb vm
