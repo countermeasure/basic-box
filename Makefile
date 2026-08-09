@@ -53,24 +53,24 @@ image: init
 	@rm -rf tmp/firmware
 
 init:
-	# TODO: Are jq and wget already installed in Trixie?
-	@required_packages="jq libnotify-bin make simple-cdd wget"; \
-	for package in $$required_packages; do \
-		if ! dpkg -s $$package >/dev/null 2>&1; then \
-			if [ $$package = 'simple-cdd' ]; then \
-				# The ``simple-cdd`` package for Debian 13, which is version 0.6.9, is
-				# broken. Instead, install version 0.6.10. \
-				# TODO: Shorten the next two lines. \
-				wget https://deb.debian.org/debian/pool/main/s/simple-cdd/simple-cdd_0.6.10_all.deb; \
-				wget https://deb.debian.org/debian/pool/main/s/simple-cdd/python3-simple-cdd_0.6.10_all.deb; \
-				sudo apt install ./simple-cdd_0.6.10_all.deb; \
-				sudo apt install ./python3-simple-cdd_0.6.10_all.deb; \
-			else \
-				sudo apt install --yes $$package; \
-			fi; \
-			echo "Installed $$package"; \
-		fi; \
-	done
+	@# Ensure the libnotify-bin package is installed.
+	@if ! dpkg -s libnotify-bin >/dev/null 2>&1; then \
+		sudo apt install --yes libnotify-bin; \
+	fi
+	@# Ensure the make package is installed.
+	@if ! dpkg -s make >/dev/null 2>&1; then \
+		sudo apt install --yes make; \
+	fi
+	@# If the simple-cdd package isn't installed, install version 0.6.10 because
+	@# the simple-cdd package for Debian 13 (version 0.6.9) is broken.
+	@if ! dpkg -s simple-cdd >/dev/null 2>&1; then \
+		debian_repo_url='https://deb.debian.org/debian/pool/main/s'; \
+		wget "$$debian_repo_url"/simple-cdd/simple-cdd_0.6.10_all.deb; \
+		wget "$$debian_repo_url"/simple-cdd/python3-simple-cdd_0.6.10_all.deb; \
+		sudo apt install ./simple-cdd_0.6.10_all.deb; \
+		sudo apt install ./python3-simple-cdd_0.6.10_all.deb; \
+		rm ./simple-cdd_0.6.10_all.deb ./python3-simple-cdd_0.6.10_all.deb; \
+	fi
 
 sudo:
 	@sudo -v
