@@ -860,7 +860,7 @@ apt install --yes gnome-shell-extension-hide-activities
 enable_gnome_extension Hide_Activities@shay.shayel.org
 # Install and enable the NoAnnoyance v2 extension.
 apt install --yes gnome-shell-extension-no-annoyance
-enable_gnome_extension noannoyance@daase.net
+enable_gnome_extension noannoyance-fork@vrba.dev
 # Install and enable the Quick Close in Overview and Disable Workspace Switcher
 # extensions.
 apt install --yes gnome-shell-extensions-extra
@@ -868,7 +868,7 @@ enable_gnome_extension middleclickclose@paolo.tranquilli.gmail.com
 enable_gnome_extension disable-workspace-switcher@jbradaric.me
 # Install, enable and configure the sytem-monitor extension.
 apt install --yes gnome-shell-extension-system-monitor
-enable_gnome_extension system-monitor@paradoxxx.zero.gmail.com
+enable_gnome_extension system-monitor@gnome-shell-extensions.gcampax.github.com
 gsettings_set 'gnome.shell.extensions.system-monitor show-swap false'
 # Install and enable the Ubuntu AppIndicators extension.
 # This extention shows the Mullvad VPN icon in the top panel.
