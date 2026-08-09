@@ -869,11 +869,7 @@ enable_gnome_extension disable-workspace-switcher@jbradaric.me
 # Install, enable and configure the sytem-monitor extension.
 apt install --yes gnome-shell-extension-system-monitor
 enable_gnome_extension system-monitor@paradoxxx.zero.gmail.com
-gsettings_set 'gnome.shell.extensions.system-monitor cpu-style "digit"'
-gsettings_set 'gnome.shell.extensions.system-monitor disk-usage-style "none"'
-gsettings_set 'gnome.shell.extensions.system-monitor icon-display false'
-gsettings_set 'gnome.shell.extensions.system-monitor memory-style "digit"'
-gsettings_set 'gnome.shell.extensions.system-monitor net-style "digit"'
+gsettings_set 'gnome.shell.extensions.system-monitor show-swap false'
 # Install and enable the Ubuntu AppIndicators extension.
 # This extention shows the Mullvad VPN icon in the top panel.
 apt install --yes gnome-shell-extension-appindicator
@@ -885,9 +881,6 @@ apt purge --yes gnome-shell-extension-prefs
 apt install --yes gnome-shell-extension-manager
 
 # Set up 9 static workspaces.
-# If shell.overrides dynamic-workspaces is not set to false before mutter
-# dynamic-workspaces is set to false, it reverts to true.
-gsettings_set 'gnome.shell.overrides dynamic-workspaces false'
 gsettings_set 'gnome.mutter dynamic-workspaces false'
 gsettings_set 'gnome.desktop.wm.preferences num-workspaces 9'
 

@@ -1098,16 +1098,10 @@ bluetooth-quick-connect@bjarosze.gmail.com/schemas"
   _test_gsettings gnome.shell.extensions.dash-to-dock hot-keys false
   _test_gsettings gnome.shell.extensions.dash-to-dock multi-monitor true
   _test_gsettings gnome.shell.extensions.dash-to-dock show-trash false
-  _test_gsettings gnome.shell.extensions.system-monitor cpu-style "'digit'"
-  _test_gsettings \
-    gnome.shell.extensions.system-monitor disk-usage-style "'none'"
-  _test_gsettings gnome.shell.extensions.system-monitor icon-display false
-  _test_gsettings gnome.shell.extensions.system-monitor memory-style "'digit'"
-  _test_gsettings gnome.shell.extensions.system-monitor net-style "'digit'"
+  _test_gsettings gnome.shell.extensions.system-monitor show-swap false
   _test_directory_exists "${user_dir}"/.cache/fish/generated_completions
   _test_package_is_not_installed gnome-shell-extension-prefs
   _test_package_is_installed gnome-shell-extension-manager
-  _test_gsettings gnome.shell.overrides dynamic-workspaces false
   _test_gsettings gnome.mutter dynamic-workspaces false
   _test_gsettings gnome.desktop.wm.preferences num-workspaces 9
   wm_keybindings_setting='gnome.desktop.wm.keybindings'
