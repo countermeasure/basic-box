@@ -67,8 +67,8 @@ init:
 		debian_repo_url='https://deb.debian.org/debian/pool/main/s'; \
 		wget "$$debian_repo_url"/simple-cdd/simple-cdd_0.6.10_all.deb; \
 		wget "$$debian_repo_url"/simple-cdd/python3-simple-cdd_0.6.10_all.deb; \
-		sudo apt install ./simple-cdd_0.6.10_all.deb; \
-		sudo apt install ./python3-simple-cdd_0.6.10_all.deb; \
+		sudo apt install --yes ./simple-cdd_0.6.10_all.deb; \
+		sudo apt install --yes ./python3-simple-cdd_0.6.10_all.deb; \
 		rm ./simple-cdd_0.6.10_all.deb ./python3-simple-cdd_0.6.10_all.deb; \
 	fi
 
