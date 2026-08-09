@@ -45,6 +45,10 @@ spacebar_appearance_setting='org.gnome.shell.extensions.space-bar.appearance'
 spacebar_behaviour_setting='org.gnome.shell.extensions.space-bar.behavior'
 spacebar_shortcuts_setting='org.gnome.shell.extensions.space-bar.shortcuts'
 spacebar_schemadir="${extensions_dir}/space-bar@luchrioh/schemas"
+# TODO: Explain why the next line in necessary, and that it might not be in the
+# next version of the Spaebar extension. Look at the next version and see if
+# this one is just missing the file that other versions have.
+glib-compile-schemas "$spacebar_schemadir"
 gsettings --schemadir "${spacebar_schemadir}" set \
   ${spacebar_behaviour_setting} always-show-numbers true
 gsettings --schemadir "${spacebar_schemadir}" set \
