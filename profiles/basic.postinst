@@ -643,7 +643,7 @@ apt install --yes \
   libbz2-dev \
   libffi-dev \
   liblzma-dev \
-  libncursesw6-dev \
+  libncurses-dev \
   libreadline-dev \
   libsqlite3-dev \
   libssl-dev \

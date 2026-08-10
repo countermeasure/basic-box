@@ -979,7 +979,7 @@ test() {
   _test_package_is_installed libbz2-dev
   _test_package_is_installed libffi-dev
   _test_package_is_installed liblzma-dev
-  _test_package_is_installed libncursesw6-dev
+  _test_package_is_installed libncurses-dev
   _test_package_is_installed libreadline-dev
   _test_package_is_installed libsqlite3-dev
   _test_package_is_installed libssl-dev
