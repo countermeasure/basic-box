@@ -156,3 +156,11 @@ releases/download/v${localsend_version}/\
 LocalSend-${localsend_version}-linux-x86-64.deb"
 link \
   "localsend/LocalSend-${localsend_version}-linux-x86-64.deb" 'localsend.deb'
+
+# Ensure the Bluetooth Quick Connect package is present.
+bqc_version=$(get_version bluetooth-quick-connect)
+wget_to_directory 'bluetooth_quick_connect' "https://extensions.gnome.org/\
+extension-data/\
+bluetooth-quick-connectbjarosze.gmail.com.v${bqc_version}.shell-extension.zip"
+link \
+  "bluetooth_quick_connect/v${bqc_version}.zip" 'bluetooth_quick_connect.zip'

@@ -72,6 +72,7 @@ extra/dotfiles/yt_dlp_config
 extra/dotfiles/zathurarc
 
 extra/packages/bandwhich.tar.gz
+extra/packages/bluetooth_quick_connect.zip
 extra/packages/delta.tar.gz
 extra/packages/delta_source.tar.gz
 extra/packages/fira_code.ttf

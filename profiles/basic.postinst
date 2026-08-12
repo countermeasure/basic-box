@@ -965,6 +965,13 @@ run_as_ordinary_user \
 # Install LocalSend.
 apt install --yes ${installer_dir}/localsend.deb
 
+# Install and configure Bluetooth Quick Connect GNOME Shell extension.
+bluetooth_quick_connect_dir="${user_dir}/.local/share/gnome-shell/extensions/\
+bluetooth-quick-connect@bjarosze.gmail.com"
+create_directory_as_ordinary_user "${bluetooth_quick_connect_dir}"
+run_as_ordinary_user \
+  "unzip ${installer_dir}/bluetooth_quick_connect.zip -d ${bluetooth_quick_connect_dir}"
+
 # The GNOME Tour so that it doesn't run on first login.
 apt purge --yes gnome-tour
 
