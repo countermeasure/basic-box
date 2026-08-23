@@ -63,6 +63,18 @@ gsettings --schemadir "${spacebar_schemadir}" set \
 gsettings --schemadir "${spacebar_schemadir}" set \
   ${spacebar_shortcuts_setting} enable-activate-workspace-shortcuts false
 
+# Enable and configure Bluetooth Quick Connect GNOME extension.
+gnome-extensions enable bluetooth-quick-connect@jarosze.gmail.com
+# TODO: The next few lines
+
+# ${bluetooth_quick_connect_schemadir} \
+# gnome.shell.extensions.bluetooth-quick-connect \
+# bluetooth-auto-power-off true
+
+# ${bluetooth_quick_connect_schemadir} \
+# gnome.shell.extensions.bluetooth-quick-connect \
+# bluetooth-auto-power-on true
+
 # Print a welcome.
 echo
 echo 'Welcome to your new Basic Box'
