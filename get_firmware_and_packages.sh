@@ -159,8 +159,8 @@ link \
 
 # Ensure the Bluetooth Quick Connect package is present.
 bqc_version=$(get_version bluetooth-quick-connect)
+bqc_filename="bluetooth-quick-connectbjarosze.gmail.com.v${bqc_version}.\
+shell-extension.zip"
 wget_to_directory 'bluetooth_quick_connect' "https://extensions.gnome.org/\
-extension-data/\
-bluetooth-quick-connectbjarosze.gmail.com.v${bqc_version}.shell-extension.zip"
-link \
-  "bluetooth_quick_connect/v${bqc_version}.zip" 'bluetooth_quick_connect.zip'
+extension-data/{$bqc_filename}"
+link "bluetooth_quick_connect/${bqc_filename}" 'bluetooth_quick_connect.zip'
