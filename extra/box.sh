@@ -1209,7 +1209,7 @@ upgrade() {
   echo
   echo 'Removing unneeded Debian packages...'
   echo
-  sudo apt --quiet --quiet autoremove
+  sudo apt --quiet --quiet --yes autoremove
   echo
   echo 'Upgrading Python packages...'
   echo
