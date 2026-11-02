@@ -10,6 +10,7 @@ readonly ansi_green='\033[1;32m'
 readonly ansi_red='\033[1;31m'
 
 _notify() {
+  # TODO: Not sure the icon is working here.
   notify-send "Box" "$1" \
     --icon \
     /usr/share/icons/Adwaita/scalable/legacy/utilities-terminal-symbolic.svg
@@ -1196,7 +1197,9 @@ upgrade() {
   echo
   sudo apt --quiet --quiet update
   echo
-  apt --upgradable list
+  # As of Debian 13, APT_PAGER must be unset or this command will wait
+  # indefinitely for a key press.
+  APT_PAGER='' apt --upgradable list
   echo
   sudo apt --quiet --quiet --yes upgrade
   echo
