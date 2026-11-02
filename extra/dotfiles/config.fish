@@ -30,7 +30,7 @@ set --export --global FZF_DEFAULT_COMMAND 'fd --type file'
 set --export --global FZF_CTRL_T_COMMAND $FZF_DEFAULT_COMMAND
 
 # Colourise man pages by setting bat as the man pager.
-set --export --global MANPAGER 'sh -c "col -bx | bat -l man -p"'
+set --export --global MANPAGER 'bat --language man --plain'
 
 # Share JupyterLab user settings across all JupyterLab environments. Without
 # this, each JupyterLab installation in each virtual environment will have its

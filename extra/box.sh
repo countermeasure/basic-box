@@ -10,10 +10,10 @@ readonly ansi_green='\033[1;32m'
 readonly ansi_red='\033[1;31m'
 
 _notify() {
-  # TODO: Not sure the icon is working here.
+  # TODO: A larger icon would be better here. Does notify-send allow?
   notify-send "Box" "$1" \
     --icon \
-    /usr/share/icons/Adwaita/scalable/legacy/utilities-terminal-symbolic.svg
+    /usr/share/icons/Adwaita/symbolic/legacy/utilities-terminal-symbolic.svg
 }
 
 _off() {
