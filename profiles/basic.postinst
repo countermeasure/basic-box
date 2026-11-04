@@ -801,10 +801,13 @@ gsettings_set "${media_keys_setting} email \"['<Super>m']\""
 gsettings_set 'gnome.shell.keybindings toggle-message-tray "[]"'
 # Set Super key browser keybinding.
 gsettings_set "${media_keys_setting} www \"['<Super>b']\""
+# Set Control+Alt+Delete from logout to shutdown.
+gsettings_set "${media_keys_setting} logout \"[]\""
+gsettings_set "${media_keys_setting} shutdown \"['<Control><Alt>Delete']\""
 # Set Super key Mullvad Browser keybinding.
 custom_keybinding_0="${custom_keybinding_setting}:\
 ${custom_keybindings_key_path}/custom0/"
-gsettings_set "${custom_keybinding_0} binding '<Ctrl><Super>b'"
+gsettings_set "${custom_keybinding_0} binding '<Control><Super>b'"
 gsettings_set "${custom_keybinding_0} command 'mullvad-browser'"
 gsettings_set "${custom_keybinding_0} name 'Mullvad Browser'"
 # Set Super key Signal Desktop keybinding.
@@ -899,7 +902,7 @@ for workspace in {1..9}; do
   gsettings_set "${wm_keybindings_setting} \
 switch-to-workspace-${workspace} \"['<Super>${workspace}']\""
   gsettings_set "${wm_keybindings_setting} \
-move-to-workspace-${workspace} \"['<Ctrl><Super>${workspace}']\""
+move-to-workspace-${workspace} \"['<Control><Super>${workspace}']\""
 done
 
 # Install and configure PaperWM GNOME Shell extension.

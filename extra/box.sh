@@ -1052,9 +1052,11 @@ custom-keybindings"
   _test_gsettings ${media_keys_setting} email "['<Super>m']"
   _test_gsettings gnome.shell.keybindings toggle-message-tray '@as []'
   _test_gsettings ${media_keys_setting} www "['<Super>b']"
+  _test_gsettings ${media_keys_setting} logout '@as []'
+  _test_gsettings ${media_keys_setting} shutdown "['<Control><Alt>Delete']"
   custom_keybinding_0="${custom_keybinding_setting}:\
 ${custom_keybindings_key_path}/custom0/"
-  _test_gsettings ${custom_keybinding_0} binding "'<Ctrl><Super>b'"
+  _test_gsettings ${custom_keybinding_0} binding "'<Control><Super>b'"
   _test_gsettings ${custom_keybinding_0} command "'mullvad-browser'"
   _test_gsettings ${custom_keybinding_0} name "'Mullvad Browser'"
   custom_keybinding_1="${custom_keybinding_setting}:\
@@ -1125,23 +1127,23 @@ extensions/bluetooth-quick-connect@bjarosze.gmail.com/schemas"
   _test_gsettings \
     ${wm_keybindings_setting} switch-to-workspace-9 "['<Super>9']"
   _test_gsettings \
-    ${wm_keybindings_setting} move-to-workspace-1 "['<Ctrl><Super>1']"
+    ${wm_keybindings_setting} move-to-workspace-1 "['<Control><Super>1']"
   _test_gsettings \
-    ${wm_keybindings_setting} move-to-workspace-2 "['<Ctrl><Super>2']"
+    ${wm_keybindings_setting} move-to-workspace-2 "['<Control><Super>2']"
   _test_gsettings \
-    ${wm_keybindings_setting} move-to-workspace-3 "['<Ctrl><Super>3']"
+    ${wm_keybindings_setting} move-to-workspace-3 "['<Control><Super>3']"
   _test_gsettings \
-    ${wm_keybindings_setting} move-to-workspace-4 "['<Ctrl><Super>4']"
+    ${wm_keybindings_setting} move-to-workspace-4 "['<Control><Super>4']"
   _test_gsettings \
-    ${wm_keybindings_setting} move-to-workspace-5 "['<Ctrl><Super>5']"
+    ${wm_keybindings_setting} move-to-workspace-5 "['<Control><Super>5']"
   _test_gsettings \
-    ${wm_keybindings_setting} move-to-workspace-6 "['<Ctrl><Super>6']"
+    ${wm_keybindings_setting} move-to-workspace-6 "['<Control><Super>6']"
   _test_gsettings \
-    ${wm_keybindings_setting} move-to-workspace-7 "['<Ctrl><Super>7']"
+    ${wm_keybindings_setting} move-to-workspace-7 "['<Control><Super>7']"
   _test_gsettings \
-    ${wm_keybindings_setting} move-to-workspace-8 "['<Ctrl><Super>8']"
+    ${wm_keybindings_setting} move-to-workspace-8 "['<Control><Super>8']"
   _test_gsettings \
-    ${wm_keybindings_setting} move-to-workspace-9 "['<Ctrl><Super>9']"
+    ${wm_keybindings_setting} move-to-workspace-9 "['<Control><Super>9']"
   keybindings_setting='gnome.shell.keybindings'
   _test_gsettings ${keybindings_setting} switch-to-application-1 '@as []'
   _test_gsettings ${keybindings_setting} switch-to-application-2 '@as []'
