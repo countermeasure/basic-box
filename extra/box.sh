@@ -1077,10 +1077,10 @@ ${custom_keybindings_key_path}/custom3/"
 'bluetooth-quick-connect@bjarosze.gmail.com', \
 'dash-to-dock@micxgx.gmail.com', \
 'Hide_Activities@shay.shayel.org', \
-'noannoyance@daase.net', \
+'noannoyance-fork@vrba.dev', \
 'middleclickclose@paolo.tranquilli.gmail.com', \
 'disable-workspace-switcher@jbradaric.me', \
-'system-monitor@paradoxxx.zero.gmail.com', \
+'system-monitor@gnome-shell-extensions.gcampax.github.com', \
 'ubuntu-appindicators@ubuntu.com', \
 'paperwm@paperwm.github.com', \
 'space-bar@luchrioh']"

@@ -48,7 +48,7 @@ spacebar_schemadir="${extensions_dir}/space-bar@luchrioh/schemas"
 # TODO: Explain why the next line in necessary, and that it might not be in the
 # next version of the Spaebar extension. Look at the next version and see if
 # this one is just missing the file that other versions have.
-glib-compile-schemas "$spacebar_schemadir"
+glib-compile-schemas "${spacebar_schemadir}"
 gsettings --schemadir "${spacebar_schemadir}" set \
   ${spacebar_behaviour_setting} always-show-numbers true
 gsettings --schemadir "${spacebar_schemadir}" set \
@@ -62,18 +62,6 @@ gsettings --schemadir "${spacebar_schemadir}" set \
   ${spacebar_appearance_setting} active-workspace-text-color 'rgb(36,31,49)'
 gsettings --schemadir "${spacebar_schemadir}" set \
   ${spacebar_shortcuts_setting} enable-activate-workspace-shortcuts false
-
-# Enable and configure Bluetooth Quick Connect GNOME extension.
-gnome-extensions enable bluetooth-quick-connect@jarosze.gmail.com
-# TODO: The next few lines
-
-# ${bluetooth_quick_connect_schemadir} \
-# gnome.shell.extensions.bluetooth-quick-connect \
-# bluetooth-auto-power-off true
-
-# ${bluetooth_quick_connect_schemadir} \
-# gnome.shell.extensions.bluetooth-quick-connect \
-# bluetooth-auto-power-on true
 
 # Print a welcome.
 echo

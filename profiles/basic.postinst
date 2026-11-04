@@ -836,17 +836,21 @@ gsettings_set 'gnome.shell.keybindings show-screenshot-ui "[]"'
 
 # Set up GNOME Shell extensions.
 # Install, enable and configure the Bluetooth Quick Connect extension.
-# TODO: Reinstate somehow???
-# apt install --yes gnome-shell-extension-bluetooth-quick-connect
-# enable_gnome_extension bluetooth-quick-connect@bjarosze.gmail.com
-# bluetooth_quick_connect_schemadir="/usr/share/gnome-shell/extensions/\
-# bluetooth-quick-connect@bjarosze.gmail.com/schemas"
-# gsettings_set_with_schemadir \
-#   ${bluetooth_quick_connect_schemadir} \
-#   'gnome.shell.extensions.bluetooth-quick-connect bluetooth-auto-power-off true'
-# gsettings_set_with_schemadir \
-#   ${bluetooth_quick_connect_schemadir} \
-#   'gnome.shell.extensions.bluetooth-quick-connect bluetooth-auto-power-on true'
+bluetooth_quick_connect_dir="${user_dir}/.local/share/gnome-shell/extensions/\
+bluetooth-quick-connect@bjarosze.gmail.com"
+create_directory_as_ordinary_user "${bluetooth_quick_connect_dir}"
+run_as_ordinary_user \
+  "unzip ${installer_dir}/bluetooth_quick_connect.zip -d ${bluetooth_quick_connect_dir}"
+bluetooth_quick_connect_schemadir="${bluetooth_quick_connect_dir}/schemas"
+glib-compile-schemas "${bluetooth_quick_connect_schemadir}"
+enable_gnome_extension bluetooth-quick-connect@bjarosze.gmail.com
+gsettings_set_with_schemadir \
+  "${bluetooth_quick_connect_schemadir}" \
+  'gnome.shell.extensions.bluetooth-quick-connect bluetooth-auto-power-off true'
+gsettings_set_with_schemadir \
+  "${bluetooth_quick_connect_schemadir}" \
+  'gnome.shell.extensions.bluetooth-quick-connect bluetooth-auto-power-on true'
+
 # Install, enable and configure the Dash to Dock extension.
 apt install --yes gnome-shell-extension-dashtodock
 enable_gnome_extension dash-to-dock@micxgx.gmail.com
@@ -964,13 +968,6 @@ run_as_ordinary_user \
 
 # Install LocalSend.
 apt install --yes ${installer_dir}/localsend.deb
-
-# Install and configure Bluetooth Quick Connect GNOME Shell extension.
-bluetooth_quick_connect_dir="${user_dir}/.local/share/gnome-shell/extensions/\
-bluetooth-quick-connect@bjarosze.gmail.com"
-create_directory_as_ordinary_user "${bluetooth_quick_connect_dir}"
-run_as_ordinary_user \
-  "unzip ${installer_dir}/bluetooth_quick_connect.zip -d ${bluetooth_quick_connect_dir}"
 
 # The GNOME Tour so that it doesn't run on first login.
 apt purge --yes gnome-tour
