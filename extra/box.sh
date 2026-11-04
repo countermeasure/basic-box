@@ -1086,7 +1086,7 @@ ${custom_keybindings_key_path}/custom3/"
 'ubuntu-appindicators@ubuntu.com', \
 'paperwm@paperwm.github.com', \
 'space-bar@luchrioh']"
-  bluetooth_quick_connect_schemadir="{$user_dir}/.local/share/gnome-shell/\
+  bluetooth_quick_connect_schemadir="${user_dir}/.local/share/gnome-shell/\
 extensions/bluetooth-quick-connect@bjarosze.gmail.com/schemas"
   _test_gsettings_with_schemadir \
     "${bluetooth_quick_connect_schemadir}" \
